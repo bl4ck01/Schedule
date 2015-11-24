@@ -1,0 +1,173 @@
+#!/usr/bin/env node
+
+const debug = require('debug')('test:server');
+
+// to redirect HTTP connections to HTTPS
+const net = require('net');
+const http = require('http');
+const https = require('https');
+// Log worker generation and death
+const logger = require('../services/logService');
+
+const fs = require('fs');
+const cluster = require('cluster'); // for threading
+
+// Keep track of workers' statuses.
+const workerStatus = {};
+
+// configuration parameters
+const params = require('../config/config');
+
+// for HTTPS server
+const sslOptions = {
+  key: fs.readFileSync(params.key),
+  cert: fs.readFileSync(params.cert),
+  requestCert: true,
+  rejectUnauthorized: false
+};
+
+// Get number of cores on host, to determine how many workers to spawn
+const numCPUs = require('os').cpus().length;
+
+/**
+ * Event listener for HTTP server "error" event.
+ * @param error thrown error
+ */
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  const bind = typeof port === 'string'
+      ? 'Pipe ' + params.baseAddress
+      : 'Port ' + params.baseAddress;
+
+  // handle specific listen errors with friendly messages
+  if (error.code === 'EACCES') {
+    logger(bind + ' requires elevated privileges');
+    process.exit(1);
+  } else if (error.code === 'EADDRINUSE') {
+    logger(bind + ' is already in use');
+    process.exit(1);
+  } else {
+    throw error;
+  }
+}
+
+/**
+ * Creates a proxy connection on the base address to redirect all HTTP requests to HTTPS
+ * @param conn client connection
+ */
+function tcpConnection(conn) {
+  // Determines whether request is HTTP or HTTPS and establishes appropriate proxy connection
+  conn.once('data', (buf) => {
+    // TLS handshake record starts with byte 22 --> checks if request is HTTPS
+    const address = (buf[0] === 22) ? params.httpsAddress : params.redirectAddress;
+
+    // Pipes data between server and proxy
+    const proxy = net.createConnection(address, () => {
+      proxy.write(buf);
+      conn.pipe(proxy).pipe(conn);
+    });
+  });
+}
+
+/**
+ * HTTP server redirects all requests to HTTPS server
+ * @param req
+ * @param res
+ */
+function httpConnection(req, res) {
+  const host = req.headers.host;
+  // 301 Redirect
+  res.writeHead(301, { 'Location': 'https://' + host + req.url });
+  res.end();
+}
+
+/**
+ * Periodically ensure workers are still responding
+ * @param cb callback function
+ */
+function eachWorker(cb) {
+  for (var id in cluster.workers) {
+    if (cluster.workers.hasOwnProperty(id)) {
+      cb(cluster.workers[id], id);
+    }
+  }
+}
+
+// Spawn threads, utilize all possible cores on host machine
+if (cluster.isMaster) {
+  // Master process forks worker processes
+  for (var i = 0; i < numCPUs; i++) {
+    const w = cluster.fork();
+    logger('worker ' + w.process.pid + ' spawned :date', {stream: logger.threadLogStream});
+  }
+
+  // Master process restarts dead workers
+  cluster.on('exit', (worker, code, signal) => {
+    const w = cluster.fork();
+    // Log to file and stdout
+    logger('worker ' + worker.process.pid + ' died (' + signal || code + '). restarting... :date', {stream: logger.threadLogStream});
+    logger('worker ' + worker.process.pid + ' died (' + signal || code + '). restarting...');
+    w.on('message', () => {
+      workerStatus[w.id] = 0;
+      logger('Message Received : ' + w.id);
+    });
+  });
+
+  setInterval(() => {
+    eachWorker((worker, id) => {
+      if (workerStatus[id] === undefined) {
+        workerStatus[id] = -1;
+      }
+
+      if (workerStatus[id] < 4) {
+        workerStatus[id]++;
+        logger('Message Sent : ' + id);
+        worker.send('check');
+      } else {
+        delete workerStatus[id];
+        // Log to file and stdout
+        logger('Problem with worker ' + id + ' :date', {stream: logger.threadLogStream});
+        logger('Problem with worker ' + id);
+        worker.disconnect();
+        worker.kill();
+      }
+    });
+  }, params.workerCheckInterval);
+
+  eachWorker((worker, id) => {
+    worker.on('message', () => {
+      workerStatus[id] = 0;
+      logger('Message Received : ' + id);
+    });
+  });
+} else {
+  // workers can share any TCP connection
+
+  process.on('message', (msg) => {
+    process.send(msg);
+  });
+
+  // Multiple instances of onListening required, attempt to make independent functions fail due to server initializations
+  const app = require('../app');
+  const tcpServer = net.createServer(tcpConnection).listen(params.baseAddress).on('error', onError).on('listening', function onListening() {
+    const addr = tcpServer.address();
+    const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
+    debug('Listening on ' + bind);
+  });
+
+  const httpServer = http.createServer(httpConnection).listen(params.redirectAddress).on('error', onError).on('listening', function onListening() {
+    const addr = httpServer.address();
+    const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
+    debug('Listening on ' + bind);
+  });
+  const server = https.createServer(sslOptions, app).listen(params.httpsAddress).on('error', onError).on('listening', function onListening() {
+    const addr = server.address();
+    const bind = typeof addr === 'string'
+        ? 'pipe ' + addr
+        : 'port ' + addr.port;
+    debug('Listening on ' + bind);
+  });
+}
