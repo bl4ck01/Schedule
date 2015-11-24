@@ -1,19 +1,20 @@
-const logger = require('morgan');
+const morgan = require('morgan');
+const path = require('path');
 const fileStreamRotator = require('file-stream-rotator');
 const fs = require('fs');
 
 // configuration parameters
 const params = require('../config/config');
-const logDirectory = params.rootDir + 'log';
+const logDirectory = path.join(params.rootDir, 'log');
 const dateFormat = 'YYYY-MM-DD';
 
 // retrieve unique id of a request
-logger.token('id', function getId(req) {
+morgan.token('id', function getId(req) {
   return req.id;
 });
 
 // ensure log directory exists
-fs.existsSync(logDirectory || fs.mkdirSync(logDirectory));
+fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
 
 // create a rotating write stream for server requests
 exports.accessLogStream = fileStreamRotator.getStream({
@@ -43,4 +44,4 @@ exports.errorSkip = (req, res) => {
   return res.statusCode < 400;
 };
 
-exports.logger = logger;
+exports.log = morgan;

@@ -2,7 +2,6 @@ const express = require('express');
 const path = require('path');
 const favicon = require('serve-favicon');
 const compression = require('compression');
-const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const uuid = require('node-uuid');
 
@@ -32,16 +31,15 @@ app.use(assignId);
 // Set up series of logs
 // dev output logged to console if not running in production
 if (app.get('env') === 'development') {
-  app.use(logger('dev'));
+  app.use(logger.log('dev'));
 }
 // Log accesses to file
-app.use(logger(':id :remote-addr :remote-user :date :method :url :status :response-time', {stream: logger.accessLogStream}));
+app.use(logger.log(':remote-addr user: :remote-user :date :method :url :status :response-time', {stream: logger.accessLogStream}));
 // Log errors to separate log
-app.use(logger('combined', {skip: logger.errorSkip, stream: logger.errorLogStream}));
+app.use(logger.log('combined', {skip: logger.errorSkip, stream: logger.errorLogStream}));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
@@ -61,6 +59,7 @@ app.use((req, res, next) => {
 if (app.get('env') === 'development') {
   app.use((err, req, res, next) => {
     res.status(err.status || 500);
+    logger.log(err, {stream: logger.errorLogStream});
     res.render('error', {
       message: err.message,
       error: err
@@ -72,6 +71,7 @@ if (app.get('env') === 'development') {
 // no stacktraces leaked to user
 app.use((err, req, res, next) => {
   res.status(err.status || 500);
+  logger.log(err, {stream: logger.errorLogStream});
   res.render('error', {
     message: err.message,
     error: {}
