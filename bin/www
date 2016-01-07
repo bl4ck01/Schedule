@@ -53,16 +53,15 @@ const sessOptions = {
 
 cstore.create(sessOptions).then((store) => {
   store.get(id, (err, data) => {
-    logger.log(data);
+    logger.write.info(data);
   });
 });
 
 process.on('unhandledPromiseRejection', (err) => {
-  logger.log('Unhandled Promise Rejection');
-  logger.log(err);
-  logger.log(err.stack);
+  logger.write.warn('Unhandled Promise Rejection');
+  logger.writer.error(err);
 
-  throw err;
+  throw err; // may generate double error message on console, but error will be written only once to error log file
 });
 
 /**
@@ -80,10 +79,10 @@ function onError(error) {
 
   // handle specific listen errors with friendly messages
   if (error.code === 'EACCES') {
-    logger.log(bind + ' requires elevated privileges');
+    logger.write.warn(bind + ' requires elevated privileges');
     process.exit(1);
   } else if (error.code === 'EADDRINUSE') {
-    logger.log(bind + ' is already in use');
+    logger.write.warn(bind + ' is already in use');
     process.exit(1);
   } else {
     throw error;
@@ -143,18 +142,15 @@ if (cluster.isMaster) {
   cluster.on('exit', (worker, code, signal) => {
     const w = cluster.fork();
     // Log to file and stdout
-    logger.log('worker ' + worker.process.pid + ' died (' + signal || code + '). restarting... :date', {stream: logger.threadLogStream});
-    logger.log('worker ' + worker.process.pid + ' died (' + signal || code + '). restarting...');
+    logger.write.worker('worker ' + worker.process.pid + ' died (' + signal || code + '). restarting...');
     w.on('message', () => {
       workerStatus[w.id] = 0;
-      logger.log('Message Received : ' + w.id);
     });
   });
 
   cluster.on('online', (worker) => {
     // Log to file and stdout
-    logger.log('worker ' + worker.process.pid + ' is online :date', {stream: logger.threadLogStream});
-    logger.log('worker ' + worker.process.pid + ' is online');
+    logger.write.worker('worker ' + worker.process.pid + ' is online');
   });
 
   setInterval(() => {
@@ -165,13 +161,11 @@ if (cluster.isMaster) {
 
       if (workerStatus[id] < 4) {
         workerStatus[id]++;
-        logger.log('Message Sent : ' + id);
         worker.send('check');
       } else {
         delete workerStatus[id];
         // Log to file and stdout
-        logger.log('Problem with worker ' + id + ' :date', {stream: logger.threadLogStream});
-        logger.log('Problem with worker ' + id);
+        logger.writer.worker('Problem with worker ' + id);
         worker.disconnect();
         worker.kill();
       }
@@ -181,7 +175,6 @@ if (cluster.isMaster) {
   eachWorker((worker, id) => {
     worker.on('message', () => {
       workerStatus[id] = 0;
-      logger.log('Message Received : ' + id);
     });
   });
 } else {
@@ -196,7 +189,7 @@ if (cluster.isMaster) {
   // with workers
   app.use(session({
     secret: params.cookieSecret,
-    name: 'LTSHD.sid',
+    name: 'APPNAME.sid',
     resave: false,
     saveUninitialized: false,
     cookie: { secure: true, httpOnly: true },

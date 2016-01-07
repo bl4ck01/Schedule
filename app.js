@@ -33,6 +33,7 @@ app.use(assignId);
 if (app.get('env') === 'development') {
   app.use(logger.log('dev'));
 }
+
 // Log accesses to file
 app.use(logger.log(':remote-addr user: :remote-user :date :method :url :status :response-time', {stream: logger.accessLogStream}));
 // Log errors to separate log
@@ -59,7 +60,7 @@ app.use((req, res, next) => {
 if (app.get('env') === 'development') {
   app.use((err, req, res, next) => {
     res.status(err.status || 500);
-    logger.log(err, {stream: logger.errorLogStream});
+    logger.write.error(err);
     res.render('error', {
       message: err.message,
       error: err
@@ -71,7 +72,7 @@ if (app.get('env') === 'development') {
 // no stacktraces leaked to user
 app.use((err, req, res, next) => {
   res.status(err.status || 500);
-  logger.log(err, {stream: logger.errorLogStream});
+  logger.write.error(err);
   res.render('error', {
     message: err.message,
     error: {}
