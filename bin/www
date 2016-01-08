@@ -120,8 +120,8 @@ function httpConnection(req, res) {
 }
 
 /**
- * Perform function on each worker
- * @param cb callback function
+ * Perform a function on each worker
+ * @param cb callback function to perform on each worker
  */
 function eachWorker(cb) {
   for (var id in cluster.workers) {
@@ -148,11 +148,14 @@ if (cluster.isMaster) {
     });
   });
 
+  // Workers log when they start up
   cluster.on('online', (worker) => {
     // Log to file and stdout
     logger.write.worker('worker ' + worker.process.pid + ' is online');
   });
 
+  // Workers are periodically queried to ensure they are still active. If a worker does not respond after 4 queries,
+  // it is killed and a new worker is spawned.
   setInterval(() => {
     eachWorker((worker, id) => {
       if (workerStatus[id] === undefined) {

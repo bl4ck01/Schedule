@@ -25,8 +25,8 @@ app.set('view engine', 'jade');
 app.use(compression());
 // Assign unique ID to all requests
 app.use(assignId);
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+// uncomment after placing your favicon in /public/images
+app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
 
 // Set up series of logs
 // dev output logged to console if not running in production
