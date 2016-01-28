@@ -1,5 +1,6 @@
 config/ssl/
 config/cookieSecret.txt
+config/dbconfig.js
 
 
 # Created by .ignore support plugin (hsz.mobi)

@@ -16,5 +16,11 @@ module.exports = {
   cert: 'config/ssl/localhost.crt',
 
   rootDir: rootDir,
-  cookieSecret: fs.readFileSync(path.join(__dirname, 'cookieSecret.txt'))
+  cookieSecret: fs.readFileSync(path.join(__dirname, 'cookieSecret.txt')),
+
+  // Database configuration
+  dbName: require('./dbconfig').db,
+  dbUsername: require('./dbconfig').user,
+  dbHost: 'localhost',
+  dbPort: '5432'
 };
