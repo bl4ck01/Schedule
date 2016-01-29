@@ -1,6 +1,11 @@
-extends layout
-
-block content
-  h1= message
-  h2= error.status
-  pre #{error.stack}
+doctype html
+html
+  head
+    title Help Desk Schedule
+    link(rel='stylesheet', href='/stylesheets/style.css')
+  body
+    div
+      h1= message
+      h2= error.status
+      pre #{error.stack}
+    script(src='/javascripts/main.js' type='text/javascript')

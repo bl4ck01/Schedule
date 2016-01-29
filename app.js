@@ -4,11 +4,9 @@ const favicon = require('serve-favicon');
 const compression = require('compression');
 const bodyParser = require('body-parser');
 const uuid = require('node-uuid');
+const session = require('express-session');
 
 const logger = require('./services/logService');
-
-const routes = require('./routes/index');
-const users = require('./routes/users');
 
 function assignId(req, res, next) {
   req.id = uuid.v4();
@@ -43,8 +41,15 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+/**
+ * REQUIRED: All app routes loaded here
+ */
+const routes = require('./routes/index');
+
+/**
+ * REQUIRED: All available routes added to server here
+ */
 app.use('/', routes);
-app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

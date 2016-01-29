@@ -188,16 +188,19 @@ if (cluster.isMaster) {
   });
 
   const app = require('../app');
-  // Set up multi-threaded session store. Must be in this file for correct implementation
+  const passport = require('../services/passportService');
+  // Set up multi-threaded session store and authentication mechanism. Must be in this file for correct implementation
   // with workers
   app.use(session({
     secret: params.cookieSecret,
-    name: 'APPNAME.sid',
+    name: 'LTSHelpDesk.sid',
     resave: false,
     saveUninitialized: false,
     cookie: { secure: true, httpOnly: true },
     store: cstore.store
   }));
+  app.use(passport.initialize());
+  app.use(passport.session());
 
   // onListening required three separate times due to server intialization error when extracting to independent function
   const tcpServer = net.createServer(tcpConnection).listen(params.baseAddress).on('error', onError).on('listening', function onListening() {

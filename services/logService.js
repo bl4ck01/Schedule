@@ -135,6 +135,9 @@ exports.write = {
   },
   warn: (message) => {
     winston.loggers.get('error').warn(message);
+  },
+  console: (message) => {
+    winston.loggers.get('errors').debug(message);
   }
 };
 

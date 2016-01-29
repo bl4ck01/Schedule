@@ -1,5 +1,5 @@
 {
-  "name": "NodeServer",
+  "name": "Schedule",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -12,13 +12,15 @@
     "compression": "1.6.0",
     "debug": "~2.2.0",
     "express": "~4.13.1",
-    "express-session": "1.12.1",
+    "express-session": "1.13.0",
     "file-stream-rotator": "0.0.6",
     "foreman": "1.4.1",
     "jade": "~1.11.0",
     "jws": "3.1.1",
     "morgan": "~1.6.1",
     "node-uuid": "1.4.7",
+    "passport": "0.3.2",
+    "passport-saml": "0.15.0",
     "pg": "4.4.4",
     "pg-format": "1.0.1",
     "serve-favicon": "~2.3.0",
