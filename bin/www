@@ -7,22 +7,22 @@ const net = require('net');
 const http = require('http');
 const https = require('https');
 const path = require('path');
-// Log worker generation and death
-const logger = require('../services/logService');
 
 const fs = require('fs');
 const uuid = require('node-uuid');
 const session = require('express-session');
 const cluster = require('cluster'); // for threading
 
+// Establish secret for cookies
+fs.writeFileSync(path.join(__dirname, '../config', 'cookieSecret.txt'), uuid.v4());
+
 // Keep track of workers' statuses.
 const workerStatus = {};
 
+// Log worker generation and death
+const logger = require('../services/logService');
 // configuration parameters
 const params = require('../config/config');
-
-// Establish secret for cookies
-fs.writeFileSync(path.join(__dirname, '../config', 'cookieSecret.txt'), uuid.v4());
 
 // for HTTPS server
 const sslOptions = {
