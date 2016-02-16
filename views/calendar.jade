@@ -1,4 +1,14 @@
-extends layouts/calendar-layout
+extends layouts/calendar-template
 
 block content
-  div.calendar
+  div#calendar
+  script.
+    $(document).ready(function() {
+      // initialize calendar
+      $('#calendar').fullCalendar({
+        // put options and callbacks here
+        dayClick: function() {
+          alert('You clicked a day');
+        }
+      })
+    });

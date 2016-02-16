@@ -17,8 +17,9 @@ automatic conversion of HTTP requests into HTTPS requests. They do not need to b
 
 ####To set up the application:
 
-1. Change favicon.ico in _public/images_ to your application-specific favicon. It is currently a white square.
-2. run `bash bin/setup_scripts/setup.sh <PROJECT_HOME_DIRECTORY_FILE_PATH>`
+1. Ensure you have [Node installed](https://nodejs.org/en/download/).
+2. Set up the application dependencies by running `npm install`.
+3. Change favicon.ico in _public/images_ to your application-specific favicon. It is currently a white square.
 
 ## Testing
 
