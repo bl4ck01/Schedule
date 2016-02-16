@@ -15,6 +15,10 @@ router.get('/cal', (req, res, next) => {
   res.render('calendar');
 });
 
+router.get('/clock/in', (req, res, next) => {
+  res.render('clock-in');
+});
+
 router.get('/login', passport.authenticate('saml'),
   (req, res, next) => {
     if (req.isAuthenticated()) {
