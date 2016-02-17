@@ -4,15 +4,15 @@ const passport = require('passport');
 
 /* GET home page. */
 router.get('/', (req, res, next) => {
-  if (req.isAuthenticated()) {
-    res.render('index', { user: req.user });
-  } else {
-    res.render('index');
-  }
+  res.redirect('/cal');
 });
 
 router.get('/cal', (req, res, next) => {
-  res.render('calendar');
+  if (req.isAuthenticated()) {
+    res.render('calendar', {user: req.user});
+  } else {
+    res.render('calendar', {user: null});
+  }
 });
 
 router.get('/clock/in', (req, res, next) => {

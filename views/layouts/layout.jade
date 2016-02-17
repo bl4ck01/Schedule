@@ -17,10 +17,10 @@ html
           h3 Help Desk Schedule
           if user
             div.log
-              a(href='/logout') Logout
+              a.btn.btn-warning(role='button' href='/logout') Logout
           else
             div.log
-              a(href='/login') Login
+              a.btn.btn-info(role='button' href='/login') Login
     div.container-fluid
       block content
     div.container-fluid
@@ -29,6 +29,6 @@ html
       div
         h4.small LTS Help Desk Schedule &copy; 2016
         p.small Maintained by Ari Kalfus
-        a(href='mailto:akalfus@brandeis.edu') Contact
+        a.btn.btn-default.btn-xs(role='button' href='mailto:akalfus@brandeis.edu') Contact
     script(src="/javascripts/calendar.js")
     script(src='/javascripts/main.js' type='text/javascript')
