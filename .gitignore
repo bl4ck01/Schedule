@@ -1,5 +1,5 @@
+/db/.idea
 config/ssl/
-config/cookieSecret.txt
 config/dbconfig.js
 
 # Bower
