@@ -1,8 +1,12 @@
 -- Employee table contains employee information.
 CREATE TABLE Employee (
+  -- UNET id of employee
   uid varchar(20) NOT NULL,
+  -- first and last name of employee
   name varchar(100) NOT NULL,
+  -- 10-digit number of employee
   phone_num char(10) NOT NULL,
+  -- technician, tier 1.5, manager roles (0,1,2 respectively)
   role int NOT NULL
 );
 

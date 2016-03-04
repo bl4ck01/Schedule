@@ -1,8 +1,11 @@
 -- Request to drop a shift
 CREATE TABLE Trade_Request (
   tid serial NOT NULL,
+  -- sid of an Assigned-Shift
   sid serial NOT NULL,
+  -- start time of sub request
   start_time time NOT NULL,
+  -- end time of sub request
   end_time time NOT NULL
 );
 
