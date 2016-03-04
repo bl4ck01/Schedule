@@ -45,11 +45,13 @@ app.use(express.static(path.join(__dirname, 'public')));
  * REQUIRED: All app routes loaded here
  */
 const routes = require('./routes/index');
+const admin = require('./routes/admin');
 
 /**
  * REQUIRED: All available routes added to server here
  */
 app.use('/', routes);
+app.use('/admin', admin);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

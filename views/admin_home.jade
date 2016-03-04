@@ -1,0 +1,10 @@
+extends layouts/layout
+
+block content
+  div.contain-fluid
+    div.well
+      p Admin page is under construction.
+      if user
+        p Welcome, #{user}!
+      else
+        p Hey! You're not supposed to be here!

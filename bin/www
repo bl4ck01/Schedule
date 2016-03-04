@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
 const debug = require('debug')('test:server');
+// configuration parameters
+const params = require('../config/config');
 
 // to redirect HTTP connections to HTTPS
 const net = require('net');
@@ -14,15 +16,13 @@ const session = require('express-session');
 const cluster = require('cluster'); // for threading
 
 // Establish secret for cookies
-fs.writeFileSync(path.join(__dirname, '../config', 'cookieSecret.txt'), uuid.v4());
+params.cookieSecret = uuid.v4();
 
 // Keep track of workers' statuses.
 const workerStatus = {};
 
 // Log worker generation and death
 const logger = require('../services/logService');
-// configuration parameters
-const params = require('../config/config');
 
 // for HTTPS server
 const sslOptions = {

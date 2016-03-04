@@ -42,13 +42,19 @@ $(document).ready(() => {
         click: () => {
           location.assign('/clock/in');
         }
+      },
+      manage: {
+        text: 'Manage',
+        click: () => {
+          location.assign('/admin');
+        }
       }
     },
 
     header: {
       left: 'month,agendaWeek,agendaDay',
       center: 'title',
-      right: 'clockIn today prev,next'
+      right: 'manage clockIn today prev,next'
     },
 
     // specify options applicable to only certain views
@@ -79,7 +85,7 @@ $(document).ready(() => {
     },
 
     eventClick: (event, jsEvent, view) => {
-
+      //TODO: Launch window displaying more details about the Assigned_Shift referenced by the event
     },
     select: (start, end, jsEvent, view) => {
 
