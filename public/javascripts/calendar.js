@@ -78,20 +78,53 @@ $(document).ready(() => {
 
     // functions applicable to the calendar
     dayClick: (date, jsEvent, view) => {
-      if (view.name === 'month' || view.name === 'agendaWeek') {
+      if (view.name === 'month') {
         cal.fullCalendar('gotoDate', date);
         cal.fullCalendar('changeView', 'agendaDay');
+      } else {
+        subRequestForm(date, jsEvent, view);
       }
     },
 
     eventClick: (event, jsEvent, view) => {
       //TODO: Launch window displaying more details about the Assigned_Shift referenced by the event
+      //TODO: Window will have button to drop the shift
     },
     select: (start, end, jsEvent, view) => {
 
     },
     unselect: (view, jsEvent) => {
-
+      hideSubRequestForm();
     }
-  })
+  });
+
+  let subRequestActive = false;
+
+  /**
+   * Brings up the sub request form
+   */
+  function showSubRequestForm(date) {
+    $('#sub-request-shift').html(date.format('MMM DD, YYYY'));
+    $('#sub-request-div').show();
+    subRequestActive = true;
+  }
+
+  /**
+   * Hides and clears the sub request form
+   */
+  function hideSubRequestForm() {
+    subRequestActive = false;
+  }
+
+  /**
+   * Acts on the sub request form
+   */
+  function subRequestForm(date) {
+    if (subRequestActive) {
+      hideSubRequestForm();
+    } else {
+      showSubRequestForm(date);
+    }
+  }
+
 });

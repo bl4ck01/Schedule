@@ -1,5 +1,3 @@
 $(document).ready(() => {
-  /**
-   * Helper functions
-   */
+
 });

@@ -2,10 +2,14 @@
 CREATE TABLE Event (
   -- sid of an Assigned-Shift
   sid serial NOT NULL,
+  -- The text on an event's element
   title varchar(100) NOT NULL,
+  -- Whether an event occurs at a specific time-of-day. This property affects whether an event's time is shown.
+  -- Also, in the agenda views, determines if it is displayed in the "all-day" section.
   allDay boolean,
-  day date NOT NULL,
-  rendering varchar(30),
+  -- Allows alternate rendering of the event, like background events.
+  -- Can be empty, "background", or "inverse-background"
+  rendering varchar(18),
   -- Restricts the business hours of this event. Object may contain the following properties:
   -- {
   --   start: '10:00', // a start time (10am in this example)

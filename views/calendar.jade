@@ -2,3 +2,17 @@ extends layouts/layout
 
 block content
   div#calendar
+  div.pull-right#sub-request-div(hidden='true')
+    div#sub-request-form
+      div.well
+        form.form-horizontal
+          div.form-group
+            label.control-label Shift
+            div
+              p.form-control-static#sub-request-shift
+          div.form-group
+            label.control-label From:
+            input.form-control#sub-request-begin-time(type='time')
+            label.control-label To:
+            input.form-control#sub-request-end-time(type='time')
+            button.btn.btn-default(type='submit') Submit
