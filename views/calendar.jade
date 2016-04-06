@@ -1,18 +1,23 @@
 extends layouts/layout
 
 block content
-  div#calendar
-  div.pull-right#sub-request-div(hidden='true')
-    div#sub-request-form
-      div.well
-        form.form-horizontal
-          div.form-group
-            label.control-label Shift
-            div
-              p.form-control-static#sub-request-shift
-          div.form-group
-            label.control-label From:
-            input.form-control#sub-request-begin-time(type='time')
-            label.control-label To:
-            input.form-control#sub-request-end-time(type='time')
-            button.btn.btn-default(type='submit') Submit
+  div.contain-fluid
+    div.col-md-10.pull-left
+      div#calendar
+    div.col-md-2.pull-right#sub-request-div(hidden='true')
+      div#sub-request-form
+        div.well
+          span.pull-right.glyphicon.glyphicon-remove.btn#close-sub-request(aria-hidden='true')
+          form.form-horizontal
+            div.form-group
+              h4
+                b Shift Drop Request
+              label.control-label Shift Selected:
+              div
+                p.form-control-static#sub-request-shift
+            div.form-group
+              label.control-label From:
+              input.form-control#sub-request-begin-time(type='time')
+              label.control-label To:
+              input.form-control#sub-request-end-time(type='time')
+              button.btn.btn-default(type='submit') Submit
