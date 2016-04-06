@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-const debug = require('debug')('test:server');
 // configuration parameters
 const params = require('../config/config');
 
@@ -206,19 +205,16 @@ if (cluster.isMaster) {
   const tcpServer = net.createServer(tcpConnection).listen(params.baseAddress).on('error', onError).on('listening', function onListening() {
     const addr = tcpServer.address();
     const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
-    debug('Listening on ' + bind);
   });
 
   const httpServer = http.createServer(httpConnection).listen(params.redirectAddress).on('error', onError).on('listening', function onListening() {
     const addr = httpServer.address();
     const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
-    debug('Listening on ' + bind);
   });
   const server = https.createServer(sslOptions, app).listen(params.httpsAddress).on('error', onError).on('listening', function onListening() {
     const addr = server.address();
     const bind = typeof addr === 'string'
         ? 'pipe ' + addr
         : 'port ' + addr.port;
-    debug('Listening on ' + bind);
   });
 }

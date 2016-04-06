@@ -6,8 +6,18 @@ block content
   div.col-md-2.pull-right#sub-request-div(hidden='true')
     div#sub-request-form
       div.well
+        // Who's currently on shift
+        div
+          h4
+            b Currently on shift:
+          //FIXME: Create this
+          p No one is on shift!
+      div.well
+        // Sub request form
         span.pull-right.glyphicon.glyphicon-remove.btn#close-sub-request(aria-hidden='true')
-        form.form-horizontal
+        form.form-horizontal(action='/shifts/drop', method='post')
+          input(type='hidden', name='_csrf', value=_csrf)
+          input(type='hidden', name='user', value=user)
           div.form-group
             h4
               b Shift Drop Request

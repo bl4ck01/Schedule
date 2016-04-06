@@ -4,7 +4,9 @@ const favicon = require('serve-favicon');
 const compression = require('compression');
 const bodyParser = require('body-parser');
 const uuid = require('node-uuid');
-const session = require('express-session');
+const helmet = require('helmet');
+const nocache = require('nocache');
+const validator = require('express-validator');
 
 const logger = require('./services/logService');
 
@@ -25,6 +27,13 @@ app.use(compression());
 app.use(assignId);
 // uncomment after placing your favicon in /public/images
 app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
+// secure app from several top Express/web security concerns
+app.use(helmet());
+app.use(helmet.hsts({
+  maxAge: 7776000000, // 90 days in milliseconds
+  includeSubDomains: true
+}));
+app.use(nocache({ noEtag: true }));
 
 // Set up series of logs
 // dev output logged to console if not running in production
@@ -39,6 +48,7 @@ app.use(logger.log('combined', {skip: logger.errorSkip, stream: logger.errorLogS
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(validator());
 app.use(express.static(path.join(__dirname, 'public')));
 
 /**
@@ -46,18 +56,28 @@ app.use(express.static(path.join(__dirname, 'public')));
  */
 const routes = require('./routes/index');
 const admin = require('./routes/admin');
+const shifts = require('./routes/shifts');
 
 /**
  * REQUIRED: All available routes added to server here
  */
 app.use('/', routes);
 app.use('/admin', admin);
+app.use('/shifts', shifts);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
   const err = new Error('Not Found');
   err.status = 404;
   next(err);
+});
+
+// CSRF error handler
+app.use((err, req, res, next) => {
+  if (err.code !== 'EBADCSRFTOKEN') return next(err);
+  // handle CSRF token errors here
+  res.status(403);
+  res.send('form tampered with');
 });
 
 // error handlers
