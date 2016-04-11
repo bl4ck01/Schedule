@@ -2,11 +2,26 @@ extends layouts/layout
 
 block content
   div.well
-    p Admin page is under construction.
-    if user
-      p Welcome, #{user}!
-    else
-      p Hey! You're not supposed to be here!
+    div.row
+      div.col-xs-2
+        div.btn-group(role='group')
+          button.btn.btn-default.manage-btn#manage-staff-btn(type='button', role='button') Staff
+          button.btn.btn-default.active.manage-btn#manage-shifts-btn(type='button', role='button') Manage Shifts
+          button.btn.btn-default.manage-btn#manage-settings-btn(type='button', role='button') Settings
+      div.col-xs-1
+        div.btn-group(role='group')
+          button.btn.btn-default(type='button', role='button', onclick='/admin/shifts/event') Quick-Add Special Event
 
-    div
-      a.btn.btn-info(role='button' href='/cal') Go Back to Calendar
+  div.well.admin-pg#staff-pg(hidden='true')
+    p This is the staff well
+  // Admin page loads the shifts page by default
+  div.well.admin-pg#shifts-pg
+    div.row
+    p This is the shifts well
+  div.well.admin-pg#settings-pg(hidden='true')
+    p This is the settings well
+
+  div.row
+    div.col-xs-1
+      div.btn-group(role='group')
+        a.btn.btn-info(type='button', role='button', href='/cal') Go Back to Calendar

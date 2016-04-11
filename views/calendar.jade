@@ -3,30 +3,30 @@ extends layouts/layout
 block content
   div.col-md-10.pull-left
     div#calendar
-  div.col-md-2.pull-right#sub-request-div(hidden='true')
-    div#sub-request-form
-      div.well
-        // Who's currently on shift
-        div
-          h4
-            b Currently on shift:
-          //FIXME: Create this
-          p No one is on shift!
-      div.well
-        // Sub request form
-        span.pull-right.glyphicon.glyphicon-remove.btn#close-sub-request(aria-hidden='true')
-        form.form-horizontal(action='/shifts/drop', method='post')
-          input(type='hidden', name='_csrf', value=_csrf)
-          input(type='hidden', name='user', value=user)
-          div.form-group
-            h4
-              b Shift Drop Request
-            label.control-label Shift Selected:
-            div
-              p.form-control-static#sub-request-shift
-          div.form-group
-            label.control-label From:
-            input.form-control#sub-request-begin-time(type='time')
-            label.control-label To:
-            input.form-control#sub-request-end-time(type='time')
-            button.btn.btn-default(type='submit') Submit
+  div.col-md-2.pull-right
+    div.well
+      // Who's currently on shift
+      div
+        h4
+          b Currently on shift:
+        //FIXME: Create this
+        p No one is on shift!
+    div#sub-request-div(hidden='true')
+      div#sub-request-form
+        div.well
+          // Sub request form
+          span.pull-right.glyphicon.glyphicon-remove.btn#close-sub-request(aria-hidden='true')
+          form.form-horizontal(action='/shifts/drop', method='post')
+            input(type='hidden', name='user', value=user)
+            div.form-group
+              h4
+                b Shift Drop Request
+              label.control-label Shift Selected:
+              div
+                p.form-control-static#sub-request-shift
+            div.form-group
+              label.control-label From:
+              input.form-control#sub-request-begin-time(type='time')
+              label.control-label To:
+              input.form-control#sub-request-end-time(type='time')
+              button.btn.btn-default(type='submit', role='button') Submit

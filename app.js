@@ -7,6 +7,8 @@ const uuid = require('node-uuid');
 const helmet = require('helmet');
 const nocache = require('nocache');
 const validator = require('express-validator');
+const contentLength = require('express-content-length-validator');
+const hpp = require('hpp');
 
 const logger = require('./services/logService');
 
@@ -27,13 +29,6 @@ app.use(compression());
 app.use(assignId);
 // uncomment after placing your favicon in /public/images
 app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
-// secure app from several top Express/web security concerns
-app.use(helmet());
-app.use(helmet.hsts({
-  maxAge: 7776000000, // 90 days in milliseconds
-  includeSubDomains: true
-}));
-app.use(nocache({ noEtag: true }));
 
 // Set up series of logs
 // dev output logged to console if not running in production
@@ -50,6 +45,18 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(validator());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// secure app from several top Express/web security concerns
+app.use(helmet());
+app.use(helmet.hsts({
+  maxAge: 7776000000, // 90 days in milliseconds
+  includeSubDomains: true
+}));
+app.use(nocache({ noEtag: true }));
+// Prevent large payload attacks. Defaults to max size 999, status code 400, message 'Invalid payload; too big.'
+app.use(contentLength.validateMax());
+// protect against HTTP Parameter Pollution attacks
+app.use(hpp());
 
 /**
  * REQUIRED: All app routes loaded here
@@ -70,14 +77,6 @@ app.use((req, res, next) => {
   const err = new Error('Not Found');
   err.status = 404;
   next(err);
-});
-
-// CSRF error handler
-app.use((err, req, res, next) => {
-  if (err.code !== 'EBADCSRFTOKEN') return next(err);
-  // handle CSRF token errors here
-  res.status(403);
-  res.send('form tampered with');
 });
 
 // error handlers
