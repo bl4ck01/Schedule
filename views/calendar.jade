@@ -15,7 +15,8 @@ block content
       div#sub-request-form
         div.well
           // Sub request form
-          span.pull-right.glyphicon.glyphicon-remove.btn#close-sub-request(aria-hidden='true')
+          button.close#close-sub-request(type='button', aria-label='Close')
+            span(aria-hidden='true') &times;
           form.form-horizontal(action='/shifts/drop', method='post')
             input(type='hidden', name='user', value=user)
             div.form-group

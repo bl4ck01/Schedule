@@ -117,28 +117,37 @@ $(document).ready(() => {
     $('#sub-request-div').fadeOut();
   });
 
-  /**
-   * Manage button and page well transition states on admin page
-   */
-  $('#manage-shifts-btn').on('click', () => {
-    $('.manage-btn').removeClass('active');
-    $('.admin-pg').hide();
-    $('#manage-shifts-btn').addClass('active');
-    $('#shifts-pg').fadeIn();
-  });
-
-  $('#manage-staff-btn').on('click', () => {
-    $('.manage-btn').removeClass('active');
-    $('.admin-pg').hide();
-    $('#manage-staff-btn').addClass('active');
-    $('#staff-pg').fadeIn();
-  });
-
-  $('#manage-settings-btn').on('click', () => {
-    $('.manage-btn').removeClass('active');
-    $('.admin-pg').hide();
-    $('#manage-settings-btn').addClass('active');
-    $('#settings-pg').fadeIn();
-  });
+  // /**
+  //  * Manage button and page well transition states on admin page
+  //  */
+  // $('#manage-shifts-btn').on('click', () => {
+  //   const btn = $('#manage-shifts-btn');
+  //   if (!btn.hasClass('active')) {
+  //     $('.manage-btn').removeClass('active');
+  //     $('.admin-pg').hide();
+  //     btn.addClass('active');
+  //     $('#shifts-pg').fadeIn();
+  //   }
+  // });
+  //
+  // $('#manage-staff-btn').on('click', () => {
+  //   const btn = $('#manage-staff-btn');
+  //   if (!btn.hasClass('active')) {
+  //     $('.manage-btn').removeClass('active');
+  //     $('.admin-pg').hide();
+  //     btn.addClass('active');
+  //     $('#staff-pg').fadeIn();
+  //   }
+  // });
+  //
+  // $('#manage-settings-btn').on('click', () => {
+  //   const btn = $('#manage-settings-btn');
+  //   if (!btn.hasClass('active')) {
+  //     $('.manage-btn').removeClass('active');
+  //     $('.admin-pg').hide();
+  //     btn.addClass('active');
+  //     $('#settings-pg').fadeIn();
+  //   }
+  // });
 
 });

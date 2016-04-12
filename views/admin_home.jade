@@ -1,25 +1,25 @@
 extends layouts/layout
 
 block content
-  div.well
-    div.row
-      div.col-xs-2
-        div.btn-group(role='group')
-          button.btn.btn-default.manage-btn#manage-staff-btn(type='button', role='button') Staff
-          button.btn.btn-default.active.manage-btn#manage-shifts-btn(type='button', role='button') Manage Shifts
-          button.btn.btn-default.manage-btn#manage-settings-btn(type='button', role='button') Settings
-      div.col-xs-1
-        div.btn-group(role='group')
-          button.btn.btn-default(type='button', role='button', onclick='/admin/shifts/event') Quick-Add Special Event
+  div
+    ul.nav.nav-tabs(role='tablist')
+      li(role='presentation')
+        a(href='#staff', aria-controls='staff', role='tab', data-toggle='tab') Staff
+      li.active(role='presentation')
+        a(href='#shifts', aria-controls='shifts', role='tab', data-toggle='tab') Shifts
+      li(role='presentation')
+        a(href='#settings', aria-controls='settings', role='tab', data-toggle='tab') Settings
 
-  div.well.admin-pg#staff-pg(hidden='true')
-    p This is the staff well
-  // Admin page loads the shifts page by default
-  div.well.admin-pg#shifts-pg
-    div.row
-    p This is the shifts well
-  div.well.admin-pg#settings-pg(hidden='true')
-    p This is the settings well
+    div.tab-content
+      div.tab-pane#staff(role='tabpanel')
+        div.well
+          p This is the staff well
+      div.tab-pane.active#shifts(role='tabpanel')
+        div.well
+          p This is the shifts well
+      div.tab-pane#settings(role='tabpanel')
+        div.well
+          p This is the settings well
 
   div.row
     div.col-xs-1
