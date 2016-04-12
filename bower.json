@@ -1,0 +1,22 @@
+{
+  "name": "schedule",
+  "description": "A multi-threaded Node scheduling application for employees with variable shift lengths.",
+  "main": "app.js",
+  "authors": [
+    "Ari Kalfus"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/arikalfus/Schedule",
+  "moduleType": [],
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap-timepicker": "^0.5.2"
+  }
+}

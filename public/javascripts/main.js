@@ -112,42 +112,12 @@ $(document).ready(() => {
    */
   $('#close-sub-request').on('click', () => {
     $('#sub-request-shift').html();
-    $('#sub-request-begin-time').html();
-    $('#sub-request-end-time').html();
-    $('#sub-request-div').fadeOut();
+    $('#sub-request-div').fadeOut(() => {
+      $('#sub-request-begin-time').timepicker('setTime', '');
+      $('#sub-request-end-time').timepicker('setTime', '');
+    });
   });
 
-  // /**
-  //  * Manage button and page well transition states on admin page
-  //  */
-  // $('#manage-shifts-btn').on('click', () => {
-  //   const btn = $('#manage-shifts-btn');
-  //   if (!btn.hasClass('active')) {
-  //     $('.manage-btn').removeClass('active');
-  //     $('.admin-pg').hide();
-  //     btn.addClass('active');
-  //     $('#shifts-pg').fadeIn();
-  //   }
-  // });
-  //
-  // $('#manage-staff-btn').on('click', () => {
-  //   const btn = $('#manage-staff-btn');
-  //   if (!btn.hasClass('active')) {
-  //     $('.manage-btn').removeClass('active');
-  //     $('.admin-pg').hide();
-  //     btn.addClass('active');
-  //     $('#staff-pg').fadeIn();
-  //   }
-  // });
-  //
-  // $('#manage-settings-btn').on('click', () => {
-  //   const btn = $('#manage-settings-btn');
-  //   if (!btn.hasClass('active')) {
-  //     $('.manage-btn').removeClass('active');
-  //     $('.admin-pg').hide();
-  //     btn.addClass('active');
-  //     $('#settings-pg').fadeIn();
-  //   }
-  // });
-
+  $('#sub-request-begin-time').timepicker({defaultTime: false});
+  $('#sub-request-end-time').timepicker({defaultTime: false});
 });

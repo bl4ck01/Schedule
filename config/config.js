@@ -4,9 +4,9 @@ const fs = require('fs');
 
 module.exports = {
   // Modify the address ports as needed for your environment.
-  baseAddress: process.env.PORT || 3000,
-  redirectAddress: (process.env.PORT || 3000) + 1,
-  httpsAddress: (process.env.PORT || 3000) + 2,
+  baseAddress: 3000,
+  redirectAddress: 3001,
+  httpsAddress: 3002,
 
   // This is how often the master process checks on the status of the worker threads. After 4 unresponsive checks, a
   // worker is restarted. Make this longer or shorter as necessary for your project.
@@ -16,7 +16,7 @@ module.exports = {
   cert: 'config/ssl/localhost.crt',
 
   rootDir: rootDir,
-  // This will be automatically assigned a unique value upon server start
+  // cookieSecret will be automatically assigned a unique value upon server start
   cookieSecret: null,
 
   // Database configuration

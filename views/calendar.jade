@@ -19,15 +19,20 @@ block content
             span(aria-hidden='true') &times;
           form.form-horizontal(action='/shifts/drop', method='post')
             input(type='hidden', name='user', value=user)
-            div.form-group
+            div.input-group
               h4
                 b Shift Drop Request
               label.control-label Shift Selected:
               div
                 p.form-control-static#sub-request-shift
-            div.form-group
-              label.control-label From:
-              input.form-control#sub-request-begin-time(type='time')
-              label.control-label To:
-              input.form-control#sub-request-end-time(type='time')
-              button.btn.btn-default(type='submit', role='button') Submit
+            p From:
+            div.input-group.bootstrap-timepicker.timepicker
+              span.input-group-addon.glyphicon.glyphicon-time#begin-time-glyph
+              input.form-control.input-small#sub-request-begin-time(type='text', aria-describedby='begin-time-glyph')
+            br
+            p To:
+            div.input-group.bootstrap-timepicker.timepicker
+              span.input-group-addon.glyphicon.glyphicon-time#end-time-glyph
+              input.form-control.input-small#sub-request-end-time(type='text', aria-describedby='end-time-glyph')
+            br
+            button.btn.btn-default.center-block(type='submit', role='button') Submit
