@@ -78,6 +78,7 @@ $(document).ready(() => {
 
     // functions applicable to the calendar
     dayClick: (date, jsEvent, view) => {
+      //TODO: Replace logic with switch to day/week view from week/month views
       if (view.name === 'month') {
         cal.fullCalendar('gotoDate', date);
         cal.fullCalendar('changeView', 'agendaDay');
@@ -87,14 +88,7 @@ $(document).ready(() => {
     },
 
     eventClick: (event, jsEvent, view) => {
-      // subRequestForm(jsEvent);
-      //TODO: Launch window displaying more details about the Assigned_Shift referenced by the event
-      //TODO: Window will have button to drop the shift
-    },
-    select: (start, end, jsEvent, view) => {
-
-    },
-    unselect: (view, jsEvent) => {
+      //TODO: Will take over logic in dayClick about launching sub request form
     }
   });
 

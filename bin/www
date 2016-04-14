@@ -58,7 +58,7 @@ cstore.create(sessOptions).then((store) => {
 
 process.on('unhandledPromiseRejection', (err) => {
   logger.write.warn('Unhandled Promise Rejection');
-  logger.writer.error(err);
+  logger.write.error(err);
 
   throw err; // may generate double error message on console, but error will be written only once to error log file
 });
@@ -133,6 +133,7 @@ function eachWorker(cb) {
 // Spawn threads, utilize all possible cores on host machine
 if (cluster.isMaster) {
   // Master process forks worker processes
+  logger.write.worker('master ' + process.pid + ' is online');
   for (var i = 0; i < numCPUs; i++) {
     cluster.fork();
   }
@@ -153,6 +154,13 @@ if (cluster.isMaster) {
     logger.write.worker('worker ' + worker.process.pid + ' is online');
   });
 
+  // Gracefully log upon death
+  process.on('SIGINT', () => {
+    cluster.disconnect();
+    logger.write.worker('master ' + process.pid + ' SIGINT received');
+    process.exit(0);
+  });
+
   // Workers are periodically queried to ensure they are still active. If a worker does not respond after 4 queries,
   // it is killed and a new worker is spawned.
   setInterval(() => {
@@ -167,7 +175,7 @@ if (cluster.isMaster) {
       } else {
         delete workerStatus[id];
         // Log to file and stdout
-        logger.writer.worker('Problem with worker ' + id);
+        logger.write.worker('Problem with worker ' + id);
         worker.disconnect();
         worker.kill();
       }
@@ -175,7 +183,7 @@ if (cluster.isMaster) {
   }, params.workerCheckInterval);
 
   eachWorker((worker, id) => {
-    worker.on('message', () => {
+    worker.on('message', (msg) => {
       workerStatus[id] = 0;
     });
   });
@@ -184,6 +192,15 @@ if (cluster.isMaster) {
 
   process.on('message', (msg) => {
     process.send(msg);
+  });
+
+  process.on('kill', () => {
+    logger.write.worker('worker' + process.pid + ' killed, shutting down');
+    process.exit(0);
+  });
+
+  process.on('SIGINT', () => {
+    logger.write.worker('worker' + process.pid + ' SIGINT received');
   });
 
   const app = require('../app');
