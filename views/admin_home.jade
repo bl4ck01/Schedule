@@ -16,7 +16,62 @@ block content
           p This is the staff well
       div.tab-pane.active#shifts(role='tabpanel')
         div.well
-          p This is the shifts well
+          div.container-fluid
+            div.row
+              button.btn.btn-default.btn-info(role='button', data-toggle='collapse', data-target='#shift-override', aria-expanded='false', aria-controls='shift-override') One-time shift edit
+              button.btn.btn-info.pull-right(type='button', role='button') Create Shifts
+            br
+            br
+            div.row
+              div.collapse#shift-override
+                div.col-md-2
+                  form(action='/shifts/get/', method='post')
+                    div.form-group
+                      label.control-label(for='override-date') Select a date:
+                      input.form-control.input-small#override-date(type='text', data-provide='datepicker', placeholder='01/10/2016')
+                    div.form-group
+                      label.control-label(for='override-shift-owner') Shift owner:
+                      input.form-control#override-shift-owner(type='text', placeholder='Louis Brandeis')
+                    div.form-group
+                      label.control-label(for='override-shift-replacement') Replaced by:
+                      input.form-control#override-shift-replacement(type='text', placeholder='Ollie Owl')
+                    label.control-label(for='sub-request-begin-time') From:
+                    div.input-group.bootstrap-timepicker.timepicker
+                      span.input-group-addon.glyphicon.glyphicon-time#begin-time-glyph
+                      input.form-control.input-small#sub-request-begin-time(type='text', aria-describedby='begin-time-glyph', placeholder='8:45 am')
+                    br
+                    label.control-label(for='sub-request-end-time') To:
+                    div.input-group.bootstrap-timepicker.timepicker
+                      span.input-group-addon.glyphicon.glyphicon-time#end-time-glyph
+                      input.form-control.input-small#sub-request-end-time(type='text', aria-describedby='end-time-glyph', placeholder='2 pm')
+                    br
+                    button.btn.btn-info.center-block(type='button') Save Changes
+                div.col-md-8
+                  div.table-responsive
+                    table.table.table-striped.table-bordered.table-hover.table-condensed#shift-override-results
+          h2.text-center Weekly Shifts Template
+          br
+          div.table-responsive
+            table.table.table-striped.table-bordered.table-hover.table-condensed
+              tr
+                th
+                th Monday
+                th Tuesday
+                th Wednesday
+                th Thursday
+                th Friday
+                th Saturday
+                th Sunday
+              tr
+                td
+
+                td
+                td
+                td
+                td
+                td
+                td
+                td
       div.tab-pane#settings(role='tabpanel')
         div.well
           p This is the settings well

@@ -96,7 +96,7 @@ $(document).ready(() => {
    * Bring up the sub request form
    */
   function showSubRequestForm(date) {
-    $('#sub-request-shift').html(date.format('MMM DD, YYYY'));
+    $('#sub-request-shift').attr('value', date.format('MMM DD, YYYY'));
     $('#sub-request-div').fadeIn();
     subRequestActive = true;
   }
@@ -105,13 +105,19 @@ $(document).ready(() => {
    * Clear and close the sub request form
    */
   $('#close-sub-request').on('click', () => {
-    $('#sub-request-shift').html();
+    $('#sub-request-shift').attr('value', '');
     $('#sub-request-div').fadeOut(() => {
       $('#sub-request-begin-time').timepicker('setTime', '');
       $('#sub-request-end-time').timepicker('setTime', '');
     });
   });
 
-  $('#sub-request-begin-time').timepicker({defaultTime: false});
-  $('#sub-request-end-time').timepicker({defaultTime: false});
+  $('#sub-request-begin-time').timepicker({
+    defaultTime: false
+  });
+  $('#sub-request-end-time').timepicker({
+    defaultTime: false
+  });
+
+  
 });

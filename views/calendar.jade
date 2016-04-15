@@ -1,9 +1,9 @@
 extends layouts/layout
 
 block content
-  div.col-md-10.pull-left
+  div.col-md-10
     div#calendar
-  div.col-md-2.pull-right
+  div.col-md-2
     div.well
       // Who's currently on shift
       div
@@ -17,14 +17,14 @@ block content
           // Sub request form
           button.close#close-sub-request(type='button', aria-label='Close')
             span(aria-hidden='true') &times;
-          form.form-horizontal(action='/shifts/drop', method='post')
+          form(action='/shifts/drop', method='post')
             input(type='hidden', name='user', value=user)
             div.input-group
               h4
                 b Shift Drop Request
               label.control-label Shift Selected:
               div
-                p.form-control-static#sub-request-shift
+                input.form-control#sub-request-shift(type='text' readonly)
             p From:
             div.input-group.bootstrap-timepicker.timepicker
               span.input-group-addon.glyphicon.glyphicon-time#begin-time-glyph

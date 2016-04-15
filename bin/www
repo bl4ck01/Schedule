@@ -142,7 +142,7 @@ if (cluster.isMaster) {
   cluster.on('exit', (worker, code, signal) => {
     const w = cluster.fork();
     // Log to file and stdout
-    logger.write.worker('worker ' + worker.process.pid + ' died (' + signal || code + '). restarting...');
+    logger.write.worker('worker ' + worker.process.pid + ' died. restarting...' + (signal || code));
     w.on('message', () => {
       workerStatus[w.id] = 0;
     });

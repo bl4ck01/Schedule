@@ -5,8 +5,9 @@ html
     meta(name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no')
     link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.6.0/fullcalendar.min.css')
     link(href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css", rel="stylesheet", integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7", crossorigin="anonymous")
-    link(rel='stylesheet', href='/stylesheets/timepicker.min.css')
-    link(rel='stylesheet', href='/stylesheets/style.min.css')
+    link(rel='stylesheet', href='stylesheets/timepicker.min.css')
+    link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.0/css/bootstrap-datepicker3.min.css')
+    link(rel='stylesheet', href='stylesheets/style.min.css')
   body
     div.container-fluid
       div.navbar
@@ -15,7 +16,7 @@ html
             h4 You are logged in as #{user}
           else
             h3 Please log in.
-            a.btn.btn-primary(type='button' role='button' href='/login') Login
+            a.btn.btn-info(type='button' role='button' href='/login') Login
     div.container-fluid
       block content
     div.container-fluid
@@ -29,5 +30,6 @@ html
     script(src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js')
     script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js", integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS", crossorigin="anonymous")
     script(src='/javascripts/bootstrap-timepicker.min.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.0/js/bootstrap-datepicker.min.js')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.6.0/fullcalendar.min.js')
     script(src='/javascripts/main.js' type='text/javascript')
