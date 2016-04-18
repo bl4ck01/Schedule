@@ -15,3 +15,7 @@ th {
 .bootstrap-timepicker-widget.dropdown-menu {
   background-color: #f9f4f1;
 }
+
+div .fc-time-grid-event {
+  cursor: pointer
+}
