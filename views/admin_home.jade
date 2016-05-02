@@ -1,7 +1,12 @@
 extends layouts/layout
 
 block content
-  div
+  div.row
+    div.col-xs-1
+      div.btn-group(role='group')
+        a.btn.btn-primary(type='button', role='button', href='/cal') Go Back to Calendar
+  br
+  div.row
     ul.nav.nav-tabs(role='tablist')
       li(role='presentation')
         a(href='#staff', aria-controls='staff', role='tab', data-toggle='tab') Staff
@@ -18,43 +23,74 @@ block content
         div.well
           div.container-fluid
             div.row
-              button.btn.btn-default.btn-info(role='button', data-toggle='collapse', data-target='#shift-override', aria-expanded='false', aria-controls='shift-override') One-time shift edit
-              button.btn.btn-info.pull-right(type='button', role='button') Create Shifts
+              button.btn.btn-default.btn-info#override-shift(role='button', data-toggle='collapse', data-target='#shift-override', aria-expanded='false', aria-controls='shift-override') One-time shift edit
+              button.btn.btn-info.pull-right#create-shift(type='button', role='button', data-toggle='collapse', data-target='#shift-creation', aria-expanded='false', aria-controls='shift-creation') Create/Modify Weekly Shifts
             br
             br
             div.row
               div.collapse#shift-override
+                h4.
+                  This form is used to modify a single shift on a specific day. If you want to create or modify
+                  weekly shifts on the Schedule Template, please use the 'Create/Modify Weekly Shifts' form.
+                br
                 div.col-md-2
                   form(action='/shifts/get/', method='post')
+                    title
                     div.form-group
                       label.control-label(for='override-date') Select a date:
-                      input.form-control.input-small#override-date(type='text', data-provide='datepicker', placeholder='01/10/2016')
+                      input.form-control.input-small#override-date(type='text', data-provide='datepicker', data-date-autoclose='true', placeholder='01/10/2016', name='date')
                     div.form-group
                       label.control-label(for='override-shift-owner') Shift owner:
-                      input.form-control#override-shift-owner(type='text', placeholder='Louis Brandeis')
+                      input.form-control#override-shift-owner(type='text', placeholder='Louis Brandeis', name='owner')
                     div.form-group
                       label.control-label(for='override-shift-replacement') Replaced by:
-                      input.form-control#override-shift-replacement(type='text', placeholder='Ollie Owl')
+                      input.form-control#override-shift-replacement(type='text', placeholder='Ollie Owl', name='replacement')
                     label.control-label(for='sub-request-begin-time') From:
                     div.input-group.bootstrap-timepicker.timepicker
                       span.input-group-addon.glyphicon.glyphicon-time#begin-time-glyph
-                      input.form-control.input-small#sub-request-begin-time(type='text', aria-describedby='begin-time-glyph', placeholder='8:45 am')
+                      input.form-control.input-small#sub-request-begin-time(type='text', aria-describedby='begin-time-glyph', placeholder='8:45 am', name='beginTime')
                     br
                     label.control-label(for='sub-request-end-time') To:
                     div.input-group.bootstrap-timepicker.timepicker
                       span.input-group-addon.glyphicon.glyphicon-time#end-time-glyph
-                      input.form-control.input-small#sub-request-end-time(type='text', aria-describedby='end-time-glyph', placeholder='2 pm')
+                      input.form-control.input-small#sub-request-end-time(type='text', aria-describedby='end-time-glyph', placeholder='2 pm', name='endTime')
                     br
                     button.btn.btn-info.center-block(type='button') Save Changes
+                    br
                 div.col-md-8
                   div.table-responsive
                     table.table.table-striped.table-bordered.table-hover.table-condensed#shift-override-results
+            div.collapse#shift-creation
+              h4.
+                This form is used to create or modify weekly shifts on the Schedule Template. If you want to change
+                a single shift on a specific day, please use the 'Shift Override' form.
+              br
+              div.col-md-10
+                form(action='shifts/new', method='post')
+                  div.form-group
+                    p Select which days this shift should apply:
+                    div.checkbox-inline
+                      input#create-shift-mon(type='checkbox', value='Mon', name='days[]')
+                      label(for='create-shift-mon') Mon
+                    div.checkbox-inline
+                      input#create-shift-tue(type='checkbox', value='Tue', name='days[]')
+                      label(for='create-shift-tue') Tue
+                    div.checkbox-inline
+                      input#create-shift-wed(type='checkbox', value='Wed', name='days[]')
+                      label(for='create-shift-wed') Wed
+                    div.checkbox-inline
+                      input#create-shift-thur(type='checkbox', value='Thur', name='days[]')
+                      label(for='create-shift-thur') Thur
+                    div.checkbox-inline
+                      input#create-shift-fri(type='checkbox', value='Fri', name='days[]')
+                      label(for='create-shift-fri') Fri
+                    div.checkbox-inline
+                      input#create-shift-sat(type='checkbox', value='Sat', name='days[]')
+                      label(for='create-shift-sat') Sat
+                    div.checkbox-inline
+                      input#create-shift-sun(type='checkbox', value='Sun', name='days[]')
+                      label(for='create-shift-sun') Sun
           div#temp-cal
       div.tab-pane#settings(role='tabpanel')
         div.well
           p This is the settings well
-
-  div.row
-    div.col-xs-1
-      div.btn-group(role='group')
-        a.btn.btn-info(type='button', role='button', href='/cal') Go Back to Calendar

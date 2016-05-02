@@ -31,28 +31,33 @@ $(document).ready(() => {
     events: [
       {
         title: 'Yoseph',
-        start: '2016-04-19T12:30:00',
-        end: '2016-04-19T14:00:00'
+        start: '2016-05-06T12:30:00',
+        end: '2016-05-06T14:00:00'
       },
       {
         title: 'Jonathan',
-        start: '2016-04-19T12:30:00',
-        end: '2016-04-19T14:30:00'
+        start: '2016-05-05T12:30:00',
+        end: '2016-04-05T14:30:00'
       },
       {
         title: 'Ari',
-        start: '2016-04-19T12:30:00',
-        end: '2016-04-19T14:00:00'
+        start: '2016-05-05T12:30:00',
+        end: '2016-05-05T14:00:00'
       },
       {
         title: 'Blake Myers',
-        start: '2016-04-19T12:30:00',
-        end: '2016-04-19T15:45:00'
+        start: '2016-05-05T12:30:00',
+        end: '2016-05-05T15:45:00'
       },
       {
         title: 'kotechar',
-        start: '2016-04-19T11:15:00',
-        end: '2016-04-19T13:15:00'
+        start: '2016-05-05T11:15:00',
+        end: '2016-05-05T13:15:00'
+      },
+      {
+        title: "Anne's Cookout",
+        start: '2016-05-06T09:00:00',
+        allDay: true
       }
     ],
 
@@ -125,7 +130,7 @@ $(document).ready(() => {
     // A value of true will limit the number of events to the height of the day cell.
     // An integer value will limit the events to a specific number of rows.
     eventLimit: true,
-    selectable: false,
+    selectable: true,
     selectHelper: true,
     unselectAuto: true, //TODO: see unselectCancel options: http://fullcalendar.io/docs/selection/unselectCancel/,
     nowIndicator: true,
@@ -139,34 +144,39 @@ $(document).ready(() => {
     events: [
       {
         title: 'Yoseph',
-        start: '2016-04-19T12:30:00',
-        end: '2016-04-19T14:00:00'
+        start: '2016-05-06T12:30:00',
+        end: '2016-05-06T14:00:00'
       },
       {
         title: 'Jonathan',
-        start: '2016-04-19T12:30:00',
-        end: '2016-04-19T14:30:00'
+        start: '2016-05-05T12:30:00',
+        end: '2016-04-05T14:30:00'
       },
       {
         title: 'Ari',
-        start: '2016-04-19T12:30:00',
-        end: '2016-04-19T14:00:00'
+        start: '2016-05-05T12:30:00',
+        end: '2016-05-05T14:00:00'
       },
       {
         title: 'Blake Myers',
-        start: '2016-04-19T12:30:00',
-        end: '2016-04-19T15:45:00'
+        start: '2016-05-05T12:30:00',
+        end: '2016-05-05T15:45:00'
       },
       {
         title: 'kotechar',
-        start: '2016-04-19T11:15:00',
-        end: '2016-04-19T13:15:00'
+        start: '2016-05-05T11:15:00',
+        end: '2016-05-05T13:15:00'
+      },
+      {
+        title: "Anne's Cookout",
+        start: '2016-05-07',
+        allDay: true
       }
     ],
 
     header: {
       left: 'month,agendaWeek,agendaDay',
-      center: 'Weekly Shifts Template',
+      center: 'title',
       right: 'today prev,next'
     },
 
@@ -195,6 +205,8 @@ $(document).ready(() => {
       if (view.name === 'month' || view.name === 'week') {
         cal.fullCalendar('gotoDate', date);
         cal.fullCalendar('changeView', 'agendaDay');
+      } else if (view.name === 'day') {
+
       }
     },
 
@@ -216,7 +228,7 @@ $(document).ready(() => {
   /**
    * Clear and close the sub request form
    */
-  $('#close-sub-request').on('click', () => {
+  $('#close-sub-request').click(() => {
     $('#sub-request-div').hide(() => {
       $('#sub-request-shift').attr('value', '');
       $('#sub-request-begin-time').timepicker('setTime', '');
@@ -231,5 +243,13 @@ $(document).ready(() => {
     defaultTime: false
   });
 
-  
+  /**
+   * Hide shift creation/override forms
+   */
+  $('#override-shift').click(() => {
+    $('#shift-creation').collapse('hide');
+  });
+  $('#create-shift').click(() => {
+    $('#shift-override').collapse('hide');
+  });
 });
