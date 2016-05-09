@@ -1,3 +1,5 @@
-/**
- * Created by akalfus on 1/28/16.
- */
+const db = require('./dbService');
+
+exports.getAll = (params, cb) => {
+  db.query()
+};

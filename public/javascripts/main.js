@@ -28,38 +28,7 @@ $(document).ready(() => {
       week: 'Week',
       day: 'Day'
     },
-    events: [
-      {
-        title: 'Yoseph',
-        start: '2016-05-06T12:30:00',
-        end: '2016-05-06T14:00:00'
-      },
-      {
-        title: 'Jonathan',
-        start: '2016-05-05T12:30:00',
-        end: '2016-04-05T14:30:00'
-      },
-      {
-        title: 'Ari',
-        start: '2016-05-05T12:30:00',
-        end: '2016-05-05T14:00:00'
-      },
-      {
-        title: 'Blake Myers',
-        start: '2016-05-05T12:30:00',
-        end: '2016-05-05T15:45:00'
-      },
-      {
-        title: 'kotechar',
-        start: '2016-05-05T11:15:00',
-        end: '2016-05-05T13:15:00'
-      },
-      {
-        title: "Anne's Cookout",
-        start: '2016-05-06T09:00:00',
-        allDay: true
-      }
-    ],
+    events: [],
 
     // construct custom buttons that can be used in the calendar header
     customButtons: {
@@ -67,6 +36,12 @@ $(document).ready(() => {
         text: 'Clock in',
         click: () => {
           location.assign('/clock/in');
+        }
+      },
+      subs: {
+        text: 'Sub Requests',
+        click: () => {
+          location.assign('/shifts/requests')
         }
       },
       manage: {
@@ -80,7 +55,7 @@ $(document).ready(() => {
     header: {
       left: 'month,agendaWeek,agendaDay',
       center: 'title',
-      right: 'manage clockIn today prev,next'
+      right: 'manage clockIn,subs today prev,next'
     },
 
     // specify options applicable to only certain views
@@ -247,9 +222,59 @@ $(document).ready(() => {
    * Hide shift creation/override forms
    */
   $('#override-shift').click(() => {
-    $('#shift-creation').collapse('hide');
+    const btn = $('#override-shift');
+    if (!btn.hasClass('active')) {
+      $('#create-shift').removeClass('active');
+      $('#shift-creation').collapse('hide');
+      btn.addClass('active');
+    } else {
+      btn.removeClass('active');
+    }
   });
+  
   $('#create-shift').click(() => {
-    $('#shift-override').collapse('hide');
+    const btn = $('#create-shift');
+    if (!btn.hasClass('active')) {
+      $('#override-shift').removeClass('active');
+      $('#shift-override').collapse('hide');
+      btn.addClass('active');
+    } else {
+      btn.removeClass('active');
+    }
+  });
+
+  /**
+   * Retrieve and display modify shift form results
+   */
+  $('#modify-search-form-btn').click(() => {
+    $.post('/shifts/get', {
+      date: $('#override-date').val,
+      owner: $('#override-shift-owner').val,
+      beginTime: $('#sub-request-begin-time').val,
+      endTime: $('#sub-request-end-time').val
+    },
+      (data) => {
+      //TODO: Fill in search table with results in data
+      console.log(data);
+    })
+      .done(() => {
+        $('#modify-search-form').hide();
+        $('#override-date').val('');
+        $('#override-shift-owner').val('');
+        $('#sub-request-begin-time').val('');
+        $('#sub-request-end-time').val('');
+        $('#modify-submit-form').fadeIn();
+      })
+      .fail(() => {
+        //TODO: Modify search table to display error, prompt to redo search
+      })
+  });
+
+  $('#modify-search-again-btn').click(() => {
+    $('#modify-submit-form').hide();
+    $('#override-shift-replacement').val('');
+    $('#sub-update-begin-time').val('');
+    $('#sub-update-end-time').val('');
+    $('#modify-search-form').fadeIn();
   });
 });

@@ -13,9 +13,17 @@ th {
 }
 
 .bootstrap-timepicker-widget.dropdown-menu {
-  background-color: #f9f4f1;
+  background-color: #f5f5f5;
 }
 
 div .fc-time-grid-event {
+  cursor: pointer
+}
+
+#override-shift {
+  margin-right: 10px;
+}
+
+.checkbox-input {
   cursor: pointer
 }
