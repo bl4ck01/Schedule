@@ -1,4 +1,5 @@
 -- foreign keys
+ALTER TABLE IF EXISTS Event DROP CONSTRAINT IF EXISTS Event_fk_id;
 ALTER TABLE IF EXISTS Assigned_Shift DROP CONSTRAINT IF EXISTS Assigned_Shift_fk_Default_Time;
 ALTER TABLE IF EXISTS Assigned_Shift DROP CONSTRAINT IF EXISTS Assigned_Shift_fk_owner;
 ALTER TABLE IF EXISTS Assigned_Shift DROP CONSTRAINT IF EXISTS Assigned_Shift_fk_covered_from;

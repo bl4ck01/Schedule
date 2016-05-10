@@ -41,12 +41,18 @@ block content
                     div.form-group
                       label.control-label(for='override-shift-owner') Shift owner:
                       input.form-control#override-shift-owner(type='text', placeholder='Louis Brandeis', name='owner')
-                    label.control-label(for='sub-request-begin-time') From:
+                    label.control-label(for='sub-request-begin-time')
+                      small
+                        i (Optional)
+                      p From:
                     div.input-group.bootstrap-timepicker.timepicker
                       span.input-group-addon.glyphicon.glyphicon-time
                       input.form-control.input-small#sub-request-begin-time(type='text', placeholder='8:45 am', name='beginTime')
                     br
-                    label.control-label(for='sub-request-end-time') To:
+                    label.control-label(for='sub-request-end-time')
+                      small
+                        i (Optional)
+                      p To:
                     div.input-group.bootstrap-timepicker.timepicker
                       span.input-group-addon.glyphicon.glyphicon-time
                       input.form-control.input-small#sub-request-end-time(type='text', placeholder='2 pm', name='endTime')

@@ -248,10 +248,10 @@ $(document).ready(() => {
    */
   $('#modify-search-form-btn').click(() => {
     $.post('/shifts/get', {
-      date: $('#override-date').val,
-      owner: $('#override-shift-owner').val,
-      beginTime: $('#sub-request-begin-time').val,
-      endTime: $('#sub-request-end-time').val
+      date: $('#override-date').val(),
+      owner: $('#override-shift-owner').val(),
+      beginTime: $('#sub-request-begin-time').val(),
+      endTime: $('#sub-request-end-time').val()
     },
       (data) => {
       //TODO: Fill in search table with results in data

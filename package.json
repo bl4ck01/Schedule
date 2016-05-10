@@ -30,7 +30,6 @@
     "pg": "^4.5.3",
     "pg-format": "^1.0.2",
     "serve-favicon": "^2.3.0",
-    "sql": "^0.67.0",
     "winston": "^2.2.0"
   },
   "devDependencies": {

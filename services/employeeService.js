@@ -2,7 +2,7 @@ const db = require('./dbService');
 
 /**
  * Insert a new Employee record
- * @param params hash containing uid, name, phone, and role keys
+ * @param params hash of key values
  * @param cb optional callback function
  */
 exports.createOne = (params, cb) => {
@@ -13,7 +13,7 @@ exports.createOne = (params, cb) => {
 
 /**
  * Insert multiple Employee records
- * @param params hash containing data array of hashes containing uid, name, phone, and role keys
+ * @param params hash of key values
  * @param cb optional callback function
  */
 exports.createMultiple = (params, cb) => {
@@ -31,7 +31,7 @@ exports.createMultiple = (params, cb) => {
 
 /**
  * Delete an Employee record
- * @param params hash containing uid key
+ * @param params hash of key values
  * @param cb optional callback function
  */
 exports.removeOne = (params, cb) => {
@@ -40,7 +40,7 @@ exports.removeOne = (params, cb) => {
 
 /**
  * Delete multiple Employee records
- * @param params hash containing data array of uids
+ * @param params hash of key values
  * @param cb optional callback function
  */
 exports.removeMultiple = (params, cb) => {
