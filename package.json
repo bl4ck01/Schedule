@@ -28,7 +28,6 @@
     "passport": "^0.3.2",
     "passport-saml": "^0.15.0",
     "pg": "^4.5.3",
-    "pg-format": "^1.0.2",
     "serve-favicon": "^2.3.0",
     "winston": "^2.2.0"
   },

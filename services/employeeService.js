@@ -20,13 +20,16 @@ exports.createMultiple = (params, cb) => {
   // Create multiple-row insert query
   var entities = '';
   params.data.forEach((entity) => {
+    // Create string of Employee query values
     entities = entities.concat('(' + entity.uid, + ', ' + entity.name + ', ' + entity.phone + ', ' + entity.role + '),');
   });
 
   // Remove final comma from entities string
   entities = entities.substring(0, entities.length);
 
-  db.query('INSERT INTO Employee (uid, name, phone, role) VALUES ' + entities, cb);
+  db.query('INSERT INTO Employee (uid, name, phone, role) VALUES ' + entities,
+    null,
+    cb);
 };
 
 /**
@@ -35,7 +38,9 @@ exports.createMultiple = (params, cb) => {
  * @param cb optional callback function
  */
 exports.removeOne = (params, cb) => {
-  db.query('DELETE FROM Employee WHERE uid = $1', params.uid, cb);
+  db.query('DELETE FROM Employee WHERE uid = $1',
+    params.uid,
+    cb);
 };
 
 /**
@@ -48,7 +53,9 @@ exports.removeMultiple = (params, cb) => {
     return '$' + (index + 1);
   });
 
-  db.query('DELETE FROM Employee WHERE uid IN (' + values.join(', ') + ')', params.data, cb);
+  db.query('DELETE FROM Employee WHERE uid IN (' + values.join(', ') + ')',
+    params.data,
+    cb);
 };
 
 /**
@@ -56,5 +63,7 @@ exports.removeMultiple = (params, cb) => {
  * @param cb optional callback function
  */
 exports.removeAll = (cb) => {
-  db.query('DELETE FROM Employee', cb);
+  db.query('DELETE FROM Employee',
+    null,
+    cb);
 };
