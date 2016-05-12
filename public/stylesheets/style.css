@@ -27,3 +27,7 @@ div .fc-time-grid-event {
 .checkbox-input {
   cursor: pointer
 }
+
+#shift-override-table {
+  display: none
+}

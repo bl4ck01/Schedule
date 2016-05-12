@@ -247,6 +247,8 @@ $(document).ready(() => {
    * Retrieve and display modify shift form results
    */
   $('#modify-search-form-btn').click(() => {
+    const table = document.getElementById('shift-override-table');
+    const results = document.getElementById('shift-override-results');
     $.post('/shifts/get', {
       date: $('#override-date').val(),
       owner: $('#override-shift-owner').val(),
@@ -254,8 +256,18 @@ $(document).ready(() => {
       endTime: $('#sub-request-end-time').val()
     },
       (data) => {
-      //TODO: Fill in search table with results in data
-      console.log(data);
+        console.log(data);
+      if (data.length > 0) {
+        // populate table with results
+      } else {
+        const notFound = table.insertRow(1).insertCell(0);
+        notFound.innerHTML = '<b style="color: red">No shifts were found with the current search criteria.</b>';
+        $('#shift-override-table').fadeIn();
+        // Delay execution of trigger until after done() procedures have completed.
+        process.nextTick(() => {
+          $('#modify-search-again-btn').trigger('click');
+        });
+      }
     })
       .done(() => {
         $('#modify-search-form').hide();
@@ -266,7 +278,9 @@ $(document).ready(() => {
         $('#modify-submit-form').fadeIn();
       })
       .fail(() => {
-        //TODO: Modify search table to display error, prompt to redo search
+        const errOccurred = table.insertRow(1).insertCell(0);
+        errOccurred.innerHTML = '<b style="color: red">An error occurred during the previous search. Please try again.</b>';
+        $('#shift-override-table').fadeIn();
       })
   });
 

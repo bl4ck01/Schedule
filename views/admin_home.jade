@@ -88,7 +88,15 @@ block content
                       br
                 div.col-md-8
                   div.table-responsive
-                    table.table.table-striped.table-bordered.table-hover.table-condensed#shift-override-results
+                    table.table.table-striped.table-bordered.table-hover.table-condensed#shift-override-table
+                      thead
+                        tr
+                          th Shift Date
+                          th Owner
+                          th Start Time
+                          th End Time
+                      tbody#shift-override-results
+
             div.collapse#shift-creation
               h4.
                 This form is used to create weekly shifts. If you want to modify shifts, please use the 'Modify Shifts'

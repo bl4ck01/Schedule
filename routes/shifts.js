@@ -17,28 +17,28 @@ router.post('/get', (req, res, next) => {
   if (!req.isAuthenticated()) { //TODO: Remove ! from authentication check
     const params = { date: req.body.date, owner: req.body.owner, startTime: req.body.beginTime, endTime: req.body.endTime };
 
-    if (params.startTime != null && params.endTime != null) {
+    if (params.startTime.length > 0 && params.endTime.length > 0) {
       shiftService.getByDateOwnerAndStartEndTimes(params, (err, result) => {
         if (err != null) {
           res.status(err.code).send(err.message);
         } else {
-          res.send(result);
+          res.send(result.rows);
         }
       })
-    } else if (params.startTime != null) {
+    } else if (params.startTime.length > 0) {
       shiftService.getByDateOwnerAndStartTime(params, (err, result) => {
         if (err != null) {
           res.status(err.code).send(err.message);
         } else {
-          res.send(result);
+          res.send(result.rows);
         }
       })
-    } else if (params.endTime != null) {
+    } else if (params.endTime.length > 0) {
       shiftService.getByDateOwnerAndEndTime(params, (err, result) => {
         if (err != null) {
           res.status(err.code).send(err.message);
         } else {
-          res.send(result);
+          res.send(result.rows);
         }
       })
     } else {
@@ -46,7 +46,7 @@ router.post('/get', (req, res, next) => {
         if (err != null) {
           res.status(err.code).send(err.message);
         } else {
-          res.send(result);
+          res.send(result.rows);
         }
       })
     }
