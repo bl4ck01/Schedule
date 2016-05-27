@@ -28,7 +28,13 @@ $(document).ready(() => {
       week: 'Week',
       day: 'Day'
     },
-    events: [],
+    events: [
+      {
+        title: 'Ravi Kotecha',
+        start: '2016-05-12T12:00:00',
+        end: '2016-05-12T15:30:00'
+      }
+    ],
 
     // construct custom buttons that can be used in the calendar header
     customButtons: {

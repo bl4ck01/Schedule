@@ -13,6 +13,17 @@ router.get('/requests', (req, res, next) => {
   }
 });
 
+router.post('/new', (req, res, next) => {
+  if (!req.isAuthenticated()) { //TODO: Remove ! from authentication check
+    const data = [];
+    req.body.days.forEach((day) => {
+      data.push({
+        
+      });
+    })
+  }
+});
+
 router.post('/get', (req, res, next) => {
   if (!req.isAuthenticated()) { //TODO: Remove ! from authentication check
     const params = { date: req.body.date, owner: req.body.owner, startTime: req.body.beginTime, endTime: req.body.endTime };

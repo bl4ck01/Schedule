@@ -141,6 +141,10 @@ block content
                       div.input-group.bootstrap-timepicker.timepicker
                         span.input-group-addon.glyphicon.glyphicon-time
                         input.form-control.input-small#shift-create-end-time(type='text', aria-describedby='end-time-glyph', placeholder='2 pm', name='endTime')
+                    div.form-group
+                      div.checkbox-inline
+                        input.checkbox-input#create-shift-all-day(type='checkbox', value='y', name='allday')
+                        label.control-label(for='create-shift-all-day') All day?
                     button.btn.btn-info.center-block(type='submit') Save Changes
                     br
           div#temp-cal
