@@ -4,7 +4,6 @@
 const params = require('../config/config');
 
 // to redirect HTTP connections to HTTPS
-const net = require('net');
 const http = require('http');
 const https = require('https');
 const path = require('path');
@@ -86,24 +85,6 @@ function onError(error) {
   } else {
     throw error;
   }
-}
-
-/**
- * Creates a proxy connection on the base address to redirect all HTTP requests to HTTPS
- * @param conn client connection
- */
-function tcpConnection(conn) {
-  // Determines whether request is HTTP or HTTPS and establishes appropriate proxy connection
-  conn.once('data', (buf) => {
-    // TLS handshake record starts with byte 22 --> checks if request is HTTPS
-    const address = (buf[0] === 22) ? params.httpsAddress : params.redirectAddress;
-
-    // Pipes data between server and proxy
-    const proxy = net.createConnection(address, () => {
-      proxy.write(buf);
-      conn.pipe(proxy).pipe(conn);
-    });
-  });
 }
 
 /**
@@ -218,17 +199,11 @@ if (cluster.isMaster) {
   app.use(passport.initialize());
   app.use(passport.session());
 
-  // onListening required three separate times due to server intialization error when extracting to independent function
-  const tcpServer = net.createServer(tcpConnection).listen(params.baseAddress).on('error', onError).on('listening', function onListening() {
-    const addr = tcpServer.address();
-    const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
-  });
-
-  const httpServer = http.createServer(httpConnection).listen(params.redirectAddress).on('error', onError).on('listening', function onListening() {
+  const httpServer = http.createServer(app).listen(params.httpPort).on('error', onError).on('listening', function onListening() {
     const addr = httpServer.address();
     const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
   });
-  const server = https.createServer(sslOptions, app).listen(params.httpsAddress).on('error', onError).on('listening', function onListening() {
+  const server = https.createServer(sslOptions, app).listen(params.httpsPort).on('error', onError).on('listening', function onListening() {
     const addr = server.address();
     const bind = typeof addr === 'string'
         ? 'pipe ' + addr

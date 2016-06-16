@@ -9,6 +9,10 @@ const nocache = require('nocache');
 const validator = require('express-validator');
 const contentLength = require('express-content-length-validator');
 const hpp = require('hpp');
+const forceSSL = require('express-force-ssl');
+
+// configuration parameters
+const params = require('./config/config');
 
 const logger = require('./services/logService');
 
@@ -18,6 +22,15 @@ function assignId(req, res, next) {
 }
 
 const app = express();
+
+// Force SSL connection
+app.use(forceSSL);
+app.set('forceSSLOptions', {
+  enable301Redirects: true,
+  trustXFPHeader: false,
+  httpsPort: params.httpsPort,
+  sslRequiredMessage: 'SSL Required.'
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

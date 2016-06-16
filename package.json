@@ -11,8 +11,9 @@
     "cluster-store": "^1.0.2",
     "compression": "^1.6.1",
     "debug": "^2.2.0",
-    "express": "^4.13.1",
+    "express": "^4.14.0",
     "express-content-length-validator": "^1.0.0",
+    "express-force-ssl": "^0.3.2",
     "express-session": "^1.13.0",
     "express-validator": "^2.20.3",
     "file-stream-rotator": "^0.0.6",
@@ -26,14 +27,14 @@
     "nodemon": "^1.9.1",
     "passport": "^0.3.2",
     "passport-saml": "^0.15.0",
-    "pg": "^4.5.3",
-    "pug": "^2.0.0-alpha8",
+    "pg": "^4.5.6",
+    "pug": "^2.0.0-beta3",
     "serve-favicon": "^2.3.0",
     "winston": "^2.2.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",
-    "eslint": "^2.7.0",
+    "eslint": "^2.12.0",
     "eslint-config-airbnb": "^7.0.0",
     "eslint-plugin-jsx-a11y": "^0.6.2",
     "eslint-plugin-react": "^4.3.0",
@@ -51,7 +52,7 @@
     "url": "git+https://github.com/arikalfus/Schedule.git"
   },
   "author": "Ari Kalfus",
-  "email": "arikalfus@gmail.com",
+  "email": "akalfus@brandeis.edu",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/arikalfus/Schedule/issues"
