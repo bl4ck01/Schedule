@@ -28,13 +28,7 @@ $(document).ready(() => {
       week: 'Week',
       day: 'Day'
     },
-    events: [
-      {
-        title: 'Ravi Kotecha',
-        start: '2016-05-12T12:00:00',
-        end: '2016-05-12T15:30:00'
-      }
-    ],
+    events: [],
 
     // construct custom buttons that can be used in the calendar header
     customButtons: {
@@ -122,38 +116,7 @@ $(document).ready(() => {
       week: 'Week',
       day: 'Day'
     },
-    events: [
-      {
-        title: 'Yoseph',
-        start: '2016-05-06T12:30:00',
-        end: '2016-05-06T14:00:00'
-      },
-      {
-        title: 'Jonathan',
-        start: '2016-05-05T12:30:00',
-        end: '2016-04-05T14:30:00'
-      },
-      {
-        title: 'Ari',
-        start: '2016-05-05T12:30:00',
-        end: '2016-05-05T14:00:00'
-      },
-      {
-        title: 'Blake Myers',
-        start: '2016-05-05T12:30:00',
-        end: '2016-05-05T15:45:00'
-      },
-      {
-        title: 'kotechar',
-        start: '2016-05-05T11:15:00',
-        end: '2016-05-05T13:15:00'
-      },
-      {
-        title: "Anne's Cookout",
-        start: '2016-05-07',
-        allDay: true
-      }
-    ],
+    events: [],
 
     header: {
       left: 'month,agendaWeek,agendaDay',
@@ -255,6 +218,7 @@ $(document).ready(() => {
   $('#modify-search-form-btn').click(() => {
     const table = document.getElementById('shift-override-table');
     const results = document.getElementById('shift-override-results');
+    $('#shift-override-table').fadeOut();
     $.post('/shifts/get', {
       date: $('#override-date').val(),
       owner: $('#override-shift-owner').val(),
@@ -262,18 +226,18 @@ $(document).ready(() => {
       endTime: $('#sub-request-end-time').val()
     },
       (data) => {
-        console.log(data);
-      if (data.length > 0) {
-        // populate table with results
-      } else {
-        const notFound = table.insertRow(1).insertCell(0);
-        notFound.innerHTML = '<b style="color: red">No shifts were found with the current search criteria.</b>';
-        $('#shift-override-table').fadeIn();
-        // Delay execution of trigger until after done() procedures have completed.
-        process.nextTick(() => {
-          $('#modify-search-again-btn').trigger('click');
-        });
-      }
+        if (data.length > 0) {
+          // populate table with results
+        } else {
+          $('#shift-override-results').find('tr').remove();
+          const notFound = results.insertRow(0).insertCell(0);
+          notFound.innerHTML = '<b style="color: red">No shifts were found with the current search criteria.</b>';
+          $('#shift-override-table').fadeIn();
+          // Delay execution of trigger until after done() procedures have completed.
+          process.nextTick(() => {
+            $('#modify-search-again-btn').trigger('click');
+          });
+        }
     })
       .done(() => {
         $('#modify-search-form').hide();
@@ -284,7 +248,8 @@ $(document).ready(() => {
         $('#modify-submit-form').fadeIn();
       })
       .fail(() => {
-        const errOccurred = table.insertRow(1).insertCell(0);
+        $('#shift-override-results').find('tr').remove();
+        const errOccurred = results.insertRow(0).insertCell(0);
         errOccurred.innerHTML = '<b style="color: red">An error occurred during the previous search. Please try again.</b>';
         $('#shift-override-table').fadeIn();
       })
