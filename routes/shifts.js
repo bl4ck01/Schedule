@@ -16,11 +16,6 @@ router.get('/requests', (req, res, next) => {
 router.post('/new', (req, res, next) => {
   if (!req.isAuthenticated()) { //TODO: Remove ! from authentication check
     const data = [];
-    req.body.days.forEach((day) => {
-      data.push({
-        
-      });
-    })
   }
 });
 

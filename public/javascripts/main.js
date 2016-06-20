@@ -1,6 +1,11 @@
 $(document).ready(() => {
   const cal = $('#calendar');
   const template = $('#temp-cal');
+
+  const timePickerDefaults = {
+    defaultTime: false
+  };
+
   // initialize calendar
   cal.fullCalendar({
     // automatically resize calendar when browser window resizes
@@ -180,12 +185,10 @@ $(document).ready(() => {
     });
   });
 
-  $('#sub-request-begin-time').timepicker({
-    defaultTime: false
-  });
-  $('#sub-request-end-time').timepicker({
-    defaultTime: false
-  });
+  $('#sub-request-begin-time').timepicker(timePickerDefaults);
+  $('#sub-request-end-time').timepicker(timePickerDefaults);
+  $('#shift-create-begin-time').timepicker(timePickerDefaults);
+  $('#shift-create-end-time').timepicker(timePickerDefaults);
 
   /**
    * Hide shift creation/override forms
@@ -262,4 +265,5 @@ $(document).ready(() => {
     $('#sub-update-end-time').val('');
     $('#modify-search-form').fadeIn();
   });
+  
 });

@@ -23,8 +23,10 @@ block content
         div.well
           div.container-fluid
             div.row
-              button.btn.btn-default.btn-info#override-shift(role='button', data-toggle='collapse', data-target='#shift-override', aria-expanded='false', aria-controls='shift-override') Modify Shifts
-              button.btn.btn-info#create-shift(type='button', role='button', data-toggle='collapse', data-target='#shift-creation', aria-expanded='false', aria-controls='shift-creation') Create Shifts
+              button.btn.btn-default.btn-info#override-shift(role='button', data-toggle='collapse',
+              data-target='#shift-override', aria-expanded='false', aria-controls='shift-override') Modify Shifts
+              button.btn.btn-info#create-shift(type='button', role='button', data-toggle='collapse',
+              data-target='#shift-creation', aria-expanded='false', aria-controls='shift-creation') Create Shifts
             br
             br
             div.row
@@ -37,7 +39,8 @@ block content
                   form#modify-search-form
                     div.form-group
                       label.control-label(for='override-date') Select a date:
-                      input.form-control.input-small#override-date(type='text', data-provide='datepicker', data-date-autoclose='true', placeholder='01/10/2016', name='date')
+                      input.form-control.input-small#override-date(type='text', data-provide='datepicker',
+                      data-date-autoclose='true', placeholder='01/10/2016', name='date')
                     div.form-group
                       label.control-label(for='override-shift-owner') Shift owner:
                       input.form-control#override-shift-owner(type='text', placeholder='Louis Brandeis', name='owner')
@@ -103,50 +106,65 @@ block content
                 form.
               br
               div.col-md-6
-                form(action='shifts/new', method='post')
+                form#create-shift-form(action='/shifts/new', method='post')
                   div.form-group
                     p Select which days this shift should apply:
                     div.checkbox-inline
-                      input.checkbox-input#create-shift-mon(type='checkbox', value='Mon', name='days[]')
+                      input.checkbox-input#create-shift-mon(type='checkbox', name='days[]', value='Mon')
                       label(for='create-shift-mon') Mon
                     div.checkbox-inline
-                      input.checkbox-input#create-shift-tue(type='checkbox', value='Tue', name='days[]')
+                      input.checkbox-input#create-shift-tue(type='checkbox', name='days[]', value='Tue')
                       label(for='create-shift-tue') Tue
                     div.checkbox-inline
-                      input.checkbox-input#create-shift-wed(type='checkbox', value='Wed', name='days[]')
+                      input.checkbox-input#create-shift-wed(type='checkbox', name='days[]', value='Wed')
                       label(for='create-shift-wed') Wed
                     div.checkbox-inline
-                      input.checkbox-input#create-shift-thur(type='checkbox', value='Thur', name='days[]')
+                      input.checkbox-input#create-shift-thur(type='checkbox', name='days[]', value='Thur')
                       label(for='create-shift-thur') Thur
                     div.checkbox-inline
-                      input.checkbox-input#create-shift-fri(type='checkbox', value='Fri', name='days[]')
+                      input.checkbox-input#create-shift-fri(type='checkbox', name='days[]', value='Fri')
                       label(for='create-shift-fri') Fri
                     div.checkbox-inline
-                      input.checkbox-input#create-shift-sat(type='checkbox', value='Sat', name='days[]')
+                      input.checkbox-input#create-shift-sat(type='checkbox', name='days[]', value='Sat')
                       label(for='create-shift-sat') Sat
                     div.checkbox-inline
-                      input.checkbox-input#create-shift-sun(type='checkbox', value='Sun', name='days[]')
+                      input.checkbox-input#create-shift-sun(type='checkbox', name='days[]', value='Sun')
                       label(for='create-shift-sun') Sun
                   div.col-md-4
                     div.form-group
-                      label.control-label(for='shift-create-owner') Shift owner:
-                      input.form-control#shift-create-owner(type='text', placeholder='Louis Brandeis', name='owner')
-                    div.form-group
-                      label.control-label(for='shift-create-begin-time') From:
-                      div.input-group.bootstrap-timepicker.timepicker
-                        span.input-group-addon.glyphicon.glyphicon-time
-                        input.form-control.input-small#shift-create-begin-time(type='text', aria-describedby='begin-time-glyph', placeholder='8:45 am', name='beginTime')
+                      label.control-label(for='create-shift-from-date') Date from:
+                      input.form-control.input-small#create-shift-from-date(type='text', data-provide='datepicker',
+                      data-date-autoclose='true', placeholder='01/10/2016', name='fromDate')
                       br
-                      label.control-label(for='shift-create-end-time') To:
+                      label.control-label(for='create-shift-to-date') Until:
+                      input.form-control.input-small#create-shift-to-date(type='text', data-provide='datepicker',
+                      data-date-autoclose='true', placeholder='01/10/2016', name='toDate')
+                    div.form-group
+                      label.control-label(for='shift-create-owner') Shift owner(s):
+                      textarea.form-control#shift-create-owner(rows='4', placeholder='Louis Brandeis, Ollie Owl',
+                      name='owners')
+                    button.btn.btn-info.center-block(type='submit') Submit Changes
+                    br
+                  div.col-md-4
+                    div.form-group
+                      label.control-label(for='shift-create-begin-time') Time from:
                       div.input-group.bootstrap-timepicker.timepicker
                         span.input-group-addon.glyphicon.glyphicon-time
-                        input.form-control.input-small#shift-create-end-time(type='text', aria-describedby='end-time-glyph', placeholder='2 pm', name='endTime')
+                        input.form-control.input-small#shift-create-begin-time(type='text', placeholder='8:45 am',
+                        name='beginTime')
+                      br
+                      label.control-label(for='shift-create-end-time') Until:
+                      div.input-group.bootstrap-timepicker.timepicker
+                        span.input-group-addon.glyphicon.glyphicon-time
+                        input.form-control.input-small#shift-create-end-time(type='text', placeholder='2 pm',
+                        name='endTime')
                     div.form-group
                       div.checkbox-inline
                         input.checkbox-input#create-shift-all-day(type='checkbox', value='y', name='allday')
                         label.control-label(for='create-shift-all-day') All day?
-                    button.btn.btn-info.center-block(type='submit') Save Changes
-                    br
+                          br
+                          i
+                            small (Leave above times blank)
           div#temp-cal
       div.tab-pane#settings(role='tabpanel')
         div.well
