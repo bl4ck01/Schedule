@@ -6,6 +6,6 @@ engines:
 ratings:
   paths:
   - "**.js"
-exclude_paths: []
+exclude_paths:
 - "public/javascripts/bootstrap-timepicker.js"
 - "public/javascripts/bootstrap-timepicker.min.js"
