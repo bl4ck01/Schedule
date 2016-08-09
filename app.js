@@ -9,7 +9,6 @@ const nocache = require('nocache');
 const validator = require('express-validator');
 const contentLength = require('express-content-length-validator');
 const hpp = require('hpp');
-const forceSSL = require('express-force-ssl');
 
 // configuration parameters
 const params = require('./config/config');
@@ -22,15 +21,6 @@ function assignId(req, res, next) {
 }
 
 const app = express();
-
-// Force SSL connection
-app.use(forceSSL);
-app.set('forceSSLOptions', {
-  enable301Redirects: true,
-  trustXFPHeader: false,
-  httpsPort: params.httpsPort,
-  sslRequiredMessage: 'SSL Required.'
-});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -50,9 +40,10 @@ if (app.get('env') === 'development') {
 }
 
 // Log accesses to file
-app.use(logger.log(':remote-addr user: :remote-user :date :method :url :status :response-time', {stream: logger.accessLogStream}));
+app.use(logger.log(':remote-addr user: :remote-user :date :method :url :status :response-time',
+  { stream: logger.accessLogStream }));
 // Log errors to separate log
-app.use(logger.log('combined', {skip: logger.errorSkip, stream: logger.errorLogStream}));
+app.use(logger.log('combined', { skip: logger.errorSkip, stream: logger.errorLogStream }));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -63,10 +54,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(helmet());
 app.use(helmet.hsts({
   maxAge: 7776000000, // 90 days in milliseconds
-  includeSubDomains: true
+  includeSubDomains: true,
 }));
 app.use(nocache({ noEtag: true }));
-// Prevent large payload attacks. Defaults to max size 999, status code 400, message 'Invalid payload; too big.'
+// Prevent large payload attacks.
+// Defaults to max size 999, status code 400, message 'Invalid payload; too big.'
 app.use(contentLength.validateMax());
 // protect against HTTP Parameter Pollution attacks
 app.use(hpp());
@@ -102,7 +94,7 @@ if (app.get('env') === 'development') {
     logger.write.error(err);
     res.render('error', {
       message: err.message,
-      error: err
+      error: err,
     });
   });
 }
@@ -114,7 +106,7 @@ app.use((err, req, res, next) => {
   logger.write.error(err);
   res.render('error', {
     message: err.message,
-    error: {}
+    error: {},
   });
 });
 

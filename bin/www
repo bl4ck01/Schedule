@@ -3,11 +3,8 @@
 // configuration parameters
 const params = require('../config/config');
 
-// to redirect HTTP connections to HTTPS
-const http = require('http');
 const https = require('https');
 const path = require('path');
-
 const fs = require('fs');
 const uuid = require('node-uuid');
 const session = require('express-session');
@@ -27,7 +24,7 @@ const sslOptions = {
   key: fs.readFileSync(params.key),
   cert: fs.readFileSync(params.cert),
   requestCert: true,
-  rejectUnauthorized: false
+  rejectUnauthorized: false,
 };
 
 // Get number of cores on host, to determine how many workers to spawn
@@ -40,13 +37,14 @@ const sessOptions = {
 
   // If left 'null' or 'undefined' this defaults to a similar memstore
   // with no special logic for 'cookie' or 'expires'
+  /* eslint-disable new-cap */
   store: cluster.isMaster && new require('express-session/session/memory')(),
 
   // Good default to use for instances where you might want
   // to cluster or to run standalone, but with same API
   serve: cluster.isMaster,
   connect: cluster.isWorker,
-  standalone: (numCPUs === 1) // override serve and connect
+  standalone: (numCPUs === 1), // override serve and connect
 };
 
 cstore.create(sessOptions).then((store) => {
@@ -59,7 +57,8 @@ process.on('unhandledPromiseRejection', (err) => {
   logger.write.warn('Unhandled Promise Rejection');
   logger.write.error(err);
 
-  throw err; // may generate double error message on console, but error will be written only once to error log file
+  // may generate double error msg on console, but error will be written only once to error log file
+  throw err;
 });
 
 /**
@@ -72,15 +71,15 @@ function onError(error) {
   }
 
   const bind = typeof port === 'string'
-      ? 'Pipe ' + params.baseAddress
-      : 'Port ' + params.baseAddress;
+      ? `Pipe ${params.baseAddress}`
+      : `Port ${params.baseAddress}`;
 
   // handle specific listen errors with friendly messages
   if (error.code === 'EACCES') {
-    logger.write.warn(bind + ' requires elevated privileges');
+    logger.write.warn(`${bind} requires elevated privileges`);
     process.exit(1);
   } else if (error.code === 'EADDRINUSE') {
-    logger.write.warn(bind + ' is already in use');
+    logger.write.warn(`${bind} is already in use`);
     process.exit(1);
   } else {
     throw error;
@@ -88,23 +87,11 @@ function onError(error) {
 }
 
 /**
- * HTTP server redirects all requests to HTTPS server
- * @param req
- * @param res
- */
-function httpConnection(req, res) {
-  const host = req.headers.host;
-  // 301 Redirect
-  res.writeHead(301, { 'Location': 'https://' + host + req.url });
-  res.end();
-}
-
-/**
  * Perform a function on each worker
  * @param cb callback function to perform on each worker
  */
 function eachWorker(cb) {
-  for (var id in cluster.workers) {
+  for (let id in cluster.workers) {
     if (cluster.workers.hasOwnProperty(id)) {
       cb(cluster.workers[id], id);
     }
@@ -114,8 +101,8 @@ function eachWorker(cb) {
 // Spawn threads, utilize all possible cores on host machine
 if (cluster.isMaster) {
   // Master process forks worker processes
-  logger.write.worker('master ' + process.pid + ' is online');
-  for (var i = 0; i < numCPUs; i++) {
+  logger.write.worker(`master ${process.pid} is online`);
+  for (let i = 0; i < numCPUs; i++) {
     cluster.fork();
   }
 
@@ -123,7 +110,7 @@ if (cluster.isMaster) {
   cluster.on('exit', (worker, code, signal) => {
     const w = cluster.fork();
     // Log to file and stdout
-    logger.write.worker('worker ' + worker.process.pid + ' died. restarting...' + (signal || code));
+    logger.write.worker(`worker ${worker.process.pid} died. restarting...${(signal || code)}`);
     w.on('message', () => {
       workerStatus[w.id] = 0;
     });
@@ -132,18 +119,18 @@ if (cluster.isMaster) {
   // Workers log when they start up
   cluster.on('online', (worker) => {
     // Log to file and stdout
-    logger.write.worker('worker ' + worker.process.pid + ' is online');
+    logger.write.worker(`worker ${worker.process.pid} is online`);
   });
 
   // Gracefully log upon death
   process.on('SIGINT', () => {
     cluster.disconnect();
-    logger.write.worker('master ' + process.pid + ' SIGINT received');
+    logger.write.worker(`master ${process.pid} SIGINT received`);
     process.exit(0);
   });
 
-  // Workers are periodically queried to ensure they are still active. If a worker does not respond after 4 queries,
-  // it is killed and a new worker is spawned.
+  // Workers are periodically queried to ensure they are still active.
+  // If a worker does not respond after 4 queries, it is killed and a new worker is spawned.
   setInterval(() => {
     eachWorker((worker, id) => {
       if (workerStatus[id] === undefined) {
@@ -156,7 +143,7 @@ if (cluster.isMaster) {
       } else {
         delete workerStatus[id];
         // Log to file and stdout
-        logger.write.worker('Problem with worker ' + id);
+        logger.write.worker(`Problem with worker ${id}`);
         worker.disconnect();
         worker.kill();
       }
@@ -176,18 +163,18 @@ if (cluster.isMaster) {
   });
 
   process.on('kill', () => {
-    logger.write.worker('worker' + process.pid + ' killed, shutting down');
+    logger.write.worker(`worker${process.pid} killed, shutting down`);
     process.exit(0);
   });
 
   process.on('SIGINT', () => {
-    logger.write.worker('worker' + process.pid + ' SIGINT received');
+    logger.write.worker(`worker${process.pid} SIGINT received`);
   });
 
   const app = require('../app');
   const passport = require('../services/passportService');
-  // Set up multi-threaded session store and authentication mechanism. Must be in this file for correct implementation
-  // with workers
+  // Set up multi-threaded session store and authentication mechanism.
+  // Must be in this file for correct implementation with workers
   app.use(session({
     secret: params.cookieSecret,
     name: 'LTSHelpDesk.sid',
@@ -199,14 +186,13 @@ if (cluster.isMaster) {
   app.use(passport.initialize());
   app.use(passport.session());
 
-  const httpServer = http.createServer(app).listen(params.httpPort).on('error', onError).on('listening', function onListening() {
-    const addr = httpServer.address();
-    const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
-  });
-  const server = https.createServer(sslOptions, app).listen(params.httpsPort).on('error', onError).on('listening', function onListening() {
-    const addr = server.address();
-    const bind = typeof addr === 'string'
-        ? 'pipe ' + addr
-        : 'port ' + addr.port;
-  });
+  const server = https.createServer(sslOptions, app)
+    .listen(params.httpsPort)
+    .on('error', onError)
+    .on('listening', () => {
+      const addr = server.address();
+      const bind = typeof addr === 'string'
+        ? `pipe ${addr}`
+        : `port ${addr.port}`;
+    });
 }
