@@ -3,8 +3,18 @@ $(document).ready(() => {
   const template = $('#temp-cal');
 
   const timePickerDefaults = {
-    defaultTime: false
+    defaultTime: false,
   };
+
+  /**
+   * Bring up the sub request form
+   */
+  function showSubRequestForm(event) {
+    $('#sub-request-shift').attr('value', event.start.format('MMMM Do, YYYY'));
+    $('#sub-request-begin-time').timepicker('setTime', event.start.format('hh:mm a'));
+    $('#sub-request-end-time').timepicker('setTime', event.end.format('hh:mm a'));
+    $('#sub-request-div').show();
+  }
 
   // initialize calendar
   cal.fullCalendar({
@@ -16,7 +26,7 @@ $(document).ready(() => {
     businessHours: {
       start: '09:00:00',
       end: '22:00:00',
-      dow: [1,2,3,4]
+      dow: [1, 2, 3, 4],
     },
     // limits the number of events displayed on a day.
     // A value of true will limit the number of events to the height of the day cell.
@@ -24,14 +34,14 @@ $(document).ready(() => {
     eventLimit: true,
     selectable: false,
     selectHelper: true,
-    unselectAuto: true, //TODO: see unselectCancel options: http://fullcalendar.io/docs/selection/unselectCancel/,
+    unselectAuto: true, // TODO: see unselectCancel options: http://fullcalendar.io/docs/selection/unselectCancel/,
     nowIndicator: true,
 
     buttonText: {
       today: 'Today',
       month: 'Month',
       week: 'Week',
-      day: 'Day'
+      day: 'Day',
     },
     events: [],
 
@@ -41,26 +51,26 @@ $(document).ready(() => {
         text: 'Clock in',
         click: () => {
           location.assign('/clock/in');
-        }
+        },
       },
       subs: {
         text: 'Sub Requests',
         click: () => {
           location.assign('/shifts/requests')
-        }
+        },
       },
       manage: {
         text: 'Manage',
         click: () => {
           location.assign('/admin');
-        }
-      }
+        },
+      },
     },
 
     header: {
       left: 'month,agendaWeek,agendaDay',
       center: 'title',
-      right: 'manage clockIn,subs today prev,next'
+      right: 'manage clockIn,subs today prev,next',
     },
 
     // specify options applicable to only certain views
@@ -69,16 +79,16 @@ $(document).ready(() => {
       agendaWeek: {
         minTime: '08:00:00',
         maxTime: '22:00:00',
-        slotEventOverlap: false
+        slotEventOverlap: false,
       },
       agendaDay: {
         minTime: '08:00:00',
         maxTime: '22:00:00',
-        slotEventOverlap: false
+        slotEventOverlap: false,
       },
       month: {
-        slotEventOverlap: false
-      }
+        slotEventOverlap: false,
+      },
     },
     defaultView: 'agendaWeek',
 
@@ -92,7 +102,7 @@ $(document).ready(() => {
 
     eventClick: (event, jsEvent, view) => {
       showSubRequestForm(event);
-    }
+    },
   });
 
   // initialize weekly template calendar
@@ -104,7 +114,7 @@ $(document).ready(() => {
     // see http://fullcalendar.io/docs/display/businessHours/
     businessHours: {
       start: '09:00:00',
-      end: '22:00:00'
+      end: '22:00:00',
     },
     // limits the number of events displayed on a day.
     // A value of true will limit the number of events to the height of the day cell.
@@ -112,21 +122,21 @@ $(document).ready(() => {
     eventLimit: true,
     selectable: true,
     selectHelper: true,
-    unselectAuto: true, //TODO: see unselectCancel options: http://fullcalendar.io/docs/selection/unselectCancel/,
+    unselectAuto: true, // TODO: see unselectCancel options: http://fullcalendar.io/docs/selection/unselectCancel/,
     nowIndicator: true,
 
     buttonText: {
       today: 'Today',
       month: 'Month',
       week: 'Week',
-      day: 'Day'
+      day: 'Day',
     },
     events: [],
 
     header: {
       left: 'month,agendaWeek,agendaDay',
       center: 'title',
-      right: 'today prev,next'
+      right: 'today prev,next',
     },
 
     // specify options applicable to only certain views
@@ -135,22 +145,22 @@ $(document).ready(() => {
       agendaWeek: {
         minTime: '08:00:00',
         maxTime: '22:00:00',
-        slotEventOverlap: false
+        slotEventOverlap: false,
       },
       agendaDay: {
         minTime: '08:00:00',
         maxTime: '22:00:00',
-        slotEventOverlap: false
+        slotEventOverlap: false,
       },
       month: {
-        slotEventOverlap: false
-      }
+        slotEventOverlap: false,
+      },
     },
     defaultView: 'agendaWeek',
 
     // functions applicable to the calendar
     dayClick: (date, jsEvent, view) => {
-      //TODO: Replace logic with switch to day/week view from week/month views
+      // TODO: Replace logic with switch to day/week view from week/month views
       if (view.name === 'month' || view.name === 'week') {
         cal.fullCalendar('gotoDate', date);
         cal.fullCalendar('changeView', 'agendaDay');
@@ -161,18 +171,8 @@ $(document).ready(() => {
 
     eventClick: (event, jsEvent, view) => {
       showSubRequestForm(event);
-    }
+    },
   });
-
-  /**
-   * Bring up the sub request form
-   */
-  function showSubRequestForm(event) {
-    $('#sub-request-shift').attr('value', event.start.format('MMMM Do, YYYY'));
-    $('#sub-request-begin-time').timepicker('setTime', event.start.format("hh:mm a"));
-    $('#sub-request-end-time').timepicker('setTime', event.end.format("hh:mm a"));
-    $('#sub-request-div').show();
-  }
 
   /**
    * Clear and close the sub request form
@@ -203,7 +203,7 @@ $(document).ready(() => {
       btn.removeClass('active');
     }
   });
-  
+
   $('#create-shift').click(() => {
     const btn = $('#create-shift');
     if (!btn.hasClass('active')) {
@@ -219,7 +219,6 @@ $(document).ready(() => {
    * Retrieve and display modify shift form results
    */
   $('#modify-search-form-btn').click(() => {
-    const table = document.getElementById('shift-override-table');
     const results = document.getElementById('shift-override-results');
     $('#shift-override-table').fadeOut();
     $.post('/shifts/get', {
@@ -234,14 +233,15 @@ $(document).ready(() => {
         } else {
           $('#shift-override-results').find('tr').remove();
           const notFound = results.insertRow(0).insertCell(0);
-          notFound.innerHTML = '<b style="color: red">No shifts were found with the current search criteria.</b>';
+          notFound.innerHTML =
+            '<b style="color: red">No shifts were found with the current search criteria.</b>';
           $('#shift-override-table').fadeIn();
           // Delay execution of trigger until after done() procedures have completed.
           process.nextTick(() => {
             $('#modify-search-again-btn').trigger('click');
           });
         }
-    })
+      })
       .done(() => {
         $('#modify-search-form').hide();
         $('#override-date').val('');
@@ -253,9 +253,10 @@ $(document).ready(() => {
       .fail(() => {
         $('#shift-override-results').find('tr').remove();
         const errOccurred = results.insertRow(0).insertCell(0);
-        errOccurred.innerHTML = '<b style="color: red">An error occurred during the previous search. Please try again.</b>';
+        errOccurred.innerHTML =
+          '<b style="color: red">An error occurred during the previous search. Please try again.</b>';
         $('#shift-override-table').fadeIn();
-      })
+      });
   });
 
   $('#modify-search-again-btn').click(() => {
@@ -265,5 +266,5 @@ $(document).ready(() => {
     $('#sub-update-end-time').val('');
     $('#modify-search-form').fadeIn();
   });
-  
+
 });

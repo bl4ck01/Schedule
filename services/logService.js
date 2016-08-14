@@ -23,7 +23,6 @@ function date() {
 // configuration parameters
 const params = require('../config/config');
 const logDirectory = path.join(params.rootDir, 'log');
-const workerFile = path.join(logDirectory, 'workers-' + date() + '.log');
 const errorFile = path.join(logDirectory, 'err-' + date() + '.log');
 const dateFormat = 'YYYY-MM-DD';
 
@@ -41,28 +40,6 @@ morgan.token('id', function getId(req) {
 
 winston.emitErrs = true; // unhandled exceptions should be logged, not ignored
 winston.loggers.exitOnError = false; // unhandled exceptions do not shut down logging service
-
-winston.loggers.add('workers', {
-  transports: [
-    new winston.transports.File({
-      name: 'worker-log-file',
-      label: 'worker status logger',
-      level: 'info',
-      filename: workerFile,
-      handleExceptions: false,
-      maxsize: 5242880, // 5 MB
-      maxFiles: 10,
-      json: true,
-      colorize: false
-    }),
-    new winston.transports.Console({
-      level: 'debug',
-      handleExceptions: true,
-      json: false,
-      colorize: true
-    })
-  ]
-});
 
 winston.loggers.add('errors', {
   transports: [
@@ -102,14 +79,6 @@ exports.accessLogStream = fileStreamRotator.getStream({
   verbose: false
 });
 
-// create a rotating write stream for worker generation and death
-exports.threadLogStream = fileStreamRotator.getStream({
-  filename: logDirectory + '/workers-%DATE%.log',
-  frequency: 'daily',
-  date_format: dateFormat,
-  verbose: false
-});
-
 // create a rotating write stream for server errors
 exports.errorLogStream = fileStreamRotator.getStream({
   filename: logDirectory + '/err-%DATE%.log',
@@ -127,9 +96,6 @@ exports.errorSkip = (req, res) => {
  */
 
 exports.write = {
-  worker: (message) => {
-    winston.loggers.get('workers').info(message);
-  },
   error: (message) => {
     winston.loggers.get('error').error(message);
   },

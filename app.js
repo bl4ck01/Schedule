@@ -19,11 +19,6 @@ const params = require('./config/config');
 const passport = require('./services/passportService');
 const logger = require('./services/logService');
 
-function assignId(req, res, next) {
-  req.id = uuid.v4();
-  next();
-}
-
 // Establish secret for cookies
 params.cookieSecret = uuid.v4();
 
@@ -43,8 +38,6 @@ app.set('view engine', 'pug');
 
 // Improve response rate by compressing data with Gzip
 app.use(compression());
-// Assign unique ID to all requests
-app.use(assignId);
 // uncomment after placing your favicon in /public/images
 app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
 
@@ -68,7 +61,7 @@ app.use(session({
   name: 'LTSHelpDesk.sid',
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: true, httpOnly: true }
+  cookie: { secure: true, httpOnly: true },
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -80,7 +73,7 @@ app.use(helmet.hsts({
   maxAge: 7776000000, // 90 days in milliseconds
   includeSubDomains: true,
 }));
-app.use(nocache({ noEtag: true }));
+app.use(nocache());
 // Prevent large payload attacks.
 // Defaults to max size 999, status code 400, message 'Invalid payload; too big.'
 app.use(contentLength.validateMax());
@@ -113,7 +106,7 @@ app.use((req, res, next) => {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-  app.use((err, req, res, next) => {
+  app.use((err, req, res) => {
     res.status(err.status || 500);
     logger.write.error(err);
     res.render('error', {
@@ -125,7 +118,7 @@ if (app.get('env') === 'development') {
 
 // production error handler
 // no stacktraces leaked to user
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   res.status(err.status || 500);
   logger.write.error(err);
   res.render('error', {
@@ -144,8 +137,8 @@ function onError(error) {
   }
 
   const bind = typeof port === 'string'
-    ? `Pipe ${params.baseAddress}`
-    : `Port ${params.baseAddress}`;
+    ? `Pipe ${params.httpsPort}`
+    : `Port ${params.httpsPort}`;
 
   // handle specific listen errors with friendly messages
   if (error.code === 'EACCES') {
@@ -161,12 +154,6 @@ function onError(error) {
 
 const server = https.createServer(sslOptions, app)
   .listen(params.httpsPort)
-  .on('error', onError)
-  .on('listening', () => {
-    const addr = server.address();
-    const bind = typeof addr === 'string'
-      ? `pipe ${addr}`
-      : `port ${addr.port}`;
-  });
+  .on('error', onError);
 
 module.exports = server;
