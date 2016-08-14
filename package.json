@@ -40,7 +40,6 @@
     "eslint-plugin-react": "^6.1.0",
     "istanbul": "^0.4.4",
     "mocha": "^3.0.2",
-    "pug-lint": "^2.3.0",
     "supertest": "^2.0.0"
   },
   "description": "A multi-threaded Node scheduling application for employees with variable shift lengths.",

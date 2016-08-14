@@ -4,7 +4,7 @@ const dbConfig = require('./dbconfig');
 
 module.exports = {
   // Modify the address ports as needed for your environment.
-  httpsPort: 8080,
+  httpsPort: 443,
 
   // REQUIRED
   key: 'config/ssl/localhost.key',
