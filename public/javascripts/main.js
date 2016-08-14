@@ -225,7 +225,7 @@ $(document).ready(() => {
       date: $('#override-date').val(),
       owner: $('#override-shift-owner').val(),
       beginTime: $('#sub-request-begin-time').val(),
-      endTime: $('#sub-request-end-time').val()
+      endTime: $('#sub-request-end-time').val(),
     },
       (data) => {
         if (data.length > 0) {
@@ -254,7 +254,8 @@ $(document).ready(() => {
         $('#shift-override-results').find('tr').remove();
         const errOccurred = results.insertRow(0).insertCell(0);
         errOccurred.innerHTML =
-          '<b style="color: red">An error occurred during the previous search. Please try again.</b>';
+          '<b style="color: red">An error occurred during the previous search. Please try again.'
+            + '</b>';
         $('#shift-override-table').fadeIn();
       });
   });
@@ -266,5 +267,4 @@ $(document).ready(() => {
     $('#sub-update-end-time').val('');
     $('#modify-search-form').fadeIn();
   });
-
 });
