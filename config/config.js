@@ -5,8 +5,7 @@ const dbConfig = require('./dbconfig');
 
 module.exports = {
   // Modify the address ports as needed for your environment.
-  httpPort: 3000,
-  httpsPort: 3001,
+  httpsPort: 8080,
 
   // This is how often the master process checks on the status of the worker threads. After 4 unresponsive checks, a
   // worker is restarted. Make this longer or shorter as necessary for your project.

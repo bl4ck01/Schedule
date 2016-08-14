@@ -1,5 +1,8 @@
 const express = require('express');
 const path = require('path');
+const https = require('https');
+const fs = require('fs');
+const session = require('express-session');
 const favicon = require('serve-favicon');
 const compression = require('compression');
 const bodyParser = require('body-parser');
@@ -13,12 +16,24 @@ const hpp = require('hpp');
 // configuration parameters
 const params = require('./config/config');
 
+const passport = require('./services/passportService');
 const logger = require('./services/logService');
 
 function assignId(req, res, next) {
   req.id = uuid.v4();
   next();
 }
+
+// Establish secret for cookies
+params.cookieSecret = uuid.v4();
+
+// for HTTPS server
+const sslOptions = {
+  key: fs.readFileSync(params.key),
+  cert: fs.readFileSync(params.cert),
+  requestCert: true,
+  rejectUnauthorized: false,
+};
 
 const app = express();
 
@@ -48,6 +63,15 @@ app.use(logger.log('combined', { skip: logger.errorSkip, stream: logger.errorLog
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(validator());
+app.use(session({
+  secret: params.cookieSecret,
+  name: 'LTSHelpDesk.sid',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: true, httpOnly: true }
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // secure app from several top Express/web security concerns
@@ -110,5 +134,39 @@ app.use((err, req, res, next) => {
   });
 });
 
+/**
+ * Event listener for server "error" event.
+ * @param error thrown error
+ */
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
 
-module.exports = app;
+  const bind = typeof port === 'string'
+    ? `Pipe ${params.baseAddress}`
+    : `Port ${params.baseAddress}`;
+
+  // handle specific listen errors with friendly messages
+  if (error.code === 'EACCES') {
+    logger.write.warn(`${bind} requires elevated privileges`);
+    process.exit(1);
+  } else if (error.code === 'EADDRINUSE') {
+    logger.write.warn(`${bind} is already in use`);
+    process.exit(1);
+  } else {
+    throw error;
+  }
+}
+
+const server = https.createServer(sslOptions, app)
+  .listen(params.httpsPort)
+  .on('error', onError)
+  .on('listening', () => {
+    const addr = server.address();
+    const bind = typeof addr === 'string'
+      ? `pipe ${addr}`
+      : `port ${addr.port}`;
+  });
+
+module.exports = server;
