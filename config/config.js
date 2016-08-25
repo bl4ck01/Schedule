@@ -1,4 +1,5 @@
 const path = require('path');
+
 const rootDir = path.join(__dirname, '../');
 const dbConfig = require('./dbconfig');
 
@@ -19,5 +20,5 @@ module.exports = {
   dbUsername: dbConfig.user,
   dbHost: dbConfig.host,
   dbPort: dbConfig.port,
-  dbPass: process.env.DB_PASS || dbConfig.dbPass
+  dbPass: process.env.DB_PASS || dbConfig.dbPass,
 };
