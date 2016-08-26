@@ -1,9 +1,10 @@
 const express = require('express');
-const router = express.Router();
+const passport = require('passport');
+
 const shiftService = require('../services/assignedShiftService');
 const logger = require('../services/logService');
 
-const passport = require('passport');
+const router = express.Router();
 
 router.get('/requests', (req, res, next) => {
   if (req.isAuthenticated()) {
@@ -14,14 +15,19 @@ router.get('/requests', (req, res, next) => {
 });
 
 router.post('/new', (req, res, next) => {
-  if (!req.isAuthenticated()) { //TODO: Remove ! from authentication check
+  if (!req.isAuthenticated()) { // TODO: Remove ! from authentication check
     const data = [];
   }
 });
 
 router.post('/get', (req, res, next) => {
-  if (!req.isAuthenticated()) { //TODO: Remove ! from authentication check
-    const params = { date: req.body.date, owner: req.body.owner, startTime: req.body.beginTime, endTime: req.body.endTime };
+  if (!req.isAuthenticated()) { // TODO: Remove ! from authentication check
+    const params = {
+      date: req.body.date,
+      owner: req.body.owner,
+      startTime: req.body.beginTime,
+      endTime: req.body.endTime,
+    };
 
     if (params.startTime.length > 0 && params.endTime.length > 0) {
       shiftService.getByDateOwnerAndStartEndTimes(params, (err, result) => {
@@ -30,7 +36,7 @@ router.post('/get', (req, res, next) => {
         } else {
           res.send(result.rows);
         }
-      })
+      });
     } else if (params.startTime.length > 0) {
       shiftService.getByDateOwnerAndStartTime(params, (err, result) => {
         if (err != null) {
@@ -38,7 +44,7 @@ router.post('/get', (req, res, next) => {
         } else {
           res.send(result.rows);
         }
-      })
+      });
     } else if (params.endTime.length > 0) {
       shiftService.getByDateOwnerAndEndTime(params, (err, result) => {
         if (err != null) {
@@ -46,7 +52,7 @@ router.post('/get', (req, res, next) => {
         } else {
           res.send(result.rows);
         }
-      })
+      });
     } else {
       shiftService.getByDateAndOwner(params, (err, result) => {
         if (err != null) {
@@ -54,7 +60,7 @@ router.post('/get', (req, res, next) => {
         } else {
           res.send(result.rows);
         }
-      })
+      });
     }
   } else {
     res.sendStatus(401);

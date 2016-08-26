@@ -1,10 +1,12 @@
+const pg = require('pg');
+
 const logger = require('../services/logService');
 const errors = require('../services/errorService');
 const params = require('../config/config');
-const pg = require('pg');
 
 // Database connection setup
-const conString = process.env.DATABASE_URL || 'postgres://' + params.dbUsername + ':' + params.dbPass + '@' + params.dbHost + ':' + params.dbPort + '/' + params.dbName;
+const conString = process.env.DATABASE_URL ||
+  `postgres://${params.dbUsername}:${params.dbPass}@${params.dbHost}:${params.dbPort}/${params.dbName}`;
 
 pg.defaults.user = params.dbUsername;
 pg.defaults.database = params.dbName;
@@ -17,16 +19,13 @@ pg.defaults.ssl = true;
  * @param client connection to database
  * @param done gracefully returns client to connection pool after rollback
  */
-const rollback = (client, done) => {
-  client.query('ROLLBACK', function(err) {
-    //if there was a problem rolling back the query
-    //something is seriously messed up.  Return the error
-    //to the done function to close & remove this client from
-    //the pool.  If you leave a client in the pool with an unaborted
-    //transaction weird, hard to diagnose problems might happen.
-    return done(err);
-  });
-};
+  // if there was a problem rolling back the query
+  // something is seriously messed up.  Return the error
+  // to the done function to close & remove this client from
+  // the pool.  If you leave a client in the pool with an unaborted
+  // transaction weird, hard to diagnose problems might happen.
+const rollback = (client, done) => client.query('ROLLBACK', done);
+
 
 /**
  * Initializes a connection pool and runs a query
@@ -46,13 +45,14 @@ exports.query = (text, values, cb) => {
       return;
     }
 
-    client.query(text, values, (err, result) => {
-      if (err) {
-        err = { message: errors.errCode(err.code), code: 404 };
-        logger.write.error(err.message);
+    client.query(text, values, (queryErr, result) => {
+      let error;
+      if (queryErr) {
+        error = { message: errors.errCode(queryErr.code), code: 404 };
+        logger.write.error(error.message);
       }
       done();
-      cb(err, result);
+      cb(error, result);
     });
   });
 };
@@ -75,22 +75,23 @@ exports.transaction = (queries, cb) => {
       return;
     }
     // begin transaction
-    client.query('BEGIN', (err) => {
-      if (err) {
+    /* eslint-disable consistent-return */
+    client.query('BEGIN', (beginQueryErr) => {
+      if (beginQueryErr) {
         return rollback(client, done);
       }
       process.nextTick(() => {
-        var i = queries.length;
+        let i = queries.length;
         queries.forEach((q) => {
-          client.query(q.text, q.values, (err) => {
-            if (err) {
+          client.query(q.text, q.values, (queryErr) => {
+            if (queryErr) {
               return rollback(client, done);
             }
             i--;
-          })
+          });
         });
         const intervalID = setInterval(() => {
-          if ( i <= 0) {
+          if (i <= 0) {
             // transaction is complete
             client.query('COMMIT', done);
           } // else, queries are still running, keep waiting
@@ -98,7 +99,8 @@ exports.transaction = (queries, cb) => {
 
         // Stop the interval from continuing to run
         clearInterval(intervalID);
-      })
+      });
     });
-  })
+    /* eslint-enable consistent-return */
+  });
 };

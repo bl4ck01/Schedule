@@ -11,13 +11,25 @@ exports.createOne = (params, cb) => {
   queries.push({
     text: 'INSERT INTO Assigned_Shift (sid, covered_from, date, end_time, owner, start_time) ' +
           'VALUES ($1, $2, $3, $4, $5, $6)',
-    values: [params.sid, params.coveredFrom, params.date, params.endTime, params.owner, params.startTime]
+    values: [
+      params.sid,
+      params.coveredFrom,
+      params.date,
+      params.endTime,
+      params.owner,
+      params.startTime],
   });
   // Create Event query
   queries.push({
     text: 'INSERT INTO Event (sid, allday, eventconstraint, eventsource, rendering, title) ' +
           'VALUES ($1, $2, $3, $4, $5, $6)',
-    values: [params.sid, params.allday, params.eventconstraint, params.eventsource, params.rendering, params.title]
+    values: [
+      params.sid,
+      params.allday,
+      params.eventconstraint,
+      params.eventsource,
+      params.rendering,
+      params.title],
   });
 
   // Run transaction of above queries
@@ -31,15 +43,15 @@ exports.createOne = (params, cb) => {
  */
 exports.createMany = (params, cb) => {
   // Create multiple-row insert query
-  var shiftEntities = '';
-  var eventEntities = '';
+  let shiftEntities = '';
+  let eventEntities = '';
   params.data.forEach((entity) => {
     // Create string of Assigned_Shift query values
-    shiftEntities = shiftEntities.concat('(' + entity.sid, + ', ' + entity.covered_from + ', ' + entity.date + ', '
-      + entity.endTime + ', ' + entity.owner + ', ' + entity.startTime + '),');
+    // eslint-disable-next-line max-len
+    shiftEntities = shiftEntities.concat(`(${entity.sid}, ${entity.covered_from}, ${entity.date}, ${entity.endTime}, ${entity.owner}, ${entity.startTime}),`);
     // Create string of Event query values
-    eventEntities = eventEntities.concat('(' + entity.sid + ', ' + entity.allday + ', ' + entity.eventconstraint
-      + ', ' + entity.eventsource + ', ' + entity.rendering + ', ' + entity.title + '),');
+    // eslint-disable-next-line max-len
+    eventEntities = eventEntities.concat(`(${entity.sid}, ${entity.allday}, ${entity.eventconstraint}, ${entity.eventsource}, ${entity.rendering}, ${entity.title}),`);
   });
 
   // Remove final comma from entities strings
@@ -49,14 +61,18 @@ exports.createMany = (params, cb) => {
   // Prepare array of transacted queries
   const queries = [];
   queries.push({
-    text: 'INSERT INTO Assigned_Shift (sid, covered_from, date, end_time, owner, start_time) VALUES ' + shiftEntities,
-    values: null
+    // eslint-disable-next-line max-len
+    text: `INSERT INTO Assigned_Shift (sid, covered_from, date, end_time, owner, start_time) VALUES ${shiftEntities}`,
+    values: null,
   });
 
   queries.push({
     text: 'INSERT INTO Event (sid, allday, eventconstraint, eventsource, rendering, title)',
-    values: null
+    values: null,
   });
+
+  // Run transaction of above queries
+  db.transaction(queries, cb);
 };
 
 /**

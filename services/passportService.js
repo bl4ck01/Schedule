@@ -1,6 +1,7 @@
 const passport = require('passport');
-const logger = require('./logService');
 const SamlStrategy = require('passport-saml').Strategy;
+
+const logger = require('./logService');
 
 passport.use(new SamlStrategy(
   {
@@ -8,7 +9,7 @@ passport.use(new SamlStrategy(
     entryPoint: 'https://louisbrandeis.shiftplanning.com/includes/saml/',
     issuer: 'https://shibboleth.brandeis.edu/idp/profile/SAML2/Redirect/SSO',
     logoutUrl: 'https://login.brandeis.edu/cgi-bin/logout',
-    passReqToCallback: true
+    passReqToCallback: true,
   },
   (profile, done) => {
     logger.write.console(profile);

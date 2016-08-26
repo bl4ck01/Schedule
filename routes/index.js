@@ -1,7 +1,7 @@
 const express = require('express');
-const router = express.Router();
-
 const passport = require('passport');
+
+const router = express.Router();
 
 /* GET home page. */
 router.get('/', (req, res, next) => {
@@ -9,10 +9,10 @@ router.get('/', (req, res, next) => {
 });
 
 router.get('/cal', (req, res, next) => {
-  if (req.isAuthenticated()) { //TODO: Modify if/else statement once authentication is configured
-    res.render('calendar', {user: req.user});
+  if (req.isAuthenticated()) { // TODO: Modify if/else statement once authentication is configured
+    res.render('calendar', { user: req.user });
   } else {
-    res.render('calendar', {user: null});
+    res.render('calendar', { user: null });
   }
 });
 

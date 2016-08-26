@@ -1,7 +1,5 @@
 const errorList = {
-  22007: 'invalid input syntax'
+  22007: 'invalid input syntax',
 };
 
-exports.errCode = (errNum) => {
-  return errorList[errNum];
-};
+exports.errCode = errNum => errorList[errNum];

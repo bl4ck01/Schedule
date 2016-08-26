@@ -18,16 +18,16 @@ exports.createOne = (params, cb) => {
  */
 exports.createMultiple = (params, cb) => {
   // Create multiple-row insert query
-  var entities = '';
+  let entities = '';
   params.data.forEach((entity) => {
     // Create string of Employee query values
-    entities = entities.concat('(' + entity.uid, + ', ' + entity.name + ', ' + entity.phone + ', ' + entity.role + '),');
+    entities = entities.concat(`(${entity.uid}, ${entity.name}, ${entity.phone}, ${entity.role}),`);
   });
 
   // Remove final comma from entities string
   entities = entities.substring(0, entities.length);
 
-  db.query('INSERT INTO Employee (uid, name, phone, role) VALUES ' + entities,
+  db.query(`INSERT INTO Employee (uid, name, phone, role) VALUES ${entities}`,
     null,
     cb);
 };
@@ -50,10 +50,10 @@ exports.removeOne = (params, cb) => {
  */
 exports.removeMultiple = (params, cb) => {
   const values = params.data.map((uid, index) => {
-    return '$' + (index + 1);
+    return `$${(index + 1)}`;
   });
 
-  db.query('DELETE FROM Employee WHERE uid IN (' + values.join(', ') + ')',
+  db.query(`DELETE FROM Employee WHERE uid IN (${values.join(', ')})`,
     params.data,
     cb);
 };
