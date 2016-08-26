@@ -44,7 +44,6 @@ app.set('view engine', 'pug');
 
 // Improve response rate by compressing data with Gzip
 app.use(compression());
-// Tag each request with a UUID
 app.use(genUniqueId);
 // uncomment after placing your favicon in /public/images
 app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
@@ -56,8 +55,8 @@ if (app.get('env') === 'development') {
 }
 
 // Log accesses to file
-app.use(logger.log(
-  ':remote-addr user: :remote-user [:date[cfl]] :method :url :status :response-time',
+// eslint-disable-next-line max-len
+app.use(logger.log(':id :remote-addr - :remote-user [:date[cfl]] ":method :url HTTP/:http-version" :status :res[content-length] :response-time ms',
   { stream: logger.accessLogStream }));
 // Log errors to separate log
 app.use(logger.log('combined', { skip: logger.errorSkip, stream: logger.errorLogStream }));
