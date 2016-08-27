@@ -166,7 +166,15 @@ function onError(error) {
 }
 
 const server = https.createServer(sslOptions, app)
-  .listen(params.httpsPort)
-  .on('error', onError);
+  .on('error', onError)
+  .listen(params.httpsPort, () => {
+    try {
+      process.setgid('akalfus');
+      process.setuid('akalfus');
+    } catch (err) {
+      logger.write.error('Failed to drop privileges, aborting.');
+      process.exit(1);
+    }
+  });
 
 module.exports = server;
