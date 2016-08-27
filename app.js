@@ -32,6 +32,11 @@ params.cookieSecret = uuid.v4();
 const sslOptions = {
   key: fs.readFileSync(params.key),
   cert: fs.readFileSync(params.cert),
+  ca: [
+    fs.readFileSync(`${params.ca}_1.cer`),
+    fs.readFileSync(`${params.ca}_2.cer`),
+    fs.readFileSync(`${params.ca}_3.cer`),
+  ],
   requestCert: true,
   rejectUnauthorized: false,
 };

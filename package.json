@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "sudo node app.js",
+    "start": "node app.js",
     "test": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- $(CLI_MOCHA) --recursive -R spec $(path)",
     "report": "see ./coverage/lcov-report/index.html",
     "delint": "./node_modules/eslint/bin/eslint.js config/ public/javascripts/ routes/ services/ test/ app.js;",

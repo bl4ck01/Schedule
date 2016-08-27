@@ -8,8 +8,10 @@ module.exports = {
   httpsPort: 443,
 
   // REQUIRED
-  key: 'config/ssl/localhost.key',
-  cert: 'config/ssl/localhost.crt',
+  key: 'config/ssl/helpdesk.unet.brandeis.edu.key',
+  cert: 'config/ssl/helpdesk_unet_brandeis_edu_cert.cer',
+  // Partial construction of CA - rest constructed in app.js
+  ca: 'config/ssl/helpdesk_unet_brandeis_edu_interm',
 
   rootDir,
   // cookieSecret will be automatically assigned a unique value upon server start
