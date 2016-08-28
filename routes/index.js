@@ -1,14 +1,18 @@
 const express = require('express');
-const passport = require('passport');
+const fs = require('fs');
 
+const config = require('../config/config');
+const passport = require('../services/passportService');
+
+// eslint-disable-next-line new-cap
 const router = express.Router();
 
 /* GET home page. */
-router.get('/', (req, res, next) => {
+router.get('/', (req, res) => {
   res.redirect('/cal');
 });
 
-router.get('/cal', (req, res, next) => {
+router.get('/cal', (req, res) => {
   if (req.isAuthenticated()) { // TODO: Modify if/else statement once authentication is configured
     res.render('calendar', { user: req.user });
   } else {
@@ -16,12 +20,12 @@ router.get('/cal', (req, res, next) => {
   }
 });
 
-router.get('/clock/in', (req, res, next) => {
+router.get('/clock/in', (req, res) => {
   res.render('clock-in');
 });
 
-router.get('/login', passport.authenticate('saml'),
-  (req, res, next) => {
+router.get('/login', passport._.authenticate('saml'),
+  (req, res) => {
     if (req.isAuthenticated()) {
       res.redirect('/');
     } else {
@@ -30,13 +34,22 @@ router.get('/login', passport.authenticate('saml'),
   }
 );
 
-router.get('/login/callback', (req, res, next) => {
-  res.redirect('/');
+router.get('/login/callback',
+  passport._.authenticate('saml', { failureRedirect: '/', failureFlash: true }),
+  (req, res) => {
+    res.redirect('/');
+  }
+);
+
+router.get('/logout', (req, res) => {
+  req.session.destroy(() => {
+    res.render('login', { message: 'You have been logged out' });
+  });
 });
 
-router.get('/logout', (req, res, next) => {
-  req.logout();
-  res.render('login', { message: 'You have been logged out' });
+router.get('/shibboleth', (req, res) => {
+  res.status(200).send(passport.strategy
+    .generateServiceProviderMetadata());
 });
 
 module.exports = router;

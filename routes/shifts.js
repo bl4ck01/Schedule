@@ -1,12 +1,11 @@
 const express = require('express');
-const passport = require('passport');
 
 const shiftService = require('../services/assignedShiftService');
-const logger = require('../services/logService');
 
+// eslint-disable-next-line new-cap
 const router = express.Router();
 
-router.get('/requests', (req, res, next) => {
+router.get('/requests', (req, res) => {
   if (req.isAuthenticated()) {
     res.render('sub_requests', { user: req.user });
   } else {
@@ -14,13 +13,13 @@ router.get('/requests', (req, res, next) => {
   }
 });
 
-router.post('/new', (req, res, next) => {
+router.post('/new', (req, res) => {
   if (!req.isAuthenticated()) { // TODO: Remove ! from authentication check
     const data = [];
   }
 });
 
-router.post('/get', (req, res, next) => {
+router.post('/get', (req, res) => {
   if (!req.isAuthenticated()) { // TODO: Remove ! from authentication check
     const params = {
       date: req.body.date,
@@ -67,7 +66,7 @@ router.post('/get', (req, res, next) => {
   }
 });
 
-router.post('/drop', (req, res, next) => {
+router.post('/drop', (req, res) => {
   if (req.isAuthenticated()) {
     res.sendStatus(200);
   } else {

@@ -1,20 +1,29 @@
 const passport = require('passport');
-const SamlStrategy = require('passport-saml-encrypted').Strategy;
+const SamlStrategy = require('passport-saml').Strategy;
 
 const logger = require('./logService');
 
-passport.use(new SamlStrategy(
+const saml = new SamlStrategy(
   {
-    path: '/login/callback',
-    entryPoint: 'https://louisbrandeis.shiftplanning.com/includes/saml/',
-    issuer: 'https://shibboleth.brandeis.edu/idp/profile/SAML2/Redirect/SSO',
-    logoutUrl: 'https://login.brandeis.edu/cgi-bin/logout',
+    callbackUrl: 'https://helpdesk.unet.brandeis.edu/login/callback',
+    entryPoint: '',
+    issuer: 'https://helpdesk.unet.brandeis.edu/shibboleth',
+    logoutCallbackUrl: 'https://helpdesk.unet.brandeis.edu/logout',
     passReqToCallback: true,
   },
   (profile, done) => {
-    logger.write.console(profile);
-    done(null);
+    logger.write.console(JSON.stringify(profile));
+    done(null, {
+      id: profile.uid,
+      email: profile.email,
+      displayName: profile.cn,
+      firstName: profile.givenName,
+      lastName: profile.sn,
+    });
   }
-));
+);
 
-module.exports = passport;
+passport.use(saml);
+
+exports._ = passport;
+exports.strategy = saml;

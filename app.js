@@ -76,8 +76,8 @@ app.use(session({
   saveUninitialized: false,
   cookie: { secure: true, httpOnly: true },
 }));
-app.use(passport.initialize());
-app.use(passport.session());
+app.use(passport._.initialize());
+app.use(passport._.session());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // secure app from several top Express/web security concerns
@@ -169,6 +169,7 @@ const server = https.createServer(sslOptions, app)
   .on('error', onError)
   .listen(params.httpsPort, () => {
     try {
+      // Drop privileges to non-root user
       process.setgid('akalfus');
       process.setuid('akalfus');
     } catch (err) {
