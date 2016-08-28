@@ -15,7 +15,7 @@ const saml = new SamlStrategy(
     logger.write.console(JSON.stringify(profile));
     done(null, {
       id: profile.uid,
-      email: profile.email,
+      email: profile.mail,
       displayName: profile.cn,
       firstName: profile.givenName,
       lastName: profile.sn,
