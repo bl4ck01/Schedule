@@ -6,7 +6,7 @@ const logger = require('./logService');
 const saml = new SamlStrategy(
   {
     callbackUrl: 'https://helpdesk.unet.brandeis.edu/login/callback',
-    entryPoint: '',
+    entryPoint: 'https://shibboleth.brandeis.edu/idp/profile/SAML2/Redirect/SSO',
     issuer: 'https://helpdesk.unet.brandeis.edu/shibboleth',
     logoutCallbackUrl: 'https://helpdesk.unet.brandeis.edu/logout',
     passReqToCallback: true,
