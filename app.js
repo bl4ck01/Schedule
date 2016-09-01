@@ -14,7 +14,7 @@ const contentLength = require('express-content-length-validator');
 const hpp = require('hpp');
 
 // configuration parameters
-const params = require('./config/config');
+const config = require('./config/config');
 
 const passport = require('./services/passportService');
 const logger = require('./services/logService');
@@ -26,16 +26,16 @@ function genUniqueId(req, res, next) {
 }
 
 // Establish secret for cookies
-params.cookieSecret = uuid.v4();
+config.cookieSecret = uuid.v4();
 
 // for HTTPS server
 const sslOptions = {
-  key: fs.readFileSync(params.key),
-  cert: fs.readFileSync(params.cert),
+  key: fs.readFileSync(config.key),
+  cert: fs.readFileSync(config.cert),
   ca: [
-    fs.readFileSync(`${params.ca}_1.cer`),
-    fs.readFileSync(`${params.ca}_2.cer`),
-    fs.readFileSync(`${params.ca}_3.cer`),
+    fs.readFileSync(`${config.ca}_1.cer`),
+    fs.readFileSync(`${config.ca}_2.cer`),
+    fs.readFileSync(`${config.ca}_3.cer`),
   ],
   requestCert: true,
   rejectUnauthorized: false,
@@ -70,7 +70,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(validator());
 app.use(session({
-  secret: params.cookieSecret,
+  secret: config.cookieSecret,
   name: 'LTSHelpDesk.sid',
   resave: false,
   saveUninitialized: false,
@@ -150,8 +150,8 @@ function onError(error) {
   }
 
   const bind = typeof port === 'string'
-    ? `Pipe ${params.httpsPort}`
-    : `Port ${params.httpsPort}`;
+    ? `Pipe ${config.httpsPort}`
+    : `Port ${config.httpsPort}`;
 
   // handle specific listen errors with friendly messages
   if (error.code === 'EACCES') {
@@ -167,11 +167,11 @@ function onError(error) {
 
 const server = https.createServer(sslOptions, app)
   .on('error', onError)
-  .listen(params.httpsPort, () => {
+  .listen(config.httpsPort, () => {
     try {
       // Drop privileges to non-root user
-      process.setgid('akalfus');
-      process.setuid('akalfus');
+      process.setgid(config.gid);
+      process.setuid(config.uid);
     } catch (err) {
       logger.write.error('Failed to drop privileges, aborting.');
       process.exit(1);

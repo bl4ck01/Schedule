@@ -2,13 +2,14 @@ const passport = require('passport');
 const SamlStrategy = require('passport-saml').Strategy;
 
 const logger = require('./logService');
+const config = require('../config/config');
 
 const saml = new SamlStrategy(
   {
-    callbackUrl: 'https://helpdesk.unet.brandeis.edu/login/callback',
-    entryPoint: 'https://shibboleth.brandeis.edu/idp/profile/SAML2/Redirect/SSO',
-    issuer: 'https://helpdesk.unet.brandeis.edu/shibboleth',
-    logoutCallbackUrl: 'https://helpdesk.unet.brandeis.edu/logout',
+    callbackUrl: config.callbackUrl,
+    entryPoint: config.entryPoint,
+    issuer: config.issuer,
+    logoutCallbackUrl: config.logoutCallbackUrl,
     passReqToCallback: true,
   },
   (profile, done) => {

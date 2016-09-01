@@ -4,11 +4,10 @@
   "private": true,
   "scripts": {
     "start": "node app.js",
-    "test": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- $(CLI_MOCHA) --recursive -R spec $(path)",
-    "report": "see ./coverage/lcov-report/index.html",
-    "delint": "./node_modules/eslint/bin/eslint.js config/ public/javascripts/ routes/ services/ test/ app.js;",
-    "clean": "rm -rf ./node_modules/; rm -rf ./coverage/;",
-    "submit": "npm run clean; npm install; npm run delint; npm run test;"
+    "test": "./node_modules/.bin/mocha --reporter spec"
+  },
+  "engines": {
+    "node": "6.x.x"
   },
   "dependencies": {
     "body-parser": "^1.15.2",
