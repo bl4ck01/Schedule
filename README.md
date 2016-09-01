@@ -1,4 +1,4 @@
-[![Code Climate](https://codeclimate.com/github/arikalfus/Schedule/badges/gpa.svg)](https://codeclimate.com/github/arikalfus/Schedule) [![Codeship Status for arikalfus/Schedule](https://codeship.com/projects/09071d00-52bb-0134-6da7-02adab5d782c/status?branch=master)](https://codeship.com/projects/171638)
+[![Code Climate](https://codeclimate.com/github/arikalfus/Schedule/badges/gpa.svg)](https://codeclimate.com/github/arikalfus/Schedule)
 
 # Schedule
 

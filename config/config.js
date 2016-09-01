@@ -1,6 +1,7 @@
 const path = require('path');
 
 const rootDir = path.join(__dirname, '../');
+const dbConfig = require('./dbconfig');
 
 module.exports = {
   // Modify the address ports as needed for your environment.
@@ -26,9 +27,9 @@ module.exports = {
   cookieSecret: null,
 
   // Database configuration
-  dbName: process.env.db,
-  dbUsername: process.env.dbUser,
-  dbHost: process.env.dbHost,
-  dbPort: process.env.dbPort,
-  dbPass: process.env.dbPass,
+  dbName: dbConfig.db,
+  dbUsername: dbConfig.user,
+  dbHost: dbConfig.host,
+  dbPort: dbConfig.port,
+  dbPass: dbConfig.dbPass,
 };
