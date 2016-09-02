@@ -42,7 +42,10 @@ block content
                       input.form-control.input-small#override-date(type='text', data-provide='datepicker',
                       data-date-autoclose='true', placeholder='01/10/2016', name='date')
                     div.form-group
-                      label.control-label(for='override-shift-owner') Shift owner:
+                      label.control-label(for='override-shift-owner')
+                        small
+                          i (Optional)
+                        p Shift owner:
                       input.form-control#override-shift-owner(type='text', placeholder='Louis Brandeis', name='owner')
                     label.control-label(for='sub-request-begin-time')
                       small

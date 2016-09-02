@@ -1,4 +1,5 @@
 const express = require('express');
+const validator = require('validator');
 
 const shiftService = require('../services/assignedShiftService');
 
@@ -15,7 +16,7 @@ router.get('/requests', (req, res) => {
 
 router.post('/new', (req, res) => {
   if (!req.isAuthenticated()) { // TODO: Remove ! from authentication check
-    const data = [];
+    res.status(200).send(req.body);
   }
 });
 
@@ -28,38 +29,40 @@ router.post('/get', (req, res) => {
       endTime: req.body.endTime,
     };
 
-    if (params.startTime.length > 0 && params.endTime.length > 0) {
-      shiftService.getByDateOwnerAndStartEndTimes(params, (err, result) => {
-        if (err != null) {
-          res.status(err.code).send(err.message);
-        } else {
-          res.send(result.rows);
-        }
-      });
-    } else if (params.startTime.length > 0) {
-      shiftService.getByDateOwnerAndStartTime(params, (err, result) => {
-        if (err != null) {
-          res.status(err.code).send(err.message);
-        } else {
-          res.send(result.rows);
-        }
-      });
-    } else if (params.endTime.length > 0) {
-      shiftService.getByDateOwnerAndEndTime(params, (err, result) => {
-        if (err != null) {
-          res.status(err.code).send(err.message);
-        } else {
-          res.send(result.rows);
-        }
-      });
-    } else {
-      shiftService.getByDateAndOwner(params, (err, result) => {
-        if (err != null) {
-          res.status(err.code).send(err.message);
-        } else {
-          res.send(result.rows);
-        }
-      });
+    if (!validator.isNull(params.owner)) {
+      if (!validator.isNull(params.startTime) && !validator.isNull(params.endTime)) {
+        shiftService.getByDateOwnerAndStartEndTimes(params, (err, result) => {
+          if (err != null) {
+            res.status(err.code).send(err.message);
+          } else {
+            res.send(result.rows);
+          }
+        });
+      } else if (!validator.isNull(params.startTime)) {
+        shiftService.getByDateOwnerAndStartTime(params, (err, result) => {
+          if (err != null) {
+            res.status(err.code).send(err.message);
+          } else {
+            res.send(result.rows);
+          }
+        });
+      } else if (!validator.isNull(params.endTime)) {
+        shiftService.getByDateOwnerAndEndTime(params, (err, result) => {
+          if (err != null) {
+            res.status(err.code).send(err.message);
+          } else {
+            res.send(result.rows);
+          }
+        });
+      } else {
+        shiftService.getByDateAndOwner(params, (err, result) => {
+          if (err != null) {
+            res.status(err.code).send(err.message);
+          } else {
+            res.send(result.rows);
+          }
+        });
+      }
     }
   } else {
     res.sendStatus(401);
