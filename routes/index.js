@@ -33,7 +33,11 @@ router.get('/login', passport._.authenticate('saml'),
 );
 
 router.post('/login/callback',
-  passport._.authenticate('saml'),
+  passport._.authenticate('saml',
+    {
+      failureRedirect: '/',
+      failureFlash: true,
+    }),
   (req, res) => {
     res.redirect('/');
   }
