@@ -4,18 +4,15 @@ const logger = require('../services/logService');
 const errors = require('../services/errorService');
 const params = require('../config/config');
 
-// Database connection setup
-const conString = process.env.DATABASE_URL ||
-  `postgres://${params.dbUsername}:${params.dbPass}@${params.dbHost}:${params.dbPort}/${params.dbName}`;
-
 const dbConfig = {
   user: params.dbUsername,
   database: params.dbName,
   password: params.dbPass,
   host: params.dbHost,
   port: params.dbPort,
-  max: 30, // max number of clients in the pool
-  idleTimeoutMillis: 30000, // how long a client is allowed to remain idle before being closed
+  max: 50, // max number of clients in the pool
+  idleTimeoutMillis: 30000, // how long a client is allowed to remain idle before being closed,
+  ssl: true,
 };
 
 const pool = new pg.Pool(dbConfig);
@@ -40,7 +37,7 @@ const rollback = (client, done) => client.query('ROLLBACK', done);
  * @param cb Optional callback function
  */
 exports.query = (text, values, cb) => {
-  pool.connect(conString, (err, client, done) => {
+  pool.connect((err, client, done) => {
     if (err) {
       logger.write.error('error fetching client from pool');
       logger.write.error(err);
@@ -73,7 +70,7 @@ exports.query = (text, values, cb) => {
  * @param cb Optional callback function
  */
 exports.transaction = (queries, cb) => {
-  pool.connect(conString, (err, client, done) => {
+  pool.connect((err, client, done) => {
     if (err) {
       logger.write.error('error fetching client from pool');
       logger.write.error(err);
