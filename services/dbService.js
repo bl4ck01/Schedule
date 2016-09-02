@@ -8,11 +8,17 @@ const params = require('../config/config');
 const conString = process.env.DATABASE_URL ||
   `postgres://${params.dbUsername}:${params.dbPass}@${params.dbHost}:${params.dbPort}/${params.dbName}`;
 
-pg.defaults.user = params.dbUsername;
-pg.defaults.database = params.dbName;
-pg.defaults.host = params.dbHost;
-pg.defaults.port = params.dbPort;
-pg.defaults.ssl = true;
+const dbConfig = {
+  user: params.dbUsername,
+  database: params.dbName,
+  password: params.dbPass,
+  host: params.dbHost,
+  port: params.dbPort,
+  max: 30, // max number of clients in the pool
+  idleTimeoutMillis: 30000, // how long a client is allowed to remain idle before being closed
+};
+
+const pool = new pg.Pool(dbConfig);
 
 /**
  * Rollback function to recover from failed transaction
@@ -34,7 +40,7 @@ const rollback = (client, done) => client.query('ROLLBACK', done);
  * @param cb Optional callback function
  */
 exports.query = (text, values, cb) => {
-  pg.connect(conString, (err, client, done) => {
+  pool.connect(conString, (err, client, done) => {
     if (err) {
       logger.write.error('error fetching client from pool');
       logger.write.error(err);
@@ -55,6 +61,10 @@ exports.query = (text, values, cb) => {
       cb(error, result);
     });
   });
+
+  pool.on('error', (err) => {
+    logger.write.error(err.message, err.stack);
+  });
 };
 
 /**
@@ -63,7 +73,7 @@ exports.query = (text, values, cb) => {
  * @param cb Optional callback function
  */
 exports.transaction = (queries, cb) => {
-  pg.connect(conString, (err, client, done) => {
+  pool.connect(conString, (err, client, done) => {
     if (err) {
       logger.write.error('error fetching client from pool');
       logger.write.error(err);
@@ -102,5 +112,9 @@ exports.transaction = (queries, cb) => {
       });
     });
     /* eslint-enable consistent-return */
+  });
+
+  pool.on('error', (err) => {
+    logger.write.error(err.message, err.stack);
   });
 };

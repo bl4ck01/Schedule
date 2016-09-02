@@ -34,7 +34,6 @@ eslint:
 .PHONY: test
 test:
 	# Run all tests with code coverage
-	sudo \
 	./node_modules/istanbul/lib/cli.js cover \
 	./node_modules/mocha/bin/_mocha -- \
 	$(CLI_MOCHA) \
@@ -50,7 +49,7 @@ report:
 .PHONY: start
 start:
 	# Start the HTTP/HTTPS server
-	sudo npm start;
+	npm start;
 
 .PHONY: submit
 submit: clean install eslint test
