@@ -32,7 +32,7 @@ router.get('/login', passport._.authenticate('saml'),
   }
 );
 
-router.get('/login/callback',
+router.post('/login/callback',
   passport._.authenticate('saml'),
   (req, res) => {
     res.redirect('/');
@@ -40,9 +40,8 @@ router.get('/login/callback',
 );
 
 router.get('/logout', (req, res) => {
-  req.session.destroy(() => {
-    res.render('login', { message: 'You have been logged out' });
-  });
+  req.logout();
+  res.render('login', { message: 'You have been logged out' });
 });
 
 router.get('/shibboleth', (req, res) => {
