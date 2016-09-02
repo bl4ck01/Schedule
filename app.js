@@ -89,9 +89,9 @@ app.use(helmet.hsts({
 app.use(nocache());
 // Prevent large payload attacks.
 // Defaults to max size 999, status code 400, message 'Invalid payload; too big.'
-app.use(contentLength.validateMax());
+// app.use(contentLength.validateMax());
 // protect against HTTP Parameter Pollution attacks
-app.use(hpp());
+// app.use(hpp());
 
 /**
  * REQUIRED: All app routes loaded here
