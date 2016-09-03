@@ -112,27 +112,10 @@ block content
                 form#create-shift-form(action='/shifts/new', method='post')
                   div.form-group
                     p Select which days this shift should apply:
-                    div.checkbox-inline
-                      input.checkbox-input#create-shift-mon(type='checkbox', name='days[]', value='Mon')
-                      label(for='create-shift-mon') Mon
-                    div.checkbox-inline
-                      input.checkbox-input#create-shift-tue(type='checkbox', name='days[]', value='Tue')
-                      label(for='create-shift-tue') Tue
-                    div.checkbox-inline
-                      input.checkbox-input#create-shift-wed(type='checkbox', name='days[]', value='Wed')
-                      label(for='create-shift-wed') Wed
-                    div.checkbox-inline
-                      input.checkbox-input#create-shift-thur(type='checkbox', name='days[]', value='Thur')
-                      label(for='create-shift-thur') Thur
-                    div.checkbox-inline
-                      input.checkbox-input#create-shift-fri(type='checkbox', name='days[]', value='Fri')
-                      label(for='create-shift-fri') Fri
-                    div.checkbox-inline
-                      input.checkbox-input#create-shift-sat(type='checkbox', name='days[]', value='Sat')
-                      label(for='create-shift-sat') Sat
-                    div.checkbox-inline
-                      input.checkbox-input#create-shift-sun(type='checkbox', name='days[]', value='Sun')
-                      label(for='create-shift-sun') Sun
+                    each val in ['Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun']
+                      div.checkbox-inline
+                        input.checkbox-input(type='checkbox', name='days[]', value=val, id=`create-shift-${val}`)
+                        label(for=`create-shift-${val}`)= val
                   div.col-md-4
                     div.form-group
                       label.control-label(for='create-shift-from-date') Date from:
