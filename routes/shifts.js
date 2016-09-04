@@ -1,5 +1,6 @@
 const express = require('express');
 const validator = require('validator');
+const _ = require('lodash');
 
 const shiftService = require('../services/assignedShiftService');
 
@@ -16,6 +17,11 @@ router.get('/requests', (req, res) => {
 
 router.post('/new', (req, res) => {
   if (!req.isAuthenticated()) { // TODO: Remove ! from authentication check
+    const days = [];
+    // Capture days from form data
+    _.forOwn(req.body, (val, key) => {
+      if ((/(days)\[[0-6]\]/).test(key)) days.push(val);
+    });
     res.status(200).send(req.body);
   }
 });

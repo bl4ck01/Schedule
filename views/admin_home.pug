@@ -112,9 +112,12 @@ block content
                 form#create-shift-form(action='/shifts/new', method='post')
                   div.form-group
                     p Select which days this shift should apply:
-                    each val in ['Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun']
+                    each val, index in ['Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun']
                       div.checkbox-inline
-                        input.checkbox-input(type='checkbox', name='days[]', value=val, id=`create-shift-${val}`)
+                        input.checkbox-input(type='checkbox',
+                                             name=`days[${index}]`,
+                                             value= val,
+                                             id=`create-shift-${val}`)
                         label(for=`create-shift-${val}`)= val
                   div.col-md-4
                     div.form-group

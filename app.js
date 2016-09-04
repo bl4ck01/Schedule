@@ -67,7 +67,7 @@ app.use(logger.log(':id :remote-addr - :remote-user [:date[cfl]] ":method :url H
 app.use(logger.log('combined', { skip: logger.errorSkip, stream: logger.errorLogStream }));
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(validator());
 app.use(session({
   secret: config.cookieSecret,
