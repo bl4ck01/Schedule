@@ -27,9 +27,9 @@ module.exports = {
   cookieSecret: null,
 
   // Database configuration
-  dbName: dbConfig.db,
-  dbUsername: dbConfig.user,
-  dbHost: dbConfig.host,
-  dbPort: dbConfig.port,
-  dbPass: dbConfig.dbPass,
+  dbName: dbConfig.db || process.env.DBNAME,
+  dbUsername: dbConfig.user || process.env.DBUSERNAME,
+  dbHost: dbConfig.host || process.env.DBHOST,
+  dbPort: dbConfig.port || process.env.DBPORT,
+  dbPass: dbConfig.dbPass || process.env.DBPASS,
 };
