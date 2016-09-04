@@ -8,29 +8,29 @@ const db = require('./dbService');
 exports.createOne = (params, cb) => {
   const queries = [];
   // Create Assigned_Shift query
-  queries.push({
-    text: 'INSERT INTO Assigned_Shift (sid, covered_from, date, end_time, owner, start_time) ' +
-          'VALUES ($1, $2, $3, $4, $5, $6)',
-    values: [
-      params.sid,
-      params.coveredFrom,
-      params.date,
-      params.endTime,
-      params.owner,
-      params.startTime],
-  });
+  queries.push(db.assigned_shift.insert(
+    {
+      sid: params.sid,
+      covered_from: params.coveredFrom,
+      date: params.date,
+      end_time: params.endTime,
+      owner: params.owner,
+      start_time: params.startTime,
+    }
+  ).toQuery()
+  );
   // Create Event query
-  queries.push({
-    text: 'INSERT INTO Event (sid, allday, eventconstraint, eventsource, rendering, title) ' +
-          'VALUES ($1, $2, $3, $4, $5, $6)',
-    values: [
-      params.sid,
-      params.allday,
-      params.eventconstraint,
-      params.eventsource,
-      params.rendering,
-      params.title],
-  });
+  queries.push(db.event.insert(
+    {
+      sid: params.sid,
+      allday: params.allday,
+      eventconstraint: params.eventconstraint,
+      eventsource: params.eventsource,
+      rendering: params.rendering,
+      title: params.title,
+    }
+  ).toQuery()
+  );
 
   // Run transaction of above queries
   db.transaction(queries, cb);
@@ -43,33 +43,31 @@ exports.createOne = (params, cb) => {
  */
 exports.createMany = (params, cb) => {
   // Create multiple-row insert query
-  let shiftEntities = '';
-  let eventEntities = '';
+  const shiftEntities = [];
+  const eventEntities = [];
   params.data.forEach((entity) => {
-    // Create string of Assigned_Shift query values
-    // eslint-disable-next-line max-len
-    shiftEntities = shiftEntities.concat(`(${entity.sid}, ${entity.covered_from}, ${entity.date}, ${entity.endTime}, ${entity.owner}, ${entity.startTime}),`);
-    // Create string of Event query values
-    // eslint-disable-next-line max-len
-    eventEntities = eventEntities.concat(`(${entity.sid}, ${entity.allday}, ${entity.eventconstraint}, ${entity.eventsource}, ${entity.rendering}, ${entity.title}),`);
+    shiftEntities.push({
+      sid: entity.sid,
+      covered_from: entity.covered_from,
+      date: entity.date,
+      end_time: entity.endTime,
+      owner: entity.owner,
+      start_time: entity.startTime,
+    });
+    eventEntities.push({
+      sid: entity.sid,
+      allday: entity.allday,
+      eventconstraint: entity.eventconstraint,
+      eventsource: entity.eventsource,
+      rendering: entity.rendering,
+      title: entity.title,
+    });
   });
-
-  // Remove final comma from entities strings
-  shiftEntities = shiftEntities.substring(0, shiftEntities.length);
-  eventEntities = eventEntities.substring(0, eventEntities.length);
 
   // Prepare array of transacted queries
   const queries = [];
-  queries.push({
-    // eslint-disable-next-line max-len
-    text: `INSERT INTO Assigned_Shift (sid, covered_from, date, end_time, owner, start_time) VALUES ${shiftEntities}`,
-    values: null,
-  });
-
-  queries.push({
-    text: 'INSERT INTO Event (sid, allday, eventconstraint, eventsource, rendering, title)',
-    values: null,
-  });
+  queries.push(db.assigned_shift.insert(shiftEntities).toQuery());
+  queries.push(db.event.insert(eventEntities).toQuery());
 
   // Run transaction of above queries
   db.transaction(queries, cb);
@@ -81,10 +79,14 @@ exports.createMany = (params, cb) => {
  * @param cb optional callback function
  */
 exports.getByDateAndOwner = (params, cb) => {
-  db.query('SELECT * FROM Assigned_Shift ' +
-            'WHERE date = $1 AND owner = $2',
-    [params.date, params.owner],
-    cb);
+  const query = db.assigned_shift.select(db.assigned_shift.star())
+    .from(db.assigned_shift)
+      .where(
+        db.assigned_shift.date.equals(params.date)
+        .and(db.assigned_shift.owner.equals(params.owner))
+      ).toQuery();
+
+  db.query(query.text, query.values, cb);
 };
 
 /**
@@ -93,11 +95,16 @@ exports.getByDateAndOwner = (params, cb) => {
  * @param cb optional callback function
  */
 exports.getByDateOwnerAndStartEndTimes = (params, cb) => {
-  db.query('SELECT * FROM Assigned_Shift ' +
-            'WHERE date = $1 AND owner = $2 AND ' +
-            'start_time = $3 AND end_time = $4',
-    [params.date, params.owner, params.startTime, params.endTime],
-    cb);
+  const query = db.assigned_shift.select(db.assigned_shift.star())
+    .from(db.assigned_shift)
+      .where(
+        db.assigned_shift.date.equals(params.date)
+        .and(db.assigned_shift.owner.equals(params.date))
+        .and(db.assigned_shift.start_time.equals(params.startTime))
+        .and(db.assigned_shift.end_time.equals(params.endTime))
+      ).toQuery();
+
+  db.query(query.text, query.values, cb);
 };
 
 /**
@@ -106,10 +113,15 @@ exports.getByDateOwnerAndStartEndTimes = (params, cb) => {
  * @param cb optional callback function
  */
 exports.getByDateOwnerAndStartTime = (params, cb) => {
-  db.query('SELECT * FROM Assigned_Shift ' +
-    'WHERE date = $1 AND owner = $2 AND start_time = $3',
-    [params.date, params.owner, params.startTime],
-    cb);
+  const query = db.assigned_shift.select(db.assigned_shift.star())
+    .from(db.assigned_shift)
+      .where(
+        db.assigned_shift.date.equals(params.date)
+        .and(db.assigned_shift.owner.equals(params.owner))
+        .and(db.assigned_shift.start_time.equals(params.startTime))
+      ).toQuery();
+
+  db.query(query.text, query.values, cb);
 };
 
 /**
@@ -118,8 +130,13 @@ exports.getByDateOwnerAndStartTime = (params, cb) => {
  * @param cb optional callback function
  */
 exports.getByDateOwnerAndEndTime = (params, cb) => {
-  db.query('SELECT * FROM Assigned_Shift ' +
-    'WHERE date = $1 AND owner = $2 AND end_time = $3',
-    [params.date, params.owner, params.endTime],
-    cb);
+  const query = db.assigned_shift.select(db.assigned_shift.star())
+    .from(db.assigned_shift)
+      .where(
+        db.assigned_shift.date.equals(params.date)
+        .and(db.assigned_shift.owner.equals(params.owner))
+        .and(db.assigned_shift.end_time.equals(params.endTime))
+      ).toQuery();
+
+  db.query(query.text, query.values, cb);
 };

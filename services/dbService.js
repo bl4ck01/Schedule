@@ -1,4 +1,5 @@
 const pg = require('pg');
+const sql = require('sql');
 
 const logger = require('../services/logService');
 const errors = require('../services/errorService');
@@ -15,6 +16,81 @@ const dbConfig = {
 };
 
 const pool = new pg.Pool(dbConfig);
+
+sql.setDialect('postgres');
+
+/**
+ * SQL definition for public.assigned_shift
+ */
+exports.assigned_shift = sql.define({
+  name: 'assigned_shift',
+  columns: [
+    { name: 'sid' },
+    { name: 'date' },
+    { name: 'start_time' },
+    { name: 'end_time' },
+    { name: 'owner' },
+    { name: 'covered_from' },
+  ],
+});
+
+
+/**
+ * SQL definition for public.default_time
+ */
+exports.default_time = sql.define({
+  name: 'default_time',
+  columns: [
+    { name: 'date' },
+    { name: 'day_of_week' },
+    { name: 'start_time' },
+    { name: 'end_time' },
+  ],
+});
+
+
+/**
+ * SQL definition for public.employee
+ */
+exports.employee = sql.define({
+  name: 'employee',
+  columns: [
+    { name: 'uid' },
+    { name: 'name' },
+    { name: 'phone_num' },
+    { name: 'role' },
+  ],
+});
+
+
+/**
+ * SQL definition for public.event
+ */
+exports.event = sql.define({
+  name: 'event',
+  columns: [
+    { name: 'sid' },
+    { name: 'title' },
+    { name: 'allday' },
+    { name: 'rendering' },
+    { name: 'eventconstraint' },
+    { name: 'eventsource' },
+  ],
+});
+
+
+/**
+ * SQL definition for public.trade_request
+ */
+exports.trade_request = sql.define({
+  name: 'trade_request',
+  columns: [
+    { name: 'tid' },
+    { name: 'sid' },
+    { name: 'start_time' },
+    { name: 'end_time' },
+  ],
+});
 
 /**
  * Rollback function to recover from failed transaction
