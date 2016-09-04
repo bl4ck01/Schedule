@@ -249,12 +249,11 @@ $(document).ready(() => {
         $('#sub-request-end-time').val('');
         $('#modify-submit-form').fadeIn();
       })
-      .fail(() => {
+      .fail((xhr) => {
         $('#shift-override-results').find('tr').remove();
         const errOccurred = results.insertRow(0).insertCell(0);
         errOccurred.innerHTML =
-          '<b style="color: red">An error occurred during the previous search. Please try again.'
-            + '</b>';
+          `<b style="color: red">Error: ${JSON.parse(xhr.responseText)[0].msg}</b>`;
         $('#shift-override-table').fadeIn();
       });
   });

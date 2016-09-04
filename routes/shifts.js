@@ -2,6 +2,7 @@ const express = require('express');
 const _ = require('lodash');
 const async = require('async');
 
+const logger = require('../services/logService');
 const assignedShift = require('../controllers/assignedShift');
 const date = require('../services/dateService');
 
@@ -16,6 +17,7 @@ const router = express.Router();
  */
 function resolveResponse(err, result, res) {
   if (err) {
+    logger.write.error(err);
     res.status(err.code).send(err.message);
   } else {
     res.status(200).send(result);
@@ -39,7 +41,7 @@ router.get('/get', (req, res) => {
     async.waterfall([
       (callback) => {
         // Validate params
-        req.checkBody('date', 'Date is required').notEmpty();
+        req.checkQuery('date', 'Date is required').notEmpty();
 
         let errors = req.validationErrors();
         if (errors) errors = { code: 400, message: errors };
