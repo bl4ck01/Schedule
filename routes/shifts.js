@@ -104,7 +104,7 @@ router.post('/new', (req, res) => {
           params.data.push(entry);
         });
 
-        assignedShift.createMany(params, callback);
+        callback(null, params);
       },
 
     ], (err, result) => resolveResponse(err, result, res));
