@@ -10,6 +10,7 @@
     "node": "6.x"
   },
   "dependencies": {
+    "async": "2.0.1",
     "body-parser": "1.15.2",
     "compression": "1.6.2",
     "debug": "2.2.0",
@@ -30,6 +31,7 @@
     "pug": "2.0.0-beta6",
     "serve-favicon": "2.3.0",
     "sql": "0.71.0",
+    "twix": "1.1.1",
     "uuid": "2.0.2",
     "validator": "5.6.0",
     "winston": "2.2.0"

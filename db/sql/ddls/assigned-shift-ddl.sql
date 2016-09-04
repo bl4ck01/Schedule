@@ -8,7 +8,7 @@ CREATE TABLE Assigned_Shift (
   end_time time NOT NULL,
   -- uid of current Employee responsible for covering this shift
   owner varchar(20) NOT NULL,
-  -- If shift was picked up, uid of who was the original owner of the shift
+  -- If shift was picked up, uid of the original owner of the shift
   covered_from varchar(20)
 );
 

@@ -34,8 +34,7 @@ exports.createOne = (params, cb) => {
   // Create Assigned_Shift query
   queries.push(assignedShift.insert(
     {
-      sid: params.sid,
-      coveredFrom: params.coveredFrom,
+      coveredFrom: params.coveredFrom || null,
       date: params.date,
       endTime: params.endTime,
       owner: params.owner,
@@ -46,7 +45,6 @@ exports.createOne = (params, cb) => {
   // Create Event query
   queries.push(event.table.insert(
     {
-      sid: params.sid,
       allday: params.allday,
       eventconstraint: params.eventconstraint,
       eventsource: params.eventsource,
@@ -71,15 +69,14 @@ exports.createMany = (params, cb) => {
   const eventEntities = [];
   params.data.forEach((entity) => {
     shiftEntities.push({
-      sid: entity.sid,
-      coveredFrom: entity.covered_from,
+      coveredFrom: entity.coveredFrom,
       date: entity.date,
       endTime: entity.endTime,
       owner: entity.owner,
       startTime: entity.startTime,
     });
+
     eventEntities.push({
-      sid: entity.sid,
       allday: entity.allday,
       eventconstraint: entity.eventconstraint,
       eventsource: entity.eventsource,
