@@ -26,13 +26,13 @@ router.post('/new', (req, res) => {
   }
 });
 
-router.post('/get', (req, res) => {
+router.get('/get', (req, res) => {
   if (!req.isAuthenticated()) { // TODO: Remove ! from authentication check
     const params = {
-      date: req.body.date,
-      owner: req.body.owner,
-      startTime: req.body.beginTime,
-      endTime: req.body.endTime,
+      date: req.query.date,
+      owner: req.query.owner,
+      startTime: req.query.beginTime,
+      endTime: req.query.endTime,
     };
 
     if (!validator.isNull(params.owner)) {

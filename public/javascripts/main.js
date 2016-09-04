@@ -221,12 +221,11 @@ $(document).ready(() => {
   $('#modify-search-form-btn').click(() => {
     const results = document.getElementById('shift-override-results');
     $('#shift-override-table').fadeOut();
-    $.post('/shifts/get', {
-      date: $('#override-date').val(),
-      owner: $('#override-shift-owner').val(),
-      beginTime: $('#sub-request-begin-time').val(),
-      endTime: $('#sub-request-end-time').val(),
-    },
+    const date = $('#override-date').val();
+    const owner = $('#override-shift-owner').val();
+    const beginTime = $('#sub-request-begin-time').val();
+    const endTime = $('#sub-request-end-time').val();
+    $.get(`/shifts/get?date=${date}&owner=${owner}&beginTime=${beginTime}&endTime=${endTime}`,
       (data) => {
         if (data.length > 0) {
           // populate table with results

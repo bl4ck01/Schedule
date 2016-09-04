@@ -52,13 +52,6 @@ app.use(compression());
 app.use(genUniqueId);
 // uncomment after placing your favicon in /public/images
 app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
-
-// Set up series of logs
-// dev output logged to console if not running in production
-if (app.get('env') === 'development') {
-  app.use(logger.log('dev'));
-}
-
 // Log accesses to file
 // eslint-disable-next-line max-len
 app.use(logger.log(':id :remote-addr - :remote-user [:date[cfl]] ":method :url HTTP/:http-version" :status :res[content-length] :response-time ms',
