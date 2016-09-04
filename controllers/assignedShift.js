@@ -1,4 +1,24 @@
-const db = require('./dbService');
+const sql = require('sql');
+
+const db = require('./../services/dbService');
+const event = require('./event');
+
+sql.setDialect('postgres');
+
+/**
+ * SQL definition for public.assigned_shift
+ */
+const assignedShift = sql.define({
+  name: 'assigned_shift',
+  columns: [
+    { name: 'sid' },
+    { name: 'date' },
+    { name: 'start_time' },
+    { name: 'end_time' },
+    { name: 'owner' },
+    { name: 'covered_from' },
+  ],
+});
 
 /**
  * Create a new Assigned_Shift and Event records
@@ -8,7 +28,7 @@ const db = require('./dbService');
 exports.createOne = (params, cb) => {
   const queries = [];
   // Create Assigned_Shift query
-  queries.push(db.assigned_shift.insert(
+  queries.push(assignedShift.insert(
     {
       sid: params.sid,
       covered_from: params.coveredFrom,
@@ -20,7 +40,7 @@ exports.createOne = (params, cb) => {
   ).toQuery()
   );
   // Create Event query
-  queries.push(db.event.insert(
+  queries.push(event.table.insert(
     {
       sid: params.sid,
       allday: params.allday,
@@ -66,8 +86,8 @@ exports.createMany = (params, cb) => {
 
   // Prepare array of transacted queries
   const queries = [];
-  queries.push(db.assigned_shift.insert(shiftEntities).toQuery());
-  queries.push(db.event.insert(eventEntities).toQuery());
+  queries.push(assignedShift.insert(shiftEntities).toQuery());
+  queries.push(event.table.insert(eventEntities).toQuery());
 
   // Run transaction of above queries
   db.transaction(queries, cb);
@@ -79,11 +99,11 @@ exports.createMany = (params, cb) => {
  * @param cb optional callback function
  */
 exports.getByDateAndOwner = (params, cb) => {
-  const query = db.assigned_shift.select(db.assigned_shift.star())
-    .from(db.assigned_shift)
+  const query = assignedShift.select(assignedShift.star())
+    .from(assignedShift)
       .where(
-        db.assigned_shift.date.equals(params.date)
-        .and(db.assigned_shift.owner.equals(params.owner))
+        assignedShift.date.equals(params.date)
+        .and(assignedShift.owner.equals(params.owner))
       ).toQuery();
 
   db.query(query.text, query.values, cb);
@@ -95,13 +115,13 @@ exports.getByDateAndOwner = (params, cb) => {
  * @param cb optional callback function
  */
 exports.getByDateOwnerAndStartEndTimes = (params, cb) => {
-  const query = db.assigned_shift.select(db.assigned_shift.star())
-    .from(db.assigned_shift)
+  const query = assignedShift.select(assignedShift.star())
+    .from(assignedShift)
       .where(
-        db.assigned_shift.date.equals(params.date)
-        .and(db.assigned_shift.owner.equals(params.date))
-        .and(db.assigned_shift.start_time.equals(params.startTime))
-        .and(db.assigned_shift.end_time.equals(params.endTime))
+        assignedShift.date.equals(params.date)
+        .and(assignedShift.owner.equals(params.date))
+        .and(assignedShift.start_time.equals(params.startTime))
+        .and(assignedShift.end_time.equals(params.endTime))
       ).toQuery();
 
   db.query(query.text, query.values, cb);
@@ -113,12 +133,12 @@ exports.getByDateOwnerAndStartEndTimes = (params, cb) => {
  * @param cb optional callback function
  */
 exports.getByDateOwnerAndStartTime = (params, cb) => {
-  const query = db.assigned_shift.select(db.assigned_shift.star())
-    .from(db.assigned_shift)
+  const query = assignedShift.select(assignedShift.star())
+    .from(assignedShift)
       .where(
-        db.assigned_shift.date.equals(params.date)
-        .and(db.assigned_shift.owner.equals(params.owner))
-        .and(db.assigned_shift.start_time.equals(params.startTime))
+        assignedShift.date.equals(params.date)
+        .and(assignedShift.owner.equals(params.owner))
+        .and(assignedShift.start_time.equals(params.startTime))
       ).toQuery();
 
   db.query(query.text, query.values, cb);
@@ -130,13 +150,15 @@ exports.getByDateOwnerAndStartTime = (params, cb) => {
  * @param cb optional callback function
  */
 exports.getByDateOwnerAndEndTime = (params, cb) => {
-  const query = db.assigned_shift.select(db.assigned_shift.star())
-    .from(db.assigned_shift)
+  const query = assignedShift.select(assignedShift.star())
+    .from(assignedShift)
       .where(
-        db.assigned_shift.date.equals(params.date)
-        .and(db.assigned_shift.owner.equals(params.owner))
-        .and(db.assigned_shift.end_time.equals(params.endTime))
+        assignedShift.date.equals(params.date)
+        .and(assignedShift.owner.equals(params.owner))
+        .and(assignedShift.end_time.equals(params.endTime))
       ).toQuery();
 
   db.query(query.text, query.values, cb);
 };
+
+exports.table = assignedShift;

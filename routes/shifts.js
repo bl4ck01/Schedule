@@ -2,7 +2,7 @@ const express = require('express');
 const validator = require('validator');
 const _ = require('lodash');
 
-const shiftService = require('../services/assignedShiftService');
+const shiftService = require('../controllers/assignedShift');
 
 // eslint-disable-next-line new-cap
 const router = express.Router();
