@@ -1,4 +1,6 @@
 const sql = require('sql');
+const _ = require('lodash');
+const validator = require('validator');
 
 const db = require('./../services/dbService');
 const event = require('./event');
@@ -18,6 +20,8 @@ const assignedShift = sql.define({
     { name: 'owner' },
     { name: 'covered_from' },
   ],
+  // lets you reference snake-case columns in camel-case, automatically handles conversion
+  snakeToCamel: true,
 });
 
 /**
@@ -31,11 +35,11 @@ exports.createOne = (params, cb) => {
   queries.push(assignedShift.insert(
     {
       sid: params.sid,
-      covered_from: params.coveredFrom,
+      coveredFrom: params.coveredFrom,
       date: params.date,
-      end_time: params.endTime,
+      endTime: params.endTime,
       owner: params.owner,
-      start_time: params.startTime,
+      startTime: params.startTime,
     }
   ).toQuery()
   );
@@ -68,11 +72,11 @@ exports.createMany = (params, cb) => {
   params.data.forEach((entity) => {
     shiftEntities.push({
       sid: entity.sid,
-      covered_from: entity.covered_from,
+      coveredFrom: entity.covered_from,
       date: entity.date,
-      end_time: entity.endTime,
+      endTime: entity.endTime,
       owner: entity.owner,
-      start_time: entity.startTime,
+      startTime: entity.startTime,
     });
     eventEntities.push({
       sid: entity.sid,
@@ -94,69 +98,29 @@ exports.createMany = (params, cb) => {
 };
 
 /**
- * Retrieve shifts assigned to an owner on a date
- * @param params hash of key values
- * @param cb optional callback function
+ * Retrieves assigned shifts
+ * @param params Columns to select by
+ * @param cb Callback function
  */
-exports.getByDateAndOwner = (params, cb) => {
-  const query = assignedShift.select(assignedShift.star())
-    .from(assignedShift)
-      .where(
-        assignedShift.date.equals(params.date)
-        .and(assignedShift.owner.equals(params.owner))
-      ).toQuery();
+exports.get = (params, cb) => {
+  const existMap = {
+    sid: false,
+    coveredFrom: false,
+    date: false,
+    endTime: false,
+    owner: false,
+    startTime: false,
+  };
 
-  db.query(query.text, query.values, cb);
-};
-
-/**
- * Get shifts assigned to an owner on a date at certain times
- * @param params hash of key values
- * @param cb optional callback function
- */
-exports.getByDateOwnerAndStartEndTimes = (params, cb) => {
-  const query = assignedShift.select(assignedShift.star())
-    .from(assignedShift)
-      .where(
-        assignedShift.date.equals(params.date)
-        .and(assignedShift.owner.equals(params.date))
-        .and(assignedShift.start_time.equals(params.startTime))
-        .and(assignedShift.end_time.equals(params.endTime))
-      ).toQuery();
-
-  db.query(query.text, query.values, cb);
-};
-
-/**
- * Get shifts assigned to an owner on a date starting at a particular time
- * @param params hash of key values
- * @param cb optional callback function
- */
-exports.getByDateOwnerAndStartTime = (params, cb) => {
-  const query = assignedShift.select(assignedShift.star())
-    .from(assignedShift)
-      .where(
-        assignedShift.date.equals(params.date)
-        .and(assignedShift.owner.equals(params.owner))
-        .and(assignedShift.start_time.equals(params.startTime))
-      ).toQuery();
-
-  db.query(query.text, query.values, cb);
-};
-
-/**
- * Get shifts assigned to an owner on a date ending at a particular time
- * @param params hash of key values
- * @param cb optional callback function
- */
-exports.getByDateOwnerAndEndTime = (params, cb) => {
-  const query = assignedShift.select(assignedShift.star())
-    .from(assignedShift)
-      .where(
-        assignedShift.date.equals(params.date)
-        .and(assignedShift.owner.equals(params.owner))
-        .and(assignedShift.end_time.equals(params.endTime))
-      ).toQuery();
+  // Dynamically create query from column keys existing in params
+  _.forOwn(existMap, (exists, key) => {
+    if (params[key] && !validator.isNull(params[key])) existMap[key] = true;
+  });
+  let query = assignedShift.where([]);
+  _.forOwn(existMap, (exists, key) => {
+    if (exists) query = query.and(assignedShift[key].equals(params[key]));
+  });
+  query = query.toQuery();
 
   db.query(query.text, query.values, cb);
 };

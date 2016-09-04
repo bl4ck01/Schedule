@@ -15,6 +15,8 @@ const employee = sql.define({
     { name: 'phone_num' },
     { name: 'role' },
   ],
+  // lets you reference snake-case columns in camel-case, automatically handles conversion
+  snakeToCamel: true,
 });
 
 /**
@@ -28,7 +30,7 @@ exports.createOne = (params, cb) => {
     {
       uid: params.uid,
       name: params.name,
-      phone: params.phone,
+      phoneNum: params.phone,
       role: params.role,
     }
   ).toQuery();
@@ -49,7 +51,7 @@ exports.createMultiple = (params, cb) => {
     entities.push({
       uid: entity.uid,
       name: entity.name,
-      phone: entity.phone,
+      phoneNum: entity.phone,
       role: entity.role,
     });
   });

@@ -13,6 +13,8 @@ const tradeRequest = sql.define({
     { name: 'start_time' },
     { name: 'end_time' },
   ],
+  // lets you reference snake-case columns in camel-case, automatically handles conversion
+  snakeToCamel: true,
 });
 
 exports.table = tradeRequest;

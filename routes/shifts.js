@@ -1,5 +1,4 @@
 const express = require('express');
-const validator = require('validator');
 const _ = require('lodash');
 
 const shiftService = require('../controllers/assignedShift');
@@ -22,7 +21,7 @@ router.post('/new', (req, res) => {
     _.forOwn(req.body, (val, key) => {
       if ((/(days)\[[0-6]\]/).test(key)) days.push(val);
     });
-    res.status(200).send(req.body);
+    res.status(200).send(days);
   }
 });
 
@@ -35,41 +34,13 @@ router.get('/get', (req, res) => {
       endTime: req.query.endTime,
     };
 
-    if (!validator.isNull(params.owner)) {
-      if (!validator.isNull(params.startTime) && !validator.isNull(params.endTime)) {
-        shiftService.getByDateOwnerAndStartEndTimes(params, (err, result) => {
-          if (err != null) {
-            res.status(err.code).send(err.message);
-          } else {
-            res.send(result.rows);
-          }
-        });
-      } else if (!validator.isNull(params.startTime)) {
-        shiftService.getByDateOwnerAndStartTime(params, (err, result) => {
-          if (err != null) {
-            res.status(err.code).send(err.message);
-          } else {
-            res.send(result.rows);
-          }
-        });
-      } else if (!validator.isNull(params.endTime)) {
-        shiftService.getByDateOwnerAndEndTime(params, (err, result) => {
-          if (err != null) {
-            res.status(err.code).send(err.message);
-          } else {
-            res.send(result.rows);
-          }
-        });
+    shiftService.get(params, (err, result) => {
+      if (err) {
+        res.status(err.code).send(err.message);
       } else {
-        shiftService.getByDateAndOwner(params, (err, result) => {
-          if (err != null) {
-            res.status(err.code).send(err.message);
-          } else {
-            res.send(result.rows);
-          }
-        });
+        res.status(200).send(result.rows);
       }
-    }
+    });
   } else {
     res.sendStatus(401);
   }
