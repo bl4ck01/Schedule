@@ -10,3 +10,8 @@ ratings:
 exclude_paths:
 - "public/javascripts/bootstrap-timepicker.js"
 - "public/javascripts/bootstrap-timepicker.min.js"
+- "public/javascripts/bootstrap-datepicker.js"
+- "public/javascripts/bootstrap.min.js"
+- "public/javascripts/fullcalendar.min.js"
+- "public/javascripts/jquery.min.js"
+- "public/javascripts/moment.min.js"
