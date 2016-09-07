@@ -1,7 +1,7 @@
 engines:
   eslint:
-    enabled: true,
-    channel: 'eslint-2',
+    enabled: true
+    channel: "eslint-2"
     exclude_fingerprints:
     - 27bf3248f5eefa5baf8241a39dc79729
   fixme:
