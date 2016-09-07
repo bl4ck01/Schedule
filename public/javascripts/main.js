@@ -56,7 +56,7 @@ $(document).ready(() => {
       subs: {
         text: 'Sub Requests',
         click: () => {
-          location.assign('/shifts/requests')
+          location.assign('/shifts/requests');
         },
       },
       manage: {
