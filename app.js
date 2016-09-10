@@ -49,6 +49,8 @@ app.set('view engine', 'pug');
 // Improve response rate by compressing data with Gzip
 app.use(compression());
 app.use(genUniqueId);
+// Pretty print JSON responses
+app.use('json', 4);
 // uncomment after placing your favicon in /public/images
 app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
 // Log accesses to file
