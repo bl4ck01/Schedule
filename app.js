@@ -10,7 +10,6 @@ const uuid = require('uuid');
 const helmet = require('helmet');
 const nocache = require('nocache');
 const validator = require('express-validator');
-const contentLength = require('express-content-length-validator');
 const hpp = require('hpp');
 
 // configuration parameters
@@ -84,9 +83,6 @@ app.use(helmet.hsts({
   includeSubDomains: true,
 }));
 app.use(nocache());
-// Prevent large payload attacks.
-// Defaults to max size 999, status code 400, message 'Invalid payload; too big.'
-app.use(contentLength.validateMax());
 // protect against HTTP Parameter Pollution attacks
 app.use(hpp());
 
