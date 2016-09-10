@@ -36,7 +36,7 @@ router.post('/login/callback', (req, res) => {
   const body = new Buffer(req.body.SAMLResponse, 'base64');
   // eslint-disable-next-line no-param-reassign
   req.body.SAMLResponse = body;
-  passport.authenticate('saml', (req1, res1) => {
+  passport._.authenticate('saml', (req1, res1) => {
     res1.redirect('/');
   });
 });
