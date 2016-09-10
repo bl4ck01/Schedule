@@ -32,16 +32,11 @@ router.get('/login', passport._.authenticate('saml'),
   }
 );
 
-router.post('/login/callback',
-  passport._.authenticate('saml',
-    {
-      failureRedirect: '/',
-      failureFlash: true,
-    }),
-  (req, res) => {
-    res.redirect('/');
-  }
-);
+router.post('/login/callback', (req, res) => {
+  const body = new Buffer(req.body.SAMLResponse, 'base64');
+  console.log(JSON.stringify(body.toString()));
+  res.redirect('/');
+});
 
 router.get('/logout', (req, res) => {
   req.logout();
