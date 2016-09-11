@@ -34,6 +34,7 @@ eslint:
 .PHONY: test
 test:
 	# Run all tests with code coverage
+	sudo \
 	NODE_TLS_REJECT_UNAUTHORIZED='0' \
 	./node_modules/istanbul/lib/cli.js cover \
 	./node_modules/mocha/bin/_mocha -- \
@@ -50,7 +51,7 @@ report:
 .PHONY: start
 start:
 	# Start the HTTP/HTTPS server
-	npm start;
+	sudo npm start;
 
 .PHONY: submit
 submit: clean install eslint test

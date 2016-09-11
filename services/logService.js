@@ -96,10 +96,10 @@ exports.errorSkip = (req, res) => res.statusCode < 400;
 
 exports.write = {
   error: (message) => {
-    winston.loggers.get('error').error(message);
+    winston.loggers.get('errors').error(message);
   },
   warn: (message) => {
-    winston.loggers.get('error').warn(message);
+    winston.loggers.get('errors').warn(message);
   },
   console: (message) => {
     winston.loggers.get('errors').debug(message);

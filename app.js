@@ -163,7 +163,16 @@ function onError(error) {
 const server = https.createServer(sslOptions, app)
   .on('error', onError)
   .listen(config.httpsPort, () => {
-    logger.write.console(`Server listening, process ${process.pid}`);
+    logger.write.console(`Server up, root process ${process.pid}`);
+    try {
+      process.setgid(config.gid);
+      process.setuid(config.uid);
+      logger.write.console(`Server privileges dropped, owner ${config.uid}`);
+    } catch (err) {
+      logger.write.console('Unable to drop privileges, exiting.');
+      logger.write.error('Unable to drop privileges.');
+      process.exit(1);
+    }
   });
 
 module.exports = server;
