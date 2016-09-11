@@ -169,8 +169,7 @@ const server = https.createServer(sslOptions, app)
       process.setuid(config.uid);
       logger.write.console(`Server privileges dropped, owner ${config.uid}`);
     } catch (err) {
-      logger.write.console('Unable to drop privileges, exiting.');
-      logger.write.error('Unable to drop privileges.');
+      logger.write.error('Unable to drop privileges, exiting.');
       process.exit(1);
     }
   });
