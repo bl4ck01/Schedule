@@ -4,7 +4,7 @@ CREATE TABLE Event (
   sid serial NOT NULL,
   -- The text on an event's element
   title varchar(100) NOT NULL,
-  -- Whether an event occurs at a specific time-of-day. This property affects whether an event's time is shown.
+  -- Whether an event occurs at a specific time-of-day. Affects whether an event's time is shown.
   -- Also, in the agenda views, determines if it is displayed in the "all-day" section.
   allDay boolean,
   -- Allows alternate rendering of the event, like background events.

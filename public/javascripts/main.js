@@ -265,4 +265,12 @@ $(document).ready(() => {
     $('#sub-update-end-time').val('');
     $('#modify-search-form').fadeIn();
   });
+
+  $('#settings-default-time-semester-btn').click(() => {
+    $('#settings-default-time-range').val('112');
+  });
+
+  $('#settings-default-time-year-btn').click(() => {
+    $('#settings-default-time-range').val('224');
+  });
 });

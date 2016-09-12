@@ -31,11 +31,12 @@ const rollback = (client, done) => client.query('ROLLBACK', done);
 
 /**
  * Initializes a connection pool and runs a query
+ * @param id Request ID
  * @param text SQL query
  * @param values Optional paramaterized values to use in query
  * @param cb Optional callback function
  */
-exports.query = (text, values, cb) => {
+exports.query = (id, text, values, cb) => {
   pool.connect((err, client, done) => {
     if (err) {
       logger.write.error('error fetching client from pool');
@@ -50,8 +51,8 @@ exports.query = (text, values, cb) => {
     client.query(text, values, (queryErr, result) => {
       let error;
       if (queryErr) {
-        error = { message: errors.errCode(queryErr.code), code: 404 };
-        logger.write.error(error.message);
+        logger.write.error({ id, msg: queryErr });
+        error = { id, message: errors.errCode(queryErr.code), code: 404 };
       }
       done();
       cb(error, result);
@@ -65,14 +66,15 @@ exports.query = (text, values, cb) => {
 
 /**
  * Initializes a connection pool and runs a transacted set of queries
+ * @param id Request ID
  * @param queries array of hashed query objects
  * @param cb Optional callback function
  */
-exports.transaction = (queries, cb) => {
+exports.transaction = (id, queries, cb) => {
   pool.connect((err, client, done) => {
     if (err) {
       logger.write.error('error fetching client from pool');
-      logger.write.error(err);
+      logger.write.error({ id, msg: err });
       if (client) {
         done(client);
       }

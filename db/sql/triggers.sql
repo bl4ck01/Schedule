@@ -29,12 +29,10 @@ CREATE OR REPLACE FUNCTION ensure_min_shift_length()
   END;
   $$ LANGUAGE PLPGSQL;
 
--- Ensures new assigned shifts are at least of minimum length.
-CREATE TRIGGER validate_shift_length BEFORE INSERT ON Assigned_Shift FOR EACH ROW
+-- Ensures new or updated assigned shifts are at least of minimum length.
+CREATE TRIGGER validate_shift_length BEFORE INSERT OR UPDATE ON Assigned_Shift FOR EACH ROW
   EXECUTE PROCEDURE ensure_min_shift_length();
--- Ensures new sub requests are at least of minimum length.
-CREATE TRIGGER validate_sub_request_length BEFORE INSERT ON Trade_Request FOR EACH ROW
-  EXECUTE PROCEDURE ensure_min_shift_length();
+-- Sub requests can be less than the minimum length - but once picked up, shift must be min. length.
 
 
 -- Function ensures that a shift operates within its day's open and close times.

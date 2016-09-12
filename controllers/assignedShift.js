@@ -55,7 +55,7 @@ exports.createOne = (params, cb) => {
   );
 
   // Run transaction of above queries
-  db.transaction(queries, cb);
+  db.transaction(params.id, queries, cb);
 };
 
 /**
@@ -91,11 +91,13 @@ exports.createMany = (params, cb) => {
   queries.push(event.table.insert(eventEntities).toQuery());
 
   // Run transaction of above queries
-  db.transaction(queries, cb);
+  db.transaction(params.id, queries, cb);
 };
 
 /**
  * Retrieves assigned shifts
+ * NOTE: If no where parameters are passed in, function will return all shifts in database.
+ * This is currently the expected behavior, although this may change.
  * @param params Columns to select by
  * @param cb Callback function
  */
@@ -119,7 +121,7 @@ exports.get = (params, cb) => {
   });
   query = query.toQuery();
 
-  db.query(query.text, query.values, cb);
+  db.query(params.id, query.text, query.values, cb);
 };
 
 exports.table = assignedShift;

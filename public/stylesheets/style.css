@@ -1,7 +1,7 @@
 body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  background-color: #f2f5f9;
+  background-color: #ecf5f5;
 }
 
 a {
@@ -20,8 +20,12 @@ textarea {
   background-color: #f5f5f5;
 }
 
+.panel-default>.panel-heading {
+  background-color: #ecf5f5;
+}
+
 div .fc-time-grid-event {
-  cursor: pointer
+  cursor: pointer;
 }
 
 #override-shift {
@@ -29,9 +33,13 @@ div .fc-time-grid-event {
 }
 
 .checkbox-input {
-  cursor: pointer
+  cursor: pointer;
 }
 
 #shift-override-table {
-  display: none
+  display: none;
+}
+
+#variable-not-exist {
+  color: red;
 }

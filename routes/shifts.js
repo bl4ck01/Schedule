@@ -1,6 +1,5 @@
 const express = require('express');
 const _ = require('lodash');
-const async = require('async');
 
 const logger = require('../services/logService');
 const assignedShift = require('../controllers/assignedShift');
@@ -11,14 +10,15 @@ const router = express.Router();
 
 /**
  * Resolves response with either error or result of request
+ * @param id Request ID
  * @param err Any Error generated from the request
  * @param result Results of the request
  * @param res Response of the request
  */
-function resolveResponse(err, result, res) {
+function resolveResponse(id, err, result, res) {
   if (err) {
-    logger.write.error(err);
-    res.status(err.code).send(err.message);
+    logger.write.error({ id, err });
+    res.status(err.code).send({ id, msg: err.message });
   } else {
     res.status(200).send(result);
   }
@@ -29,37 +29,33 @@ function resolveResponse(err, result, res) {
  */
 
 router.get('/requests', (req, res) => {
-  if (req.isAuthenticated()) {
+  if (!req.isAuthenticated()) { // TODO: Remove ! from authentication check
     res.render('sub_requests', { user: req.user });
   } else {
-    res.render('sub_requests');
+    res.sendStatus(401);
   }
 });
 
 router.get('/get', (req, res) => {
   if (!req.isAuthenticated()) { // TODO: Remove ! from authentication check
-    async.waterfall([
-      (callback) => {
-        // Validate params
-        req.checkQuery('date', 'Date is required').notEmpty();
+    // Validate params
+    req.checkQuery('date', 'Date is required').notEmpty();
 
-        let errors = req.validationErrors();
-        if (errors) errors = { code: 400, message: errors };
-        const params = {
-          date: req.query.date,
-          owner: req.query.owner,
-          startTime: req.query.beginTime,
-          endTime: req.query.endTime,
-        };
-        // If no errors exist, errors will be null
-        callback(errors, params);
-      },
+    let errors = req.validationErrors();
+    if (errors) {
+      errors = { code: 400, message: errors };
+      resolveResponse(req.id, errors, null, res);
+    } else {
+      const params = {
+        id: req.id,
+        date: req.query.date,
+        owner: req.query.owner,
+        startTime: req.query.beginTime,
+        endTime: req.query.endTime,
+      };
 
-      (params, callback) => {
-        assignedShift.get(params, callback);
-      },
-
-    ], (err, result) => resolveResponse(err, result, res));
+      assignedShift.get(params, (err, result) => resolveResponse(req.id, err, result.rows, res));
+    }
   } else {
     res.sendStatus(401);
   }
@@ -71,50 +67,48 @@ router.get('/get', (req, res) => {
 
 router.post('/new', (req, res) => {
   if (!req.isAuthenticated()) { // TODO: Remove ! from authentication check
-    async.waterfall([
-      (callback) => {
-        // Capture dayNames from form data
-        const dayNames = [];
-        _.forOwn(req.body, (val, key) => {
-          if ((/(days)\[[0-6]\]/).test(key)) dayNames.push(val);
-        });
+    // TODO: Validate params
 
-        const daySet = new Set(dayNames);
-        const days = [];
+    // Capture dayNames from form data
+    const dayNames = [];
+    _.forOwn(req.body, (val, key) => {
+      if ((/(days)\[[0-6]\]/).test(key)) dayNames.push(val);
+    });
 
-        const dayRange = date.getRange(req.body.fromDate, req.body.toDate);
-        while (dayRange.hasNext()) {
-          const unformattedDay = dayRange.next();
-          const dayName = unformattedDay.format('ddd');
+    const daySet = new Set(dayNames);
+    const days = [];
 
-          // Day must be formatted in ISO 8601 format for Postgres date type
-          if (daySet.has(dayName)) days.push(unformattedDay.format('YYYY-MM-DD'));
-        }
+    // Create individual dates for each day between fromDate and toDate
+    const dayRange = date.getRange(req.body.fromDate, req.body.toDate);
+    while (dayRange.hasNext()) {
+      const unformattedDay = dayRange.next();
+      const dayName = unformattedDay.format('ddd');
+      // Day must be formatted in ISO 8601 format for Postgres date type
+      if (daySet.has(dayName)) days.push(unformattedDay.format('YYYY-MM-DD'));
+    }
 
-        callback(null, days);
-      },
+    const params = { data: [] };
+    days.forEach((day) => {
+      const entry = {
+        id: req.id,
+        date: day,
+        owner: req.body.owner,
+        startTime: req.body.beginTime,
+        endTime: req.body.endTime,
+      };
+      params.data.push(entry);
+    });
 
-      (days, callback) => {
-        const params = { data: [] };
-        days.forEach((day) => {
-          const entry = {
-            date: day,
-            owner: req.body.owner,
-            startTime: req.body.beginTime,
-            endTime: req.body.endTime,
-          };
-          params.data.push(entry);
-        });
-
-        callback(null, params);
-      },
-
-    ], (err, result) => resolveResponse(err, result, res));
+    assignedShift.createMany(params, (err, result) => {
+      resolveResponse(req.id, err, result.rows, res);
+    });
+  } else {
+    res.sendStatus(401);
   }
 });
 
 router.post('/drop', (req, res) => {
-  if (req.isAuthenticated()) {
+  if (!req.isAuthenticated()) { // TODO: Remove ! from authentication check
     res.sendStatus(200);
   } else {
     res.sendStatus(401);
@@ -128,6 +122,8 @@ router.post('/drop', (req, res) => {
 router.put('/update', (req, res) => {
   if (!req.isAuthenticated()) { // TODO: Remove ! from authentication check
     res.status(200).send(req.body);
+  } else {
+    res.sendStatus(401);
   }
 });
 

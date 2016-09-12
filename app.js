@@ -18,6 +18,16 @@ const config = require('./config/config');
 const passport = require('./services/passportService');
 const logger = require('./services/logService');
 
+// String used by Morgan loggers
+const logString = ':id :remote-addr - :remote-user [:date[cfl]] ":method :url ' +
+  'HTTP/:http-version" :status :res[content-length] :response-time ms';
+
+/**
+ * Assigns a UUID to every Request
+ * @param req Request
+ * @param res Response
+ * @param next Next callback
+ */
 function genUniqueId(req, res, next) {
   // eslint-disable-next-line no-param-reassign
   req.id = uuid.v4();
@@ -50,18 +60,16 @@ app.set('json', 4);
 
 // Improve response rate by compressing data with Gzip
 app.use(compression());
+// Assign each request a UUID
 app.use(genUniqueId);
-// uncomment after placing your favicon in /public/images
 app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
 // Log accesses to file
-app.use(logger.log(':id :remote-addr - :remote-user [:date[cfl]] ":method :url ' +
-  'HTTP/:http-version" :status :res[content-length] :response-time ms',
-  { stream: logger.accessLogStream }));
+app.use(logger.log(logString, { stream: logger.accessLogStream }));
 // Log errors to separate log
-app.use(logger.log('combined', { skip: logger.errorSkip, stream: logger.errorLogStream }));
+app.use(logger.log(logString, { skip: logger.errorSkip, stream: logger.errorLogStream }));
 // Log to console
 if (app.get('env') === 'development') {
-  app.use(logger.log('dev'));
+  app.use(logger.log(logString));
 }
 
 app.use(bodyParser.json());
@@ -94,6 +102,7 @@ app.use(hpp());
 const routes = require('./routes/index');
 const admin = require('./routes/admin');
 const shifts = require('./routes/shifts');
+const defaultTime = require('./routes/defaultTime');
 
 /**
  * REQUIRED: All available routes added to server here
@@ -101,6 +110,7 @@ const shifts = require('./routes/shifts');
 app.use('/', routes);
 app.use('/admin', admin);
 app.use('/shifts', shifts);
+app.use('/times/default', defaultTime);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
@@ -163,7 +173,8 @@ function onError(error) {
 const server = https.createServer(sslOptions, app)
   .on('error', onError)
   .listen(config.httpsPort, () => {
-    logger.write.console(`Server up, root process ${process.pid}`);
+    logger.write.console(`Server up, process ${process.pid}`);
+    // Drop root privileges from binding to privileged HTTPS port
     try {
       process.setgid(config.gid);
       process.setuid(config.uid);

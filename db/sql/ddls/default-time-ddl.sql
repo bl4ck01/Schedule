@@ -1,6 +1,5 @@
 -- Daily times the Help Desk is open.
 CREATE TABLE Default_Time (
-  -- there is one Shift-Time object for each calendar day
   date date NOT NULL,
   -- 0-based integer of week day, Mon=0, Sun=6
   day_of_week int NOT NULL,

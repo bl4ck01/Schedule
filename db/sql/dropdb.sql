@@ -11,7 +11,6 @@ ALTER TABLE IF EXISTS Trade_Request DROP CONSTRAINT IF EXISTS Trade_Request_fk_A
 -- triggers
 DROP TRIGGER IF EXISTS update_shifts_upon_day_update ON Default_Time;
 DROP TRIGGER IF EXISTS validate_shift_length ON Assigned_Shift;
-DROP TRIGGER IF EXISTS validate_sub_request_length ON Trade_Request;
 DROP TRIGGER IF EXISTS valid_shift_times ON Assigned_Shift;
 
 

@@ -58,6 +58,7 @@ winston.loggers.add('errors', {
     new winston.transports.Console({
       level: 'debug',
       handleExceptions: true,
+      humanReadableUnhandledException: true,
       json: false,
       colorize: true,
     }),

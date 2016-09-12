@@ -35,7 +35,7 @@ exports.createOne = (params, cb) => {
     }
   ).toQuery();
 
-  db.query(query.text, query.values, cb);
+  db.query(params.id, query.text, query.values, cb);
 };
 
 /**
@@ -58,7 +58,7 @@ exports.createMultiple = (params, cb) => {
 
   const query = employee.insert(entities).toQuery();
 
-  db.query(query.text, query.values, cb);
+  db.query(params.id, query.text, query.values, cb);
 };
 
 /**
@@ -71,7 +71,7 @@ exports.removeOne = (params, cb) => {
     employee.uid.equals(params.uid)
   ).toQuery();
 
-  db.query(query.text, query.values, cb);
+  db.query(params.id, query.text, query.values, cb);
 };
 
 /**
@@ -84,17 +84,18 @@ exports.removeMultiple = (params, cb) => {
     employee.uid.in(params.data)
   ).toQuery();
 
-  db.query(query.text, query.values, cb);
+  db.query(params.id, query.text, query.values, cb);
 };
 
 /**
  * Deletes EVERY Employee record
+ * @param id Request ID
  * @param cb optional callback function
  */
-exports.removeAll = (cb) => {
+exports.removeAll = (id, cb) => {
   const query = employee.delete().toQuery();
 
-  db.query(query.text, query.values, cb);
+  db.query(id, query.text, query.values, cb);
 };
 
 exports._ = employee;
