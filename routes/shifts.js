@@ -60,6 +60,14 @@ router.get('/get', (req, res) => {
   }
 });
 
+router.get('/get/all', (req, res) => {
+  if (!req.isAuthenticated()) { // TODO: Remove ! from authentication check
+    assignedShift.all(req.id, (err, result) => respond(req.id, err, result.rows, res));
+  } else {
+    res.sendStatus(401);
+  }
+});
+
 /**
  * POST routes
  */

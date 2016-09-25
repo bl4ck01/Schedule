@@ -124,4 +124,15 @@ exports.get = (params, cb) => {
   db.query(params.id, query.text, query.values, cb);
 };
 
+/**
+ * Retrieves every Shift from the database
+ * @param id Request ID
+ * @param cb Callback function
+ */
+exports.all = (id, cb) => {
+  const query = assignedShift.where([]).toQuery();
+
+  db.query(id, query.text, query.values, cb);
+};
+
 exports.table = assignedShift;
