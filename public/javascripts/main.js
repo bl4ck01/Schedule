@@ -189,6 +189,8 @@ $(document).ready(() => {
   $('#sub-request-end-time').timepicker(timePickerDefaults);
   $('#shift-create-begin-time').timepicker(timePickerDefaults);
   $('#shift-create-end-time').timepicker(timePickerDefaults);
+  $('#settings-default-time-start').timepicker(timePickerDefaults);
+  $('#settings-default-time-end').timepicker(timePickerDefaults);
 
   /**
    * Hide shift creation/override forms
@@ -266,11 +268,13 @@ $(document).ready(() => {
     $('#modify-search-form').fadeIn();
   });
 
-  // Modifies the Default Time range in Settings accordion->Default Time
+  /**
+   * Modifies the Default Time range in Settings accordion->Default Time
+   */
   $('#settings-default-time-semester-btn').click(() => {
-    $('#settings-default-time-range').val('112');
+    $('#settings-default-time-range').val('116');
   });
   $('#settings-default-time-year-btn').click(() => {
-    $('#settings-default-time-range').val('224');
+    $('#settings-default-time-range').val('260');
   });
 });

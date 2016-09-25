@@ -70,4 +70,41 @@ exports.get = (params, cb) => {
   db.query(params.id, query.text, query.values, cb);
 };
 
+/**
+ * Delete a Default Time record
+ * @param params hash of key values
+ * @param cb optional callback function
+ */
+exports.removeOne = (params, cb) => {
+  const query = defaultTime.delete().where(
+    defaultTime.date.equals(params.date)
+  ).returning().toQuery();
+
+  db.query(params.id, query.text, query.values, cb);
+};
+
+/**
+ * Delete multiple Default Time records
+ * @param params hash of key values; key dates must be an array of ISO 8601 date strings
+ * @param cb optional callback function
+ */
+exports.removeMultiple = (params, cb) => {
+  const query = defaultTime.delete().where(
+    defaultTime.date.in(params.dates)
+  ).returning().toQuery();
+
+  db.query(params.id, query.text, query.values, cb);
+};
+
+/**
+ * Deletes EVERY Default Time record
+ * @param id Request ID
+ * @param cb optional callback function
+ */
+exports.removeAll = (id, cb) => {
+  const query = defaultTime.delete().toQuery();
+
+  db.query(id, query.text, query.values, cb);
+};
+
 exports.table = defaultTime;

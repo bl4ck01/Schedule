@@ -1,7 +1,9 @@
 const express = require('express');
+const async = require('async');
 
 const logger = require('../services/logService');
 const defaultTime = require('../controllers/defaultTime');
+const assignedShift = require('../controllers/assignedShift');
 const date = require('../services/dateService');
 
 // eslint-disable-next-line new-cap
@@ -14,12 +16,12 @@ const router = express.Router();
  * @param result Results of the request
  * @param res Response of the request
  */
-function resolveResponse(id, err, result, res) {
+function respond(id, err, result, res) {
   if (err) {
     logger.write.error({ id, err });
     res.status(err.code).send({ id, msg: err.message });
   } else {
-    res.status(200).send(result);
+    res.redirect('/admin/');
   }
 }
 
@@ -51,7 +53,7 @@ function getDateRange(firstDay, num) {
  * POST routes
  */
 
-router.post('/create', (req, res) => {
+router.post('/new', (req, res) => {
   if (!req.isAuthenticated()) { // TODO: remove ! from authentication check
     // Validate params
     req.checkBody('startTime', 'start time is required').notEmpty();
@@ -61,10 +63,10 @@ router.post('/create', (req, res) => {
     let errors = req.validationErrors();
     if (errors) {
       errors = { code: 400, message: errors };
-      resolveResponse(errors, null, res);
+      respond(errors, null, res);
     } else {
       // Get all days from today to range
-      const days = getDateRange(date.date(), req.body.range);
+      const days = getDateRange(date.date(), req.body.range || 0);
 
       const params = { data: [] };
       days.forEach((day) => {
@@ -79,12 +81,34 @@ router.post('/create', (req, res) => {
         params.data.push(entry);
       });
 
-      defaultTime.createMany(params, (err, result) => {
-        result.rows.forEach((entity) => {
-          // eslint-disable-next-line no-param-reassign
-          entity.date = date.formatDate(entity.date);
-        });
-        resolveResponse(req.id, err, result.rows, res);
+      async.waterfall([
+        (callback) => {
+          const dates = [];
+          params.data.forEach((entry) => dates.push(entry.date));
+          defaultTime.removeMultiple({ id: req.id, dates }, (err, result) => {
+            callback(err, result.rows);
+          });
+        },
+        (deletedShifts, callback) => {
+          defaultTime.createMany(params, (err, result) => {
+            const items = [];
+            result.rows.forEach((entity) => {
+              const item = entity;
+              item.date = date.formatDate(item.date);
+              items.push(item);
+            });
+            callback(err, items, deletedShifts);
+          });
+        },
+        (defaultTimes, deletedShifts, callback) => {
+          const shiftParams = {};
+          shiftParams.data = deletedShifts;
+          assignedShift.createMany(shiftParams, (err) => {
+            callback(err, defaultTimes);
+          });
+        },
+      ], (err, result) => {
+        respond(req.id, err, result, res);
       });
     }
   } else {
@@ -99,7 +123,7 @@ router.post('/update', (req, res) => {
     if (req.checkBody('startTime', 'start time is required').notEmpty()
       || req.checkBody('endTime', 'end time is required').notEmpty()) {
       errors = { code: 400, message: req.validationErrors() };
-      resolveResponse(errors, null, res);
+      respond(errors, null, res);
     }
 
     const params = {
@@ -110,7 +134,7 @@ router.post('/update', (req, res) => {
     };
 
     defaultTime.updateTimes(params, (err, result) => {
-      resolveResponse(req.id, err, result.rows, res);
+      respond(req.id, err, result.rows, res);
     });
   } else {
     res.sendStatus(401);
