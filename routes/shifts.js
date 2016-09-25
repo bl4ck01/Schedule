@@ -1,5 +1,4 @@
 const express = require('express');
-const _ = require('lodash');
 
 const logger = require('../services/logService');
 const assignedShift = require('../controllers/assignedShift');
@@ -15,7 +14,7 @@ const router = express.Router();
  * @param result Results of the request
  * @param res Response of the request
  */
-function resolveResponse(id, err, result, res) {
+function respond(id, err, result, res) {
   if (err) {
     logger.write.error({ id, err });
     res.status(err.code).send({ id, msg: err.message });
@@ -44,7 +43,7 @@ router.get('/get', (req, res) => {
     let errors = req.validationErrors();
     if (errors) {
       errors = { code: 400, message: errors };
-      resolveResponse(req.id, errors, null, res);
+      respond(req.id, errors, null, res);
     } else {
       const params = {
         id: req.id,
@@ -54,7 +53,7 @@ router.get('/get', (req, res) => {
         endTime: req.query.endTime,
       };
 
-      assignedShift.get(params, (err, result) => resolveResponse(req.id, err, result.rows, res));
+      assignedShift.get(params, (err, result) => respond(req.id, err, result.rows, res));
     }
   } else {
     res.sendStatus(401);
@@ -69,13 +68,7 @@ router.post('/new', (req, res) => {
   if (!req.isAuthenticated()) { // TODO: Remove ! from authentication check
     // TODO: Validate params
 
-    // Capture dayNames from form data
-    const dayNames = [];
-    _.forOwn(req.body, (val, key) => {
-      if ((/(days)\[[0-6]\]/).test(key)) dayNames.push(val);
-    });
-
-    const daySet = new Set(dayNames);
+    const daySet = new Set(req.body.days);
     const days = [];
 
     // Create individual dates for each day between fromDate and toDate
@@ -100,7 +93,7 @@ router.post('/new', (req, res) => {
     });
 
     assignedShift.createMany(params, (err, result) => {
-      resolveResponse(req.id, err, result.rows, res);
+      respond(req.id, err, result.rows, res);
     });
   } else {
     res.sendStatus(401);

@@ -10,7 +10,6 @@ const uuid = require('uuid');
 const helmet = require('helmet');
 const nocache = require('nocache');
 const validator = require('express-validator');
-const hpp = require('hpp');
 
 // configuration parameters
 const config = require('./config/config');
@@ -73,7 +72,7 @@ if (app.get('env') === 'development') {
 }
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(validator());
 app.use(session({
   secret: config.cookieSecret,
@@ -93,8 +92,6 @@ app.use(helmet.hsts({
   includeSubDomains: true,
 }));
 app.use(nocache());
-// protect against HTTP Parameter Pollution attacks
-app.use(hpp());
 
 /**
  * REQUIRED: All app routes loaded here

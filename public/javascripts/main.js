@@ -266,10 +266,10 @@ $(document).ready(() => {
     $('#modify-search-form').fadeIn();
   });
 
+  // Modifies the Default Time range in Settings accordion->Default Time
   $('#settings-default-time-semester-btn').click(() => {
     $('#settings-default-time-range').val('112');
   });
-
   $('#settings-default-time-year-btn').click(() => {
     $('#settings-default-time-range').val('224');
   });

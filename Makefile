@@ -34,6 +34,7 @@ eslint:
 .PHONY: test
 test:
 	# Run all tests with code coverage
+	snyk test && \
 	sudo \
 	NODE_TLS_REJECT_UNAUTHORIZED='0' \
 	./node_modules/istanbul/lib/cli.js cover \
