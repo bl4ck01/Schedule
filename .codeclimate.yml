@@ -1,6 +1,10 @@
 engines:
   eslint:
     enabled: true
+    channel: "eslint-2"
+    checks:
+      import/no-unresolved:
+        enabled: false
   fixme:
     enabled: true
 ratings:
@@ -9,3 +13,9 @@ ratings:
 exclude_paths:
 - "public/javascripts/bootstrap-timepicker.js"
 - "public/javascripts/bootstrap-timepicker.min.js"
+- "public/javascripts/bootstrap-datepicker.js"
+- "public/javascripts/bootstrap-datepicker.min.js"
+- "public/javascripts/bootstrap.min.js"
+- "public/javascripts/fullcalendar.min.js"
+- "public/javascripts/jquery.min.js"
+- "public/javascripts/moment.min.js"
