@@ -32,9 +32,9 @@ router.get('/login', passport._.authenticate('saml'),
   }
 );
 
-router.post('/login/callback', (req, res) => {
-  const body = new Buffer(req.body.SAMLResponse, 'base64');
-  console.log(JSON.stringify(body.toString('utf8')));
+router.post('/login/callback', passport._.authenticate('saml'), (req, res) => {
+  // const body = new Buffer(req.body.SAMLResponse, 'base64');
+  // console.log(JSON.stringify(body.toString('utf8')));
   res.redirect('/');
 });
 

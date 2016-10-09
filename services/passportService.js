@@ -13,11 +13,9 @@ const saml = new SamlStrategy(
     passReqToCallback: true,
   },
   (profile, done) => {
-    logger.write.console(JSON.stringify(profile));
+    // logger.write.console(JSON.stringify(profile));
     done(null, {
-      id: profile.uid,
-      email: profile.mail,
-      displayName: profile.cn,
+      email: profile.userName,
       firstName: profile.givenName,
       lastName: profile.sn,
     });
