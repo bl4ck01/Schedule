@@ -27,6 +27,7 @@
     "passport-saml": "0.15.0",
     "pg": "6.1.0",
     "pug": "2.0.0-beta6",
+    "raven": "0.12.1",
     "serve-favicon": "2.3.0",
     "sql": "0.71.0",
     "twix": "1.1.1",

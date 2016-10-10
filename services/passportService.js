@@ -1,7 +1,6 @@
 const passport = require('passport');
 const SamlStrategy = require('passport-saml').Strategy;
 
-const logger = require('./logService');
 const config = require('../config/config');
 
 const saml = new SamlStrategy(

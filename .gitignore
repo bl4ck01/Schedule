@@ -1,6 +1,7 @@
 /db/.idea
 config/ssl/
 config/dbconfig.js
+/config/errorConfig.js
 
 # Bower
 bower_components

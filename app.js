@@ -10,6 +10,7 @@ const uuid = require('uuid');
 const helmet = require('helmet');
 const nocache = require('nocache');
 const validator = require('express-validator');
+const raven = require('raven');
 
 // configuration parameters
 const config = require('./config/config');
@@ -92,6 +93,8 @@ app.use(helmet.hsts({
   includeSubDomains: true,
 }));
 app.use(nocache());
+app.use(raven.middleware.express.requestHandler(config.errorCreds.url));
+app.use(raven.middleware.express.errorHandler(config.errorCreds.url));
 
 /**
  * REQUIRED: All app routes loaded here
@@ -124,10 +127,7 @@ if (app.get('env') === 'development') {
   app.use((err, req, res) => {
     res.status(err.status || 500);
     logger.write.error(err);
-    res.render('error', {
-      message: err.message,
-      error: err,
-    });
+    res.end(`${res.sentry}\n`);
   });
 }
 
@@ -136,10 +136,7 @@ if (app.get('env') === 'development') {
 app.use((err, req, res) => {
   res.status(err.status || 500);
   logger.write.error(err);
-  res.render('error', {
-    message: err.message,
-    error: {},
-  });
+  res.end(`${res.sentry}\n`);
 });
 
 /**

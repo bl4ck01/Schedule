@@ -1,4 +1,5 @@
 const path = require('path');
+const fs = require('fs');
 
 const rootDir = path.join(__dirname, '../');
 const dbConfig = require('./dbconfig');
@@ -32,4 +33,7 @@ module.exports = {
   dbHost: dbConfig.host || process.env.DBHOST,
   dbPort: dbConfig.port || process.env.DBPORT,
   dbPass: dbConfig.dbPass || process.env.DBPASS,
+
+  // Remote error logging
+  errorCreds: fs.readFileSync('./config/errorConfig.js'),
 };
