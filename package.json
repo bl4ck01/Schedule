@@ -16,11 +16,11 @@
     "debug": "2.2.0",
     "express": "4.14.0",
     "express-session": "1.14.1",
-    "express-validator": "2.20.8",
+    "express-validator": "2.20.10",
     "file-stream-rotator": "0.0.7",
-    "helmet": "2.1.2",
-    "lodash": "4.15.0",
-    "moment": "2.14.1",
+    "helmet": "2.3.0",
+    "lodash": "4.16.4",
+    "moment": "2.15.1",
     "morgan": "1.7.0",
     "nocache": "1.0.1",
     "passport": "0.3.2",
@@ -31,33 +31,29 @@
     "serve-favicon": "2.3.0",
     "sql": "0.71.0",
     "twix": "1.1.1",
-    "uuid": "2.0.2",
-    "validator": "5.6.0",
+    "uuid": "2.0.3",
+    "validator": "6.0.0",
     "winston": "2.2.0"
   },
   "devDependencies": {
-    "eslint": "3.4.0",
-    "eslint-config-airbnb": "10.0.1",
-    "eslint-plugin-import": "1.14.0",
-    "eslint-plugin-jsx-a11y": "2.2.1",
-    "eslint-plugin-react": "6.2.0",
+    "eslint": "3.7.1",
+    "eslint-config-airbnb": "12.0.0",
+    "eslint-plugin-import": "1.16.0",
+    "eslint-plugin-jsx-a11y": "2.2.3",
+    "eslint-plugin-react": "6.4.0",
     "istanbul": "0.4.5",
-    "mocha": "3.0.2",
+    "mocha": "3.1.1",
     "snyk": "1.19.1",
     "supertest": "2.0.0"
   },
-  "description": "A multi-threaded Node scheduling application for employees with variable shift lengths.",
+  "description": "A Node scheduling application for employees with variable shift lengths.",
   "main": "app.js",
-  "directories": {
-    "test": "test"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/arikalfus/Schedule.git"
   },
   "author": "Ari Kalfus",
   "email": "akalfus@brandeis.edu",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/arikalfus/Schedule/issues"
   },

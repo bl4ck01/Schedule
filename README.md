@@ -2,7 +2,7 @@
 
 # Schedule
 
-A multi-threaded Node scheduling application for employees with variable shift lengths.
+A Node scheduling application for employees with variable shift lengths.
 
 ## Set Up
 
