@@ -1,0 +1,16 @@
+div.tab-pane.active#shifts(role='tabpanel')
+  div.well
+    div.container-fluid
+      div.row
+        button.btn.btn-default.btn-info#override-shift(role='button', data-toggle='collapse',
+        data-target='#shift-override', aria-expanded='false',
+        aria-controls='shift-override') Modify Shifts
+        button.btn.btn-info#create-shift(type='button', role='button', data-toggle='collapse',
+        data-target='#shift-creation', aria-expanded='false',
+        aria-controls='shift-creation') Create Shifts
+      br
+      br
+      div.row
+        include admin_shifts/modify_form
+        include admin_shifts/create_form
+    div#temp-cal

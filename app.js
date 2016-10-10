@@ -93,6 +93,7 @@ app.use(helmet.hsts({
   includeSubDomains: true,
 }));
 app.use(nocache());
+// Sentry.io error logging/handling
 app.use(raven.middleware.express.requestHandler(config.errorCreds.url));
 app.use(raven.middleware.express.errorHandler(config.errorCreds.url));
 

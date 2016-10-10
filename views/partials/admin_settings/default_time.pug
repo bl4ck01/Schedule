@@ -1,0 +1,40 @@
+div.panel.panel-default
+  div.panel-heading#settings-default-times-header(role='tab')
+    h4.panel-title
+      a(role='button', data-toggle='collapse', data-parents='#settings-accordion',
+      href='#settings-default-times-body', aria-expanded='false',
+      aria-controls='settings-default-times-body') Default Times
+  div.panel-collapse.collapse#settings-default-times-body(role='tabpanel',
+  aria-labelledby='settings-default-times-header')
+    div.panel-body
+      div.row
+        form#set-default-times-form(action='/times/default/new', method='post')
+          div.col-md-2
+            div.form-group
+              label.control-label(
+              for='settings-default-time-start') Change the default start time:
+              div.input-group.bootstrap-timepicker.timepicker
+                span.input-group-addon.glyphicon.glyphicon-time
+                input.form-control#settings-default-time-start(type='text',
+                placeholder='8 AM',
+                name='startTime')
+            div.form-group
+              label.control-label(
+              for='settings-default-time-end') Change the default end time:
+              div.input-group.bootstrap-timepicker.timepicker
+                span.input-group-addon.glyphicon.glyphicon-time
+                input.form-control#settings-default-time-end(type='text',
+                placeholder='8 PM',
+                name='endTime')
+          div.col-md-4
+            div.form-group
+              label(for='settings-default-time-range') Apply these changes for how many days into the future? (Exclude today)
+              div.col-md-5
+                input.form-control#settings-default-time-range(type='number',
+                placeholder='0', name='range')
+              div.col-md-1
+                div.btn-group-vertical
+                  button.btn.btn-default.btn-xs#settings-default-time-semester-btn One semester
+                  button.btn.btn-default.btn-xs#settings-default-time-year-btn One school year
+          div.col-md-1
+            button.btn.btn-info.center-block#settings-default-time-submit-btn(type='submit') Submit Changes

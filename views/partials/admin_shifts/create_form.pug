@@ -1,0 +1,56 @@
+div.collapse#shift-creation
+  h4.
+    This form is used to create weekly shifts. If you want to modify shifts, please
+    use the 'Modify Shifts' form.
+  br
+  div.col-md-6
+    form#create-shift-form(action='/shifts/new', method='post')
+      div.form-group
+        p Select which days this shift should apply:
+        // Generate checkbox element for each day of the week
+        each val in ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+          div.checkbox-inline
+            input.checkbox-input(type='checkbox', name='days[]', value= val,
+            id=`create-shift-${val}`)
+            label(for=`create-shift-${val}`)= val
+      div.col-md-4
+        div.form-group
+          label.control-label(for='create-shift-from-date') Date from:
+          input.form-control#create-shift-from-date(type='text',
+          data-provide='datepicker',
+          data-date-autoclose='true', placeholder='01/10/2016', name='fromDate')
+        div.form-group
+          label.control-label(for='create-shift-to-date') Until:
+          input.form-control#create-shift-to-date(type='text',
+          data-provide='datepicker',
+          data-date-autoclose='true', placeholder='01/10/2016', name='toDate')
+        div.form-group
+          label.control-label(for='shift-create-owner') Shift owner(s):
+          textarea.form-control#shift-create-owner(rows='4', placeholder='Louis ' +
+          'Brandeis, Ollie Owl',
+          name='owners')
+        button.btn.btn-info.center-block(type='submit') Submit Changes
+        br
+      div.col-md-4
+        div.form-group
+          label.control-label(for='shift-create-begin-time') Time from:
+          div.input-group.bootstrap-timepicker.timepicker
+            span.input-group-addon.glyphicon.glyphicon-time
+            input.form-control#shift-create-begin-time(type='text',
+            placeholder='8:45 am',
+            name='beginTime')
+        div.form-group
+          label.control-label(for='shift-create-end-time') Until:
+          div.input-group.bootstrap-timepicker.timepicker
+            span.input-group-addon.glyphicon.glyphicon-time
+            input.form-control#shift-create-end-time(type='text',
+            placeholder='2 pm',
+            name='endTime')
+        div.form-group
+          div.checkbox-inline
+            input.checkbox-input#create-shift-all-day(type='checkbox', value='y',
+            name='allday')
+            label.control-label(for='create-shift-all-day') All day?
+              br
+              i
+                small (Leave above times blank)

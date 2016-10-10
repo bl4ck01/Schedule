@@ -9,7 +9,6 @@ const saml = new SamlStrategy(
     entryPoint: config.entryPoint,
     issuer: config.issuer,
     logoutCallbackUrl: config.logoutCallbackUrl,
-    passReqToCallback: true,
   },
   (profile, done) => {
     // logger.write.console(JSON.stringify(profile));
