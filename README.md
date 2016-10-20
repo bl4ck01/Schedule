@@ -1,4 +1,4 @@
-[![Code Climate](https://codeclimate.com/github/arikalfus/Schedule/badges/gpa.svg)](https://codeclimate.com/github/arikalfus/Schedule)
+[![Code Climate](https://codeclimate.com/github/arikalfus/Schedule/badges/gpa.svg)](https://codeclimate.com/github/arikalfus/Schedule) [![Known Vulnerabilities](https://snyk.io/test/github/arikalfus/schedule/badge.svg)](https://snyk.io/test/github/arikalfus/schedule)
 
 # Schedule
 
