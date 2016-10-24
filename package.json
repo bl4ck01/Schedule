@@ -20,7 +20,7 @@
     "file-stream-rotator": "0.0.7",
     "helmet": "2.1.2",
     "lodash": "4.15.0",
-    "moment": "2.14.1",
+    "moment": "2.15.2",
     "morgan": "1.7.0",
     "nocache": "1.0.1",
     "passport": "0.3.2",
