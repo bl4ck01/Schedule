@@ -84,7 +84,7 @@ router.post('/new', (req, res) => {
       async.waterfall([
         (callback) => {
           const dates = [];
-          params.data.forEach((entry) => dates.push(entry.date));
+          params.data.forEach(entry => dates.push(entry.date));
           defaultTime.removeMultiple({ id: req.id, dates }, (err, result) => {
             callback(err, result.rows);
           });
@@ -111,31 +111,6 @@ router.post('/new', (req, res) => {
         respond(req.id, err, result, res);
       });
     }
-  } else {
-    res.sendStatus(401);
-  }
-});
-
-router.post('/update', (req, res) => {
-  if (!req.isAuthenticated()) { // TODO: remove ! from authentication check
-    // Validate params
-    let errors;
-    if (req.checkBody('startTime', 'start time is required').notEmpty()
-      || req.checkBody('endTime', 'end time is required').notEmpty()) {
-      errors = { code: 400, message: req.validationErrors() };
-      respond(errors, null, res);
-    }
-
-    const params = {
-      id: req.id,
-      startTime: req.body.startTime,
-      endTime: req.body.endTime,
-      startDay: date.date(),
-    };
-
-    defaultTime.updateTimes(params, (err, result) => {
-      respond(req.id, err, result.rows, res);
-    });
   } else {
     res.sendStatus(401);
   }
