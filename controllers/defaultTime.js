@@ -34,7 +34,10 @@ exports.createMany = (params, cb) => {
     });
   });
 
-  const query = defaultTime.insert(entities).returning('date').toQuery();
+  const query = defaultTime.insert(entities).onConflict({
+    columns: ['date'],
+    update: ['start_time', 'end_time'],
+  }).returning('date').toQuery();
 
   db.query(params.id, query.text, query.values, cb);
 };
@@ -77,8 +80,8 @@ exports.get = (params, cb) => {
  */
 exports.removeOne = (params, cb) => {
   const query = defaultTime.delete().where(
-    defaultTime.date.equals(params.date)
-  ).returning().toQuery();
+    defaultTime.date.equals(params.date))
+    .returning().toQuery();
 
   db.query(params.id, query.text, query.values, cb);
 };
@@ -90,8 +93,8 @@ exports.removeOne = (params, cb) => {
  */
 exports.removeMultiple = (params, cb) => {
   const query = defaultTime.delete().where(
-    defaultTime.date.in(params.dates)
-  ).returning().toQuery();
+    defaultTime.date.in(params.dates))
+    .returning().toQuery();
 
   db.query(params.id, query.text, query.values, cb);
 };

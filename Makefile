@@ -17,7 +17,7 @@ clean:
 .PHONY: install
 install:
 	# Install NodeJS modules
-	npm install;
+	yarn install;
 
 .PHONY: eslint
 eslint:

@@ -39,9 +39,7 @@ exports.createOne = (params, cb) => {
       endTime: params.endTime,
       owner: params.owner,
       startTime: params.startTime,
-    }
-  ).toQuery()
-  );
+    }).toQuery());
   // Create Event query
   queries.push(event.table.insert(
     {
@@ -50,9 +48,7 @@ exports.createOne = (params, cb) => {
       eventsource: params.eventsource,
       rendering: params.rendering,
       title: params.title,
-    }
-  ).toQuery()
-  );
+    }).toQuery());
 
   // Run transaction of above queries
   db.transaction(params.id, queries, cb);
