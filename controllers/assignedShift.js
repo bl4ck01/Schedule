@@ -116,19 +116,7 @@ exports.get = (params, cb) => {
     if (exists) query = query.and(assignedShift[key].equals(params[key]));
   });
   query = query.toQuery();
-
   db.query(params.id, query.text, query.values, cb);
-};
-
-/**
- * Retrieves every Shift from the database
- * @param id Request ID
- * @param cb Callback function
- */
-exports.all = (id, cb) => {
-  const query = assignedShift.where([]).toQuery();
-
-  db.query(id, query.text, query.values, cb);
 };
 
 exports.table = assignedShift;

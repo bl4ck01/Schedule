@@ -25,15 +25,12 @@ const employee = sql.define({
  * @param cb optional callback function
  */
 exports.createOne = (params, cb) => {
-  // Ensure only the schema keys are passed onto the query
-  const query = employee.insert(
-    {
-      uid: params.uid,
-      name: params.name,
-      phoneNum: params.phone,
-      role: params.role,
-    }
-  ).toQuery();
+  const query = employee.insert({
+    uid: params.uid,
+    name: params.name,
+    phoneNum: params.phone,
+    role: params.role,
+  }).toQuery();
 
   db.query(params.id, query.text, query.values, cb);
 };

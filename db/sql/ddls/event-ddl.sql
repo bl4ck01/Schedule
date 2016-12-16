@@ -1,7 +1,6 @@
 -- Event table holds fullcalendar.io Event information to construct shifts
 CREATE TABLE Event (
-  -- sid of an Assigned-Shift
-  sid serial NOT NULL,
+  eid serial NOT NULL,
   -- The text on an event's element
   title varchar(100) NOT NULL,
   -- Whether an event occurs at a specific time-of-day. Affects whether an event's time is shown.
@@ -26,11 +25,8 @@ CREATE TABLE Event (
 -- Constraints on Event table.
 ALTER TABLE Event
   -- primary key
-  ADD CONSTRAINT Event_pk PRIMARY KEY (sid),
+  ADD CONSTRAINT Event_pk PRIMARY KEY (eid),
   -- foreign keys
-  ADD CONSTRAINT Event_fk_id FOREIGN KEY (sid)
-    REFERENCES Assigned_Shift (sid)
-    ON DELETE CASCADE
-    NOT DEFERRABLE INITIALLY IMMEDIATE
   -- other constraints
-  ;
+  -- rendering can only have two possible values if not null
+  ADD CONSTRAINT valid_rendering CHECK(rendering IS NULL OR rendering IN ('background', 'inverse-background')) NOT DEFERRABLE INITIALLY IMMEDIATE;

@@ -1,3 +1,15 @@
 version: v1.5.2
-ignore: {}
+ignore:
+  'npm:ejs:20161128':
+    - passport-saml > xml-encryption > ejs:
+        reason: No remediation or patch available
+        expires: '2017-01-15T00:53:36.932Z'
+  'npm:ejs:20161130':
+    - passport-saml > xml-encryption > ejs:
+        reason: No remediation or patch available
+        expires: '2017-01-15T00:53:36.933Z'
+  'npm:ejs:20161130-1':
+    - passport-saml > xml-encryption > ejs:
+        reason: No remediation or patch available
+        expires: '2017-01-15T00:53:36.933Z'
 patch: {}

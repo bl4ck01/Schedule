@@ -5,7 +5,7 @@ const timepickerDefaults = {
 $(document).ready(() => {
   let shifts = [];
   // FIXME: Move shifts to Redis cache and retrieve from there
-  $.get('/shifts/get/all', (data) => {
+  $.get('/events/get/all', (data) => {
     if (data.length > 0) {
       shifts = data;
     }
