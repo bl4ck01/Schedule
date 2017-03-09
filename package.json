@@ -11,10 +11,10 @@
   },
   "dependencies": {
     "async": "2.0.1",
-    "body-parser": "1.15.2",
+    "body-parser": "1.17.1",
     "compression": "1.6.2",
     "debug": "2.2.0",
-    "express": "4.14.0",
+    "express": "4.15.2",
     "express-session": "1.14.1",
     "express-validator": "2.20.8",
     "file-stream-rotator": "0.0.7",
