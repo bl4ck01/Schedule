@@ -3,9 +3,6 @@ config/ssl/
 config/dbconfig.js
 /config/errorConfig.js
 
-# Yarn
-yarn.lock
-
 # Bower
 bower_components
 
