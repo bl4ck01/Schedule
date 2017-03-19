@@ -1,6 +1,7 @@
 -- Variable-length employee shifts.
 CREATE TABLE Assigned_Shift (
   sid serial NOT NULL,
+  eid serial NOT NULL,
   date date NOT NULL,
   -- when shift begins
   start_time time NOT NULL,
@@ -21,6 +22,11 @@ ALTER TABLE Assigned_Shift
     REFERENCES Default_Time (date)
     ON DELETE CASCADE
     -- on update trigger update_shifts_upon_day_update will fire.
+    NOT DEFERRABLE INITIALLY IMMEDIATE,
+  ADD CONSTRAINT Assigned_Shift_fk_Event
+  FOREIGN KEY (eid)
+    REFERENCES Event (eid)
+    ON DELETE CASCADE
     NOT DEFERRABLE INITIALLY IMMEDIATE,
   ADD CONSTRAINT Assigned_Shift_fk_owner FOREIGN KEY (owner)
     REFERENCES Employee (uid)

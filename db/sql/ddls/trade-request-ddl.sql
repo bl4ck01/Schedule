@@ -3,6 +3,8 @@ CREATE TABLE Trade_Request (
   tid serial NOT NULL,
   -- sid of an Assigned-Shift
   sid serial NOT NULL,
+  -- eid of an Event
+  eid serial NOT NULL,
   -- start time of sub request
   start_time time NOT NULL,
   -- end time of sub request
@@ -16,6 +18,10 @@ ALTER TABLE Trade_Request
   -- foreign keys
   ADD CONSTRAINT Trade_Request_fk_Assigned_Shift FOREIGN KEY (sid)
     REFERENCES Assigned_Shift (sid)
+    ON DELETE CASCADE
+    NOT DEFERRABLE INITIALLY IMMEDIATE,
+  ADD CONSTRAINT Trade_Request_fk_Event
+    FOREIGN KEY (eid) REFERENCES Event (eid)
     ON DELETE CASCADE
     NOT DEFERRABLE INITIALLY IMMEDIATE
   -- other constraints

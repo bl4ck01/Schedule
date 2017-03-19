@@ -36,7 +36,7 @@ CREATE TRIGGER validate_shift_length BEFORE INSERT OR UPDATE ON Assigned_Shift F
 
 
 -- Function ensures that a shift operates within its day's open and close times.
-CREATE OR REPLACE FUNCTION valid_shift_timeframe()
+CREATE OR REPLACE FUNCTION valid_shift_time_frame()
   RETURNS TRIGGER AS $$
   BEGIN
     IF
@@ -52,4 +52,4 @@ CREATE OR REPLACE FUNCTION valid_shift_timeframe()
 
 -- Ensures assigned shifts are only created within valid times in their corresponding Default_Time.
 CREATE TRIGGER valid_shift_times BEFORE INSERT ON Assigned_Shift FOR EACH ROW
-  EXECUTE PROCEDURE valid_shift_timeframe();
+  EXECUTE PROCEDURE valid_shift_time_frame();
