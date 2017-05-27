@@ -1,4 +1,6 @@
-version: v1.5.2
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.7.0
+# ignores vulnerabilities until expiry date; change duration by modifying expiry date
 ignore:
   'npm:ejs:20161128':
     - passport-saml > xml-encryption > ejs:
@@ -12,4 +14,10 @@ ignore:
     - passport-saml > xml-encryption > ejs:
         reason: No remediation or patch available
         expires: '2017-01-15T00:53:36.933Z'
-patch: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  'npm:ms:20170412':
+    - morgan > debug > ms:
+        patched: '2017-05-21T23:58:05.193Z'
+    - compression > debug > ms:
+        patched: '2017-05-21T23:58:05.193Z'
